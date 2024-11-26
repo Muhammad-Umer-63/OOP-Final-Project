@@ -12,7 +12,7 @@ int main()
 
     sf::RectangleShape bermudaRectangle;
     bermudaRectangle.setFillColor(sf::Color::Magenta);
-    sf::Vector2f rectangleposition(350, 350);
+    sf::Vector2f rectangleposition(376, 350);
     bermudaRectangle.setPosition(rectangleposition);
     bermudaRectangle.setSize(sf::Vector2f(100, 100));
     float xvelocity = 3, yvelocity = 3;
