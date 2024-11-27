@@ -40,6 +40,7 @@ private:
 
     //Mouse Positions
     sf::Vector2i mousePosWindow; //take save rahe value
+    sf::Vector2f mousePosView;
 
     //Game Logic
 
@@ -87,7 +88,7 @@ void Game::initVariables() {
 
     //GameLogic
     this->points = 0;
-    this->enemySpawnTimerMax = 1000.f;
+    this->enemySpawnTimerMax = 10.f;
     this->enemySpawnTimer = this->enemySpawnTimerMax;
     this->maxEnemies = 5;
 
@@ -207,6 +208,7 @@ inline void Game::updateMousePositions()
     */
 
     this->mousePosWindow = sf::Mouse::getPosition(*this->window);
+    this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
 
 
 }
@@ -243,10 +245,38 @@ void Game::updateEnemies()
 
     }
 
+    bool deleted = false;
 
-    for (auto &e : this->enemies) { //auto for loop
+    for (int i = 0; i < this->enemies.size(); i++) { //auto for loop
 
-        e.move(0.f, 1.f); // takes x and y scalke factor 10 toh 10 frames chalte hai
+        this->enemies[i].move(0.f, 1.f);// takes x and y scalke factor 10 toh 10 frames chalte hai
+
+        //check if clicked upon
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+            if (this->enemies[i].getGlobalBounds().contains(this->mousePosView)) {
+
+                deleted = true;
+
+                //gain points
+                this->points += 10.f;
+
+            }
+
+        }
+
+        //if enemies is past screen it deletes // you should delete only once
+        if (this->enemies[i].getPosition().y > this->window->getSize().y) {
+
+            deleted = true;
+
+        }
+
+        if (deleted) {
+
+            this->enemies.erase(this->enemies.begin() + i);
+
+        }
 
     }
 
