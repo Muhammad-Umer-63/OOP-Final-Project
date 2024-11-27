@@ -8,8 +8,8 @@ int main()
 {
  
     sf::RenderWindow window;
-    window.create(sf::VideoMode(1280, 720), "Hangman"); //VideoMode Size of window
-    //window.setFramerateLimit(60);
+    window.create(sf::VideoMode(1280, 720), "Hangman",sf::Style::Default); //VideoMode Size of window
+    window.setFramerateLimit(60);
    // we have to create a loop
 
     sf::RectangleShape rect;
@@ -24,7 +24,8 @@ int main()
     float xVelocity = 3;
     float yVelocity = 3;
 
-    sf::Event event;
+    sf::Event event; 
+    //basically any input you guve will be stored here and then after wards it can be used in pollEvent
     //will hold info about an event
 
     while (window.isOpen()) {
@@ -54,19 +55,21 @@ int main()
 
             }
 
-            if (rectanglePosition.x < 0 || rectanglePosition.x > 1280 - 100) xVelocity *= -1; //negative wapis jaye
-            if (rectanglePosition.y < 0 || rectanglePosition.y > 720 - 100) yVelocity *= -1;
-
-            rectanglePosition.x += xVelocity;
-            rectanglePosition.y += yVelocity; //to move objects we have to add it to that position 
-            //still only doing in back end
-            rect.setPosition(rectanglePosition);
-
-            window.clear();
-            window.draw(rect);
-            window.display();
+            
 
         }
+
+        if (rectanglePosition.x < 0 || rectanglePosition.x > 1280 - 100) xVelocity *= -1; //negative wapis jaye
+        if (rectanglePosition.y < 0 || rectanglePosition.y > 720 - 100) yVelocity *= -1;
+
+        rectanglePosition.x += xVelocity;
+        rectanglePosition.y += yVelocity; //to move objects we have to add it to that position 
+        //still only doing in back end
+        rect.setPosition(rectanglePosition);
+
+        window.clear();
+        window.draw(rect);
+        window.display();
 
     }
 
