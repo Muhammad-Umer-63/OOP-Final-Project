@@ -44,10 +44,13 @@ private:
 
     //Game Logic
 
-    int points;
+    bool endGame;
+    unsigned points;
+    int health;
     float enemySpawnTimer;
     float enemySpawnTimerMax;
     int maxEnemies;
+    bool mouseHeld;
 
     //Game Objects
     //not gonna use as far
@@ -66,6 +69,7 @@ public:
 
     //Accessors
     const bool running() const;
+    const bool getEndGame() const;
 
     //Functions
 
@@ -85,12 +89,15 @@ public:
 void Game::initVariables() {
 
     this->window = nullptr;
-
+   
     //GameLogic
+    this->endGame = false;
     this->points = 0;
+    this->health = 10;
     this->enemySpawnTimerMax = 10.f;
     this->enemySpawnTimer = this->enemySpawnTimerMax;
-    this->maxEnemies = 5;
+    this->maxEnemies = 10;
+    this->mouseHeld = false;
 
 
 }
@@ -135,6 +142,12 @@ Game::~Game() {
 const bool Game::running() const {
 
     return this->window->isOpen();
+
+}
+
+const bool Game::getEndGame() const
+{
+    return this->endGame;
 
 }
 
@@ -245,41 +258,57 @@ void Game::updateEnemies()
 
     }
 
-    bool deleted = false;
-
+    //Moving and updating enemies
     for (int i = 0; i < this->enemies.size(); i++) { //auto for loop
 
-        this->enemies[i].move(0.f, 1.f);// takes x and y scalke factor 10 toh 10 frames chalte hai
+        bool deleted = false;
 
-        //check if clicked upon
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        this->enemies[i].move(0.f, 5.f);// takes x and y scalke factor 10 toh 10 frames chalte hai mov in y axis
 
-            if (this->enemies[i].getGlobalBounds().contains(this->mousePosView)) {
+        if (this->enemies[i].getPosition().y > this->window->getSize().y) {
 
-                deleted = true;
+            this->enemies.erase(this->enemies.begin() + i);
+            this->health -= 1; //enemy reaches bottom of screen
+            cout << "Health : " << this->health << endl;
+        } //this is gonna delete the enemy
 
-                //gain points
-                this->points += 10.f;
+
+    }
+
+
+    //check if clicked upon
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) { //this is game tactic/control
+
+        if (this->mouseHeld == false) {
+
+            this->mouseHeld = true;
+            bool deleted = false;
+
+            for (size_t i = 0; i < this->enemies.size() && deleted == false; i++) { //deleted better check than breaks
+
+                if (this->enemies[i].getGlobalBounds().contains(this->mousePosView)) {
+
+                    deleted = true;
+
+                    this->enemies.erase(this->enemies.begin() + i);
+
+                    //Gain Points
+                    this->points += 1;
+                    cout << "Points : " << this->points << endl;
+                }
 
             }
 
         }
 
-        //if enemies is past screen it deletes // you should delete only once
-        if (this->enemies[i].getPosition().y > this->window->getSize().y) {
+    }
+    // aik dafa click kiya hoga toh chale ga zaroori nahi ke chale kahin aur se
+    else {
 
-            deleted = true;
-
-        }
-
-        if (deleted) {
-
-            this->enemies.erase(this->enemies.begin() + i);
-
-        }
+        this->mouseHeld = false;
 
     }
-
 }
 
 
@@ -288,9 +317,19 @@ void Game::update() { //update game logic close your eyes
 
     this->pollEvents(); //order very important
 
-    this->updateMousePositions();
-    
-    this->updateEnemies();
+    if (this->endGame == false) {
+
+        this->updateMousePositions();
+
+        this->updateEnemies();
+    }
+
+    //End game condition
+    if (this->health <= 0) {
+
+        this->endGame = true;
+
+    }
 
 }
 
