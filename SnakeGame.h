@@ -1,7 +1,7 @@
 #pragma once
 #include<iostream>
-#include"C:\Users\DELL\OneDrive\Desktop\OOP GITHUB\Food.h"
-#include"C:\Users\DELL\OneDrive\Desktop\OOP GITHUB\Snake.h"
+#include"Food.h"
+#include"Snake.h"
 using namespace std;
 
 class SnakeGame {

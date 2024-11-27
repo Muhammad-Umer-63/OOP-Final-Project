@@ -1,7 +1,7 @@
  #pragma once
 #include "SFML/Graphics.hpp"
-#include"C:\Users\DELL\OneDrive\Desktop\OOP GITHUB\Grid.h"
-#include"C:\Users\DELL\OneDrive\Desktop\OOP GITHUB\Food.h"
+#include"Grid.h"
+#include"Food.h"
 #include<iostream>
 #include<ctime>
 #include<cstdlib>
