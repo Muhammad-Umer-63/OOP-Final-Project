@@ -3,6 +3,7 @@
 #include <vector>
 #include <ctime>
 #include <cmath>
+#include <sstream> //string stream
 #include <istream>
 #include <ostream>
 #include <string>
@@ -42,6 +43,13 @@ private:
     sf::Vector2i mousePosWindow; //take save rahe value
     sf::Vector2f mousePosView;
 
+    //Resources
+
+    sf::Font font;
+
+    //Text
+    sf::Text uiText;
+
     //Game Logic
 
     bool endGame;
@@ -59,6 +67,8 @@ private:
 
     void initVariables();
     void initWindow();
+    void initFonts();
+    void initText();
     void initEnemies();
 
 public:
@@ -77,10 +87,12 @@ public:
 
     void pollEvents();
     void updateMousePositions();
+    void updateText();
     void updateEnemies();
     void update();
 
-    void renderEnemies();
+    void renderText(sf::RenderTarget& target); //you don't always have to render to window 
+    void renderEnemies(sf::RenderTarget& target); //good habbit
     void render();
 
 };
@@ -111,13 +123,32 @@ void Game::initWindow() {
     this->window->setFramerateLimit(60); 
 }
 
+void Game::initFonts()
+{
+
+    if (this->font.loadFromFile("Fonts/Roboto-Bold.ttf")) {
+
+        cout << "ERROR::GAME::INITFONTS::Failed to load Font!" << endl;
+    }
+
+}
+
+void Game::initText()
+{
+
+    this->uiText.setFont(this->font);
+    this->uiText.setCharacterSize(24);
+    this->uiText.setFillColor(sf::Color::White);
+    this->uiText.setString("NONE");
+
+}
+
 void Game::initEnemies()
 {
     this->enemy.setPosition(10.f,10.f); //zero zero default //ZERO ZERO is top left of screen not middle
-    this->enemy.setSize(sf::Vector2f(100.f, 100.f)); //ulta grid top +ve x axis and botton +ve y axis
-    this->enemy.setScale(sf::Vector2f(0.5f, 0.5f));
+    this->enemy.setSize(sf::Vector2f(10.f, 10.f)); //ulta grid top +ve x axis and botton +ve y axis
     this->enemy.setFillColor(sf::Color::Cyan);
-    this->enemy.setOutlineColor(sf::Color::Green);
+    this->enemy.setOutlineColor(sf::Color::Black);
     this->enemy.setOutlineThickness(1.f);
 
 }
@@ -125,6 +156,8 @@ void Game::initEnemies()
 Game::Game() {
 
     this->initVariables();
+    this->initFonts();
+    this->initText();
     this->initWindow();
     this->initEnemies();
 
@@ -158,7 +191,8 @@ void Game::spawnEnemy()
    
     /* returns void
     
-        spawns enemies and sets their colors and positions
+        spawns enemies and sets their types, colors. Spawns at positions randomly.
+        - sets a random type (diff).
         - sets a random position 
         - sets a random color
         - adds enemy to the vector
@@ -172,10 +206,54 @@ void Game::spawnEnemy()
         0.f
     );
 
-    this->enemy.setFillColor(sf::Color::Green);
+    //Randomize enemy type
+
+    int type = rand() % 5;
+
+    switch (type) {
+
+    case 0:
+
+        this->enemy.setScale(sf::Vector2f(1.f, 1.f));
+        this->enemy.setFillColor(sf::Color::Magenta);
+        break;
+
+    case 1:
+
+        this->enemy.setScale(sf::Vector2f(5.f, 5.f));
+        this->enemy.setFillColor(sf::Color::Blue);
+        break;
+    
+    case 2:
+
+        this->enemy.setScale(sf::Vector2f(10.f, 10.f));
+        this->enemy.setFillColor(sf::Color::Cyan);
+        break;
+
+    case 3:
+
+        this->enemy.setScale(sf::Vector2f(15.f, 15.f));
+        this->enemy.setFillColor(sf::Color::Red);
+        break;
+
+    case 4:
+
+        this->enemy.setScale(sf::Vector2f(20.f, 20.f));
+        this->enemy.setFillColor(sf::Color::Green);
+        break;
+
+    default:
+
+        this->enemy.setScale(sf::Vector2f(25.f, 25.f));
+        this->enemy.setFillColor(sf::Color::Yellow);
+
+        break;
+
+    }
 
     //spawn enemy
     this->enemies.push_back(this->enemy); //vectors mein yeh sare agaye hain
+
 
 
     //Remove enemies at the end of screen
@@ -223,6 +301,16 @@ inline void Game::updateMousePositions()
     this->mousePosWindow = sf::Mouse::getPosition(*this->window);
     this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
 
+
+}
+
+void Game::updateText()
+{
+
+    stringstream ss;
+    ss << "Points : " << this->points << endl << "Health : " << this->health << endl;
+
+    this->uiText.setString(ss.str());
 
 }
 
@@ -289,13 +377,29 @@ void Game::updateEnemies()
 
                 if (this->enemies[i].getGlobalBounds().contains(this->mousePosView)) {
 
-                    deleted = true;
+                    //Gain Points
+
+                    if(this->enemies[i].getFillColor() == sf::Color::Magenta)
+                        this->points += 10;
+                    else if(this->enemies[i].getFillColor() == sf::Color::Blue)
+                        this->points += 7;
+                    else if (this->enemies[i].getFillColor() == sf::Color::Cyan)
+                        this->points += 5;
+                    else if (this->enemies[i].getFillColor() == sf::Color::Red)
+                        this->points += 3;
+                    else if (this->enemies[i].getFillColor() == sf::Color::Green)
+                        this->points += 2;
+                    else if (this->enemies[i].getFillColor() == sf::Color::Yellow)
+                        this->points += 1;
+
+                    cout << "Points : " << this->points << endl;
+
+
+                    deleted = true; //delete here
 
                     this->enemies.erase(this->enemies.begin() + i);
 
-                    //Gain Points
-                    this->points += 1;
-                    cout << "Points : " << this->points << endl;
+
                 }
 
             }
@@ -321,6 +425,8 @@ void Game::update() { //update game logic close your eyes
 
         this->updateMousePositions();
 
+        this->updateText();
+
         this->updateEnemies();
     }
 
@@ -334,12 +440,20 @@ void Game::update() { //update game logic close your eyes
 }
 
 
-void Game::renderEnemies()
+void Game::renderText(sf::RenderTarget& target)
+{
+
+    target.draw(this->uiText);
+
+}
+
+
+void Game::renderEnemies(sf::RenderTarget& target)
 {
     //Rendering all the enemies
     for (auto& e : this->enemies) { //auto for loop
 
-        this->window->draw(e);
+        target.draw(e);
 
     }
 
@@ -363,8 +477,9 @@ void Game::render() { //open your eyes visual
     this->window->clear();
 
     //Draw game objects
-    this->renderEnemies();
+    this->renderEnemies(*this->window);
 
+    this->renderText(*this->window);
 
     this->window->display();
 
