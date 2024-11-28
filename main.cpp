@@ -6,6 +6,8 @@
 using namespace std;
 
 int main(){
+    
+
     srand(static_cast<unsigned int>(time(0)));
     int selection;
     cout << "enter 1 if you wanna play snake game: ";

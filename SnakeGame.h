@@ -1,31 +1,32 @@
+
+#include <SFML/Graphics.hpp>
 #include<iostream>
 #include"Snake.h"
 #include"Food.h"
 using namespace std;
 
 
-
-
+    
 
 
 class SnakeGame {
 private:
     Snake s1;
-    Food f1;
+    Food  f1;
     int dx = 1, dy = 0;
-
+   
 public:
+    sf::Vector2f foodcoord;
+    sf::Vector2f headcoord;
     SnakeGame() {
         sf::RenderWindow window(sf::VideoMode(800, 600), "OOP Project by 23i-0754 & 23i-0006");
         window.setFramerateLimit(30);
-        int(&grid)[60][40] = s1.getGrid();
-
-        // Place initial food
-        f1.placeFood(grid);
 
         sf::Clock clock;
         float moveDelay = 0.2f;  // Delay in seconds between snake movements
         float elapsedTime = 0.0f;
+        
+
 
         while (window.isOpen()) {
             sf::Event event;
@@ -56,32 +57,67 @@ public:
                 s1.moveSnake(dx, dy);  // Pass current direction to moveSnake
                 elapsedTime = 0.0f;   // Reset elapsed time
             }
-       //     if (grid[s1.getHeadX()][s1.getHeadY()] == 2) {
-       //         // Handle collision logic, e.g., grow snake and place new food
-       //         f1.placeFood(grid);
-       //     }
+      
             window.clear();
             s1.drawGridForSnake(window);
             f1.drawFood(window);
+            s1.updateGridForFood(f1.getfoodpointx(), f1.getfoodpointy());
+
             s1.drawSnake(window);
 
-       //     collision();
+            checkcollision();
             window.display();
         }
     }
 
+    
 
-    void collision() {
-        // Get snake head and food positions
-        sf::Vector2f snakeHeadPos = s1.getHeadPosition();
-        sf::Vector2f foodPos = f1.getFoodPosition();
-
-        // Check collision (distance within a certain threshold)
-        float distance = sqrt(pow(snakeHeadPos.x - foodPos.x, 2) + pow(snakeHeadPos.y - foodPos.y, 2));
-        if (distance < 10) { // 10 is a threshold, adjust based on your sprite sizes
-            // Handle collision logic, e.g., increase score, reposition food
-            cout << "Collision Detected!" << endl;
-        }
+    void getfoodpositionfromfood() {
+        foodcoord.x = f1.getfoodpointx();
+        foodcoord.y = f1.getfoodpointy();
+       
+      
     }
 
+    void getheadpositionfromsnake() {
+        headcoord.x = s1.getheadpositionx();
+        headcoord.y = s1.getheadpositiony();
+    }
+    
+
+    void checkcollision() {
+        getfoodpositionfromfood();
+        getheadpositionfromsnake();
+    sf::Vector2i headGridPos = sf::Vector2i( headcoord.x,headcoord.y);
+
+    sf::Vector2i foodGridPos;
+    foodGridPos.x = foodcoord.x;
+    foodGridPos.y = foodcoord.y;
+
+    // Debugging output (optional)
+  //  cout << "Head: (" << headGridPos.x << ", " << headGridPos.y << ") ";
+    //cout << "Food: (" << foodGridPos.x << ", " << foodGridPos.y << ")" << endl;
+
+    // Check for collision
+    if (headGridPos == foodGridPos) {
+        cout << "Collision detected!" << endl;
+        collision();}
+    }
+
+    void collision() {
+        f1.increaseVelocity();
+
+        
+    }
+
+
+
+
+
+
+
+
+
+
+    
 };

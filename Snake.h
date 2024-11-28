@@ -9,7 +9,7 @@ using namespace std;
 class Snake {     //1. grid    2. snakesegments  
 private:
     
-    int Grid[60][40] = { 0 };
+    //int Grid[60][40] = { 0 };
     int cellLength = 10;
     int cellWidth = 10;
     sf::Vertex line1[2];// Class attribute for line1
@@ -26,6 +26,8 @@ private:
    // sf::Vector2f headpositionforcollision;
 
 public:
+    int Grid[60][40] = { 0 };
+
   //  sf::Vector2f returning ()const {
     //    return (headposition.x,headposition.y)
 
@@ -73,22 +75,13 @@ public:
 
 
     }
-    sf::Vector2f getHeadPosition() const {
-        return sf::Vector2f(snakePositionsXY[0][19], snakePositionsXY[1][19]);
+    int getheadpositionx() const{
+      //  cout << "head: " << snakePositionsXY[0][19]/10-10<<" ";
+        return (snakePositionsXY[0][19]/10-10);
     }
-    int(&getGrid())[60][40]{
-        return Grid;
-    }
-
-        void updateGridWithFood(int x, int y) {
-        Grid[x][y] = 2; // Mark food position with 2
-    }
-    int getHeadX() const {
-        return snakePositionsXY[0][19]; // The x-coordinate of the snake's head (last element)
-    }
-
-    int getHeadY() const {
-        return snakePositionsXY[1][19]; // The y-coordinate of the snake's head (last element)
+    int getheadpositiony() const {
+      //  cout << snakePositionsXY[1][19]/10-10 << endl;
+        return snakePositionsXY[1][19]/10-10;
     }
     void drawGridForSnake(sf::RenderWindow& window)const {
         window.draw(line1, 2, sf::Lines);
@@ -111,10 +104,11 @@ public:
             int gridX = snakePositionsXY[0][i] / 10-10; // Map x-coordinate to grid
             int gridY = snakePositionsXY[1][i] / 10-10; // Map y-coordinate to grid
            // if (gridX >= 0 && gridX < 60 && gridY >= 0 && gridY <40 ) {
-                Grid[gridX][gridY] = 1; // Mark the grid as occupied by the snake
-                //cout << i << endl;
-                cout << "gridX: " << gridX << endl;
-                cout<< "gridY: " << gridY << endl;
+              if(i<19)  Grid[gridX][gridY] = 1; // Mark the grid as occupied by the snake
+              if (i == 19) Grid[gridX][gridY] = 2;
+              //cout << i << endl;
+             //   cout << "gridX: " << gridX << endl;
+              //  cout<< "gridY: " << gridY << endl;
 
          //}
         }
@@ -124,8 +118,14 @@ public:
               //  if (Grid[i][j] == 1)cout << "i=" << i << " ";
             }
         }
-
+        
        
+    }
+    void updateGridForFood(int dx, int dy) {
+        Grid[dx][dy] = 3;
+       // cout <<"food: " << dx << " " << dy << " ";
+       // cout << Grid[dx][dy+1] << " " << Grid[dx][dy-1]<<" " << Grid[dx + 1][dy] <<" " << Grid[dx - 1][dy] << endl;
+        
     }
 
 
@@ -138,58 +138,18 @@ public:
         }
 
         // Update the head position
-        snakePositionsXY[0][19] += dx *cellLength; // Move head by cell size in x
-        snakePositionsXY[1][19] += dy *cellWidth; // Move head by cell size in y
+        snakePositionsXY[0][19] += dx * cellLength; // Move head by cell size in x
+        snakePositionsXY[1][19] += dy * cellWidth; // Move head by cell size in y
 
         // Update the grid after movement
         updateGrid();
-      //  for (int i = 0; i < 40; ++i) {
-       //     for (int j = 0; j < 40; ++j) {
-        //      cout << Grid[i][j] << " ";
-       ///     }
-        //  cout << endl;
-       // }
-
-            // Update the snake's position in the grid
-         //   int newX = snakePositionsXY[0][19];
-         //   int newY = snakePositionsXY[1][19];
-
-       //     if (Grid[newX][newY] == 2) {
-       //         cout << "COLLISION";   // Collision with food logic here
-       //     }
-
-            // Continue updating the grid and snake position...
-        
-
     }
 
 
    
 
     void drawSnake(sf::RenderWindow& window) {
-        updateGrid(); // Update the grid before drawing
-      /* for (int i = 0; i < 20; ++i) {
-            cout << "Snake segment " << i << ": ("
-                << snakePositionsXY[0][i] << ", "
-                << snakePositionsXY[1][i] << ")" << endl;
-        }
-
-        */
-     ////////////////////////////////////////////////////////////////////////////////////////////program slow hoga
-
-         ////////////////////////////////////////////////////////////////////////////////////////////////tells k back end pr grid kaisay chal rhi
-        cout << "Grid after update:" << endl;
-        for (int i = 0; i < 40; ++i) { 
-            for (int j = 0; j < 60; ++j) { 
-                cout << Grid[j][i] << " ";
-            }
-            cout << endl; 
-        }
-
-
-        
-        
-
+       //updateGrid(); // Update the grid before drawing
         for (int i = 0; i < 60; ++i) {
             for (int j = 0; j < 40; ++j) {
             if (Grid[i][j] == 1) {
@@ -206,6 +166,22 @@ public:
             }
             }
         }
+
+        
+      /*     cout << "Grid after update:" << endl;
+        for (int i = 0; i < 40; ++i) { // Rows (height, second index)
+            for (int j = 0; j < 60; ++j) { // Columns (width, first index)
+                if (Grid[j][i] == 1)cout << "#"<<" ";
+                else if (Grid[j][i] == 2)cout << "O"<<" ";
+                else if (Grid[j][i] == 3)cout << "F" << " ";
+                else { cout << "." << " "; }
+            }
+            cout << endl; // Move to the next row after printing a row
+        }
+        */
+        
+        
+
     }
 
 
