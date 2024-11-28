@@ -1,6 +1,5 @@
  #pragma once
 #include "SFML/Graphics.hpp"
-#include"Grid.h"
 #include"Food.h"
 #include<iostream>
 #include<ctime>
@@ -24,20 +23,25 @@ private:
     sf::Sprite snakeArray[20];
     int xcoord, ycoord;
     int snakePositionsXY[2][20];
+   // sf::Vector2f headpositionforcollision;
 
 public:
+  //  sf::Vector2f returning ()const {
+    //    return (headposition.x,headposition.y)
+
+    //}
     Snake() {
 
-        snakeBody.loadFromFile("yellowSnake.png");
+        snakeBody.loadFromFile("snake111.png");
         snakeBodySprite.setTexture(snakeBody);
-        snakeBodySprite.setScale(1.5f, 1.5f);
+        snakeBodySprite.setScale(0.4f, 0.4f);
         snakeHead.loadFromFile("SnakeHead.png");
         snakeHeadSprite.setTexture(snakeHead);
         snakeHeadSprite.setScale(0.4f, 0.4f);
     
         
 
-        xcoord = 250, ycoord = 200;
+        xcoord = 100, ycoord = 200;
         for (int i = 0; i < 20; ++i) {
             snakePositionsXY[0][i] = xcoord ; // Set initial x-coordinates
             snakePositionsXY[1][i] = ycoord;                 // Set initial y-coordinates
@@ -69,6 +73,23 @@ public:
 
 
     }
+    sf::Vector2f getHeadPosition() const {
+        return sf::Vector2f(snakePositionsXY[0][19], snakePositionsXY[1][19]);
+    }
+    int(&getGrid())[60][40]{
+        return Grid;
+    }
+
+        void updateGridWithFood(int x, int y) {
+        Grid[x][y] = 2; // Mark food position with 2
+    }
+    int getHeadX() const {
+        return snakePositionsXY[0][19]; // The x-coordinate of the snake's head (last element)
+    }
+
+    int getHeadY() const {
+        return snakePositionsXY[1][19]; // The y-coordinate of the snake's head (last element)
+    }
     void drawGridForSnake(sf::RenderWindow& window)const {
         window.draw(line1, 2, sf::Lines);
         window.draw(line2, 2, sf::Lines);
@@ -86,16 +107,16 @@ public:
         }
        
         // Update the grid based on the snake's position
-        for (int i = 0; i < 10; ++i) {
-            int gridX = snakePositionsXY[0][i] / 10-20; // Map x-coordinate to grid
-            int gridY = snakePositionsXY[1][i] / 10-15; // Map y-coordinate to grid
-            if (gridX >= 0 && gridX < 40 && gridY >= 0 && gridY < 30) {
+        for (int i = 0; i < 20; ++i) {
+            int gridX = snakePositionsXY[0][i] / 10-10; // Map x-coordinate to grid
+            int gridY = snakePositionsXY[1][i] / 10-10; // Map y-coordinate to grid
+           // if (gridX >= 0 && gridX < 60 && gridY >= 0 && gridY <40 ) {
                 Grid[gridX][gridY] = 1; // Mark the grid as occupied by the snake
                 //cout << i << endl;
-                //cout << "gridX: " << gridX << endl;
-                //cout<< "gridY: " << gridY << endl;
+                cout << "gridX: " << gridX << endl;
+                cout<< "gridY: " << gridY << endl;
 
-            }
+         //}
         }
         for (int i = 0; i < 60; ++i) {
             for (int j = 0; j < 40; ++j) {
@@ -122,7 +143,24 @@ public:
 
         // Update the grid after movement
         updateGrid();
+      //  for (int i = 0; i < 40; ++i) {
+       //     for (int j = 0; j < 40; ++j) {
+        //      cout << Grid[i][j] << " ";
+       ///     }
+        //  cout << endl;
+       // }
+
+            // Update the snake's position in the grid
+         //   int newX = snakePositionsXY[0][19];
+         //   int newY = snakePositionsXY[1][19];
+
+       //     if (Grid[newX][newY] == 2) {
+       //         cout << "COLLISION";   // Collision with food logic here
+       //     }
+
+            // Continue updating the grid and snake position...
         
+
     }
 
 
@@ -140,35 +178,32 @@ public:
      ////////////////////////////////////////////////////////////////////////////////////////////program slow hoga
 
          ////////////////////////////////////////////////////////////////////////////////////////////////tells k back end pr grid kaisay chal rhi
-
-       /* cout << "Grid after update:" << endl;
-        for (int i = 0; i < 60; ++i) {
-            for (int j = 0; j < 40; ++j) {
-                cout << Grid[i][j] << " ";
+        cout << "Grid after update:" << endl;
+        for (int i = 0; i < 40; ++i) { 
+            for (int j = 0; j < 60; ++j) { 
+                cout << Grid[j][i] << " ";
             }
-            cout << endl;
+            cout << endl; 
         }
-        */
+
+
+        
         
 
         for (int i = 0; i < 60; ++i) {
             for (int j = 0; j < 40; ++j) {
-              //  if (Grid[i][j] == 1) {
+            if (Grid[i][j] == 1) {
                    
 
-                  
-
-                    // Draw body segments first
                     for (int i = 0; i < 19; ++i) {
                         snakeBodySprite.setPosition(snakePositionsXY[0][i], snakePositionsXY[1][i]);
                         window.draw(snakeBodySprite);
                     }
 
-                    // Draw head explicitly
                     snakeHeadSprite.setPosition(snakePositionsXY[0][19], snakePositionsXY[1][19]);
                     window.draw(snakeHeadSprite);
 
-               //}
+            }
             }
         }
     }

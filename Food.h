@@ -12,6 +12,7 @@ private:
 	sf::Texture foodTexture;
 	sf::Sprite foodSprite;
 	sf::Vector2f foodPosition;
+	int x, y;
 	int randi;
 	int randj;
 	float xvelocity = 1.5, yvelocity = 1.5;
@@ -29,6 +30,22 @@ public:
 
 		
 	}
+	void placeFood(int(&grid)[60][40]) {
+		// Randomly place food in an empty spot
+		do {
+			x = rand() % 60; // Random column
+			y = rand() % 40; // Random row
+		} while (grid[x][y] != 0); // Ensure the spot is empty
+
+		grid[x][y] = 2; // Update the grid with food
+	}
+
+	int getX() const { return x; }
+	int getY() const { return y; }
+	sf::Vector2f getFoodPosition() const {
+		return foodPosition;
+	}
+
 	void drawFood(sf::RenderWindow& window){
 		if (foodPosition.x > 700-20 || foodPosition.x < 100) {
 			xvelocity *= -1;
@@ -42,6 +59,8 @@ public:
 		foodSprite.setPosition(foodPosition.x,foodPosition.y);
 		window.draw(foodSprite);
 	}
+
+
 	
 
 
