@@ -25,8 +25,6 @@ using namespace std;
 //
 //};
 
-
-
 /* game acts as the game engine */
 
 class Game {
@@ -484,4 +482,3 @@ void Game::render() { //open your eyes visual
     this->window->display();
 
 }
-
