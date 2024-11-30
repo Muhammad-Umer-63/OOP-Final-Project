@@ -55,8 +55,8 @@ public:
 			yvelocity *= -1;
 		}
 
-		foodPosition.x += xvelocity;
-        foodPosition.y += yvelocity;
+		//foodPosition.x += xvelocity;
+        //foodPosition.y += yvelocity;
 		foodSprite.setPosition(foodPosition.x,foodPosition.y);
 		window.draw(foodSprite);
 
@@ -88,8 +88,8 @@ public:
 	}
 
 	void bonus(sf::RenderWindow& window) {
-		bonusPosition.x = 450;
-		bonusPosition.y = 450;
+		bonusPosition.x = randi;
+		bonusPosition.y = randj;
 		bonusSprite.setPosition(bonusPosition.x, bonusPosition.y); 
 			window.draw(bonusSprite);
 	}

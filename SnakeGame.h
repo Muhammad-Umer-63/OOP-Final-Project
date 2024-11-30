@@ -19,7 +19,7 @@ public:
 
     SnakeGame() {
         sf::RenderWindow window(sf::VideoMode(800, 600), "OOP Project by 23i-0754 & 23i-0006");
-        window.setFramerateLimit(30);
+        window.setFramerateLimit(60);
 
         sf::Clock clock;
         float elapsedTime = 0.0f;
@@ -76,15 +76,16 @@ public:
         getfoodpositionfromfood();
         getheadpositionfromsnake();
         
-        if (headcoord.x == f1.getfoodpointx() && headcoord.y == f1.getfoodpointy()) {
+        if (headcoord.x >= f1.getfoodpointx() && headcoord.y >= f1.getfoodpointy() && headcoord.x <= f1.getfoodpointx()+1 && headcoord.y <= f1.getfoodpointy()+1) {
             cout << "Collision detected! ....Score:" << f1.score << endl;
             collision(window);
 
         }
-
+        if (s1.selfCollision()) { f1.score -= 1; }
 
         if (headcoord.x == f1.getbonuspointx() && headcoord.y == f1.getbonuspointy()) {
             cout << "\n\n\nbonus collided\n\n\n";
+            f1.score += 5;
         }
 
 
@@ -93,17 +94,20 @@ public:
 
     void outofbound() {
         if (headcoord.x <= 0.5) {
-            cout << "YOU LOSE";
+            s1.setHeadPositionaftercollision();
             
         }
         else if (headcoord.x >= 58) {
-            cout << "YOU LOSE";
+            s1.setHeadPositionaftercollision();
+
          }
         else if (headcoord.y<=0) {
-            cout << "YOU LOSE";
+            s1.setHeadPositionaftercollision();
+
             }
         else if (headcoord.y>=39) {
-            cout << "YOU LOSE";
+            s1.setHeadPositionaftercollision();
+
 
         }
 

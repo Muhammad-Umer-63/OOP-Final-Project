@@ -171,20 +171,29 @@ public:
     int getHeadPositionY() const {
         return snakePositionsXY[1][snakeSize - 1] / cellWidth - 10;
     }
-    /*void selfCollision() {
-        // Ensure snake has more than one segment (head + at least one body part)
-        if (snakeSize > 1) {
-            // Iterate through the snake body (excluding the head)
-            for (int i = 1; i < snakeSize; ++i) {
-                // Compare head position with each body segment position
-                if (getHeadPositionX() == snakePositionsXY[i][0] && getHeadPositionY() == snakePositionsXY[i][1]) {
-                    cout << "\n\n\n\nSELF COLLISION\n\n\n";
-                    break;  // Stop once a collision is detected
+    void setHeadPositionaftercollision(){
+        snakePositionsXY[0][snakeSize - 1] = 400;
+        snakePositionsXY[1][snakeSize - 1] = 300;
+
+    }
+    bool selfCollision() {
+        if (snakeSize > 5) {  
+            for (int i = 0; i < snakeSize - 1; ++i) { 
+                if (snakePositionsXY[0][snakeSize - 1] == snakePositionsXY[0][i] &&
+                    snakePositionsXY[1][snakeSize - 1] == snakePositionsXY[1][i]) {
+                    std::cout << "SELF COLLISION DETECTED!" << std::endl;
+                    setHeadPositionaftercollision(); 
+                    return true;
                 }
             }
         }
+        return false;
     }
-    */
+
+
+
+   
+    
 
 };
 
