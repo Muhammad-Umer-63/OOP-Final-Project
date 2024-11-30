@@ -24,6 +24,8 @@ private:
 	sf::Texture hm_texture;
 	sf::Sprite hm_sprite;
 
+	int lives;
+
 	void initVariables();
 	void initTexture();
 	void initSprite();
@@ -44,6 +46,7 @@ void HangmanFigure::initVariables() {
 	this->top = 0;
 	this->width = 15;
 	this->height = 75;
+	this->lives = 7;
 
 }
 
@@ -93,21 +96,28 @@ private:
 
 	sf::Font uiFont;
 	sf::Text uiText;
+	sf::Text historyText;
 
 	string* easy;
 	string* medium;
 	string* hard;
+	string* history;
+
+	int score;
 
 	void initVariables();
 	void initFont();
 	void initText();
 	void populateArrays();
-
+	
 
 public:
 
 	Category();
 	~Category();
+
+	string getRandomWord();
+	void initHistory(int);
 
 	void updateText();
 	void renderText(sf::RenderTarget&);
@@ -120,6 +130,8 @@ void Category::initVariables() {
 	this->medium = new string[100];
 	this->hard = new string[100];
 	this->populateArrays();
+	this->history = NULL;
+	this->score = 0;
 
 }
 
@@ -139,6 +151,15 @@ void Category::initText() {
 	this->uiText.setCharacterSize(24);
 	this->uiText.setFillColor(sf::Color::White);
 	this->uiText.setString("NONE");
+	this->uiText.setOrigin(sf::Vector2f(-700.f, 1.f)); //why ulta?? //Position 
+	this->uiText.setCharacterSize(24);
+
+	this->historyText.setFont(this->uiFont);
+	this->historyText.setCharacterSize(24);
+	this->historyText.setFillColor(sf::Color::Red);
+	this->historyText.setString("NONE");
+	this->historyText.setOrigin(sf::Vector2f(-700.f, -150.f)); //why ulta?? //Position 
+	this->historyText.setCharacterSize(24);
 
 }
 
@@ -209,15 +230,85 @@ Category::~Category() {
 }
 
 
-void Category::updateText() {
+string Category::getRandomWord() {
 
+	int index = rand() % 100;
+	int option = (rand() % 3) + 1;
+
+	if (option == 1) {
+
+		return this->easy[index];
+
+	}
+
+	else if (option == 2) {
+
+		return this->medium[index];
+
+	}
+	
+	else if (option == 3) {
+
+		return hard[index];
+
+	}
+
+	return easy[index];
 
 }
+
+void Category::initHistory(int size){
+
+	if (history != NULL) {
+
+		delete[] history;
+
+		this->history = new string[size];
+		for (int i = 0; i < size; i++) {
+
+			history[i] = '_';
+
+		}
+
+	}
+
+	else {
+
+		this->history = new string[size];
+		for (int i = 0; i < size; i++) {
+
+			history[i] = '_';
+
+		}
+
+	}
+
+}
+
+void Category::updateText() {
+
+	stringstream ui;
+	stringstream his;
+
+	ui << "Points : " << "\n" << "Lives : " << "\n";
+	this->uiText.setString(ui.str());
+ 
+	/*for (int i = 0; history->length(); i++) {
+
+		his << history[i] << " ";
+
+	}
+	
+	this->historyText.setString(his.str());
+	his.clear();*/
+
+}
+
 
 void Category::renderText(sf::RenderTarget& target) {
 
 		target.draw(this->uiText);
-
+		target.draw(this->historyText);
 }
 
 class Hangman {
@@ -238,6 +329,8 @@ private:
 
 	//private variables
 	bool endGame;
+	string hiddenWord;
+	int hiddenWord_len;
 
 	//initializing functions
 	void initVariables();
@@ -274,6 +367,9 @@ void Hangman::initVariables() {
 
 	this->window = nullptr;
 	this->endGame = false;
+	this->hiddenWord = category.getRandomWord();
+	this->hiddenWord_len = hiddenWord.length();
+	this->category.initHistory(hiddenWord_len);
 
 }
 
@@ -287,11 +383,9 @@ void Hangman::initWindow() {
 
 }
 
-
 const bool Hangman::running() const { return this->window->isOpen(); }
 
 const bool Hangman::getEndGame() const { return this->endGame; }
-
 
 Hangman::Hangman() {
 
@@ -329,8 +423,6 @@ void Hangman::pollEvents() {
 
 }
 
-
-
 void Hangman::update() {
 
 	this->pollEvents(); //order very important //game management
@@ -357,10 +449,6 @@ void Hangman::render() { //open your eyes visual
 
 	this->window->clear();
 
-	/*this->renderText(*this->window);
-
-	this->renderSprite(*this->window);*/
-
 	this->figure.renderSprite(*this->window);
 
 	this->category.renderText(*this->window);
@@ -375,10 +463,10 @@ void Hangman::gameLoop() {
 
 		//update
 		this->update();
-
+		
 		//render
 		this->render();
 
 	}
 
-}
+}// game logic interaction?
