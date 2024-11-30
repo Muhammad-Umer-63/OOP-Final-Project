@@ -27,8 +27,8 @@ public:
 	Food() {
 
 		score = 0;
-		randi = rand() % 600 + 100;
-		randj = rand() % 400 + 100;
+		randi = rand() % 500 + 150;
+		randj = rand() % 400 + 150;
 		foodPosition.x = randi;
 		foodPosition.y = randj;
 		foodTexture.loadFromFile("rabbit.png");

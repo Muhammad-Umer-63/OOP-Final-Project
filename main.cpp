@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
-//#include "C:\Users\DELL\OneDrive\Desktop\OOP GITHUB\Snake.h"
-//#include"C:\Users\DELL\OneDrive\Desktop\OOP GITHUB\include\SFML\Audio\Music.hpp"
+#include"SFML/Audio.hpp"
+#include "C:\Users\DELL\OneDrive\Desktop\OOP GITHUB\Snake.h"
+#include"C:\Users\DELL\OneDrive\Desktop\OOP GITHUB\include\SFML\Audio\Music.hpp"
 #include"SnakeGame.h"
 #include<iostream>
 using namespace std;

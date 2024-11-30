@@ -49,10 +49,10 @@ public:
         snakeBodySprite.setScale(0.4f, 0.4f);
 
         snakeHead.loadFromFile("SnakeHead.png");
-        //snakeHead.loadFromFile("gerlunsaab.jpg");
+       // snakeHead.loadFromFile("gerlunsaab.jpg");
         snakeHeadSprite.setTexture(snakeHead);
-        snakeHeadSprite.setScale(0.4f, 0.4f);
-        //snakeHeadSprite.setScale(0.07f, 0.07f);
+       snakeHeadSprite.setScale(0.4f, 0.4f);
+        //snakeHeadSprite.setScale(0.06f, 0.06f);
 
 
 
@@ -62,7 +62,7 @@ public:
             snakeArray[i] = (i == snakeSize - 1) ? snakeHeadSprite : snakeBodySprite;
         }
 
-        line1[0] = sf::Vertex(sf::Vector2f(100, 100), sf::Color::Red);
+        line1[0] = sf::Vertex(sf::Vector2f(100, 100), sf::Color::White);
         line1[1] = sf::Vertex(sf::Vector2f(700, 100), sf::Color::Blue);
 
         line2[0] = sf::Vertex(sf::Vector2f(100, 500), sf::Color::Red);
