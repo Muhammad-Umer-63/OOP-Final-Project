@@ -44,6 +44,8 @@ private:
     //Resources
 
     sf::Font font;
+    sf::Texture hangman;
+    sf::Sprite hm_sprite;
 
     //Text
     sf::Text uiText;
@@ -69,6 +71,10 @@ private:
     void initText();
     void initEnemies();
 
+    void initTexture();
+    void initSprite();
+
+
 public:
 
     //const and destructor
@@ -88,9 +94,13 @@ public:
     void updateText();
     void updateEnemies();
     void update();
+    void updateSprite();
+
 
     void renderText(sf::RenderTarget& target); //you don't always have to render to window 
     void renderEnemies(sf::RenderTarget& target); //good habbit
+    void renderSprite(sf::RenderTarget& target);
+
     void render();
 
 };
@@ -151,6 +161,23 @@ void Game::initEnemies()
 
 }
 
+void Game::initTexture()
+{
+
+    this->hangman.loadFromFile("Sprites/Hangman/Hangman Sprites Final.png",sf::IntRect(5,0,15,75)); //(+15,same, same, same, same)
+
+}
+
+void Game::initSprite()
+{
+
+    this->hm_sprite.setTexture(this->hangman);
+    this->hm_sprite.setScale(8.f, 8.f);
+    this->hm_sprite.setPosition(50.0f, 50.0f);
+    this->hm_sprite.rotate(.0f);
+
+}
+
 Game::Game() {
 
     this->initVariables();
@@ -158,6 +185,8 @@ Game::Game() {
     this->initText();
     this->initWindow();
     this->initEnemies();
+    this->initTexture();
+    this->initSprite();
 
 }
 
@@ -421,11 +450,15 @@ void Game::update() { //update game logic close your eyes
 
     if (this->endGame == false) {
 
-        this->updateMousePositions();
+       // this->updateMousePositions();
 
         this->updateText();
 
-        this->updateEnemies();
+        this->updateSprite();
+
+       // this->updateEnemies();
+
+        
     }
 
     //End game condition
@@ -434,6 +467,12 @@ void Game::update() { //update game logic close your eyes
         this->endGame = true;
 
     }
+
+}
+
+void Game::updateSprite()
+{
+    
 
 }
 
@@ -457,6 +496,14 @@ void Game::renderEnemies(sf::RenderTarget& target)
 
 }
 
+void Game::renderSprite(sf::RenderTarget& target)
+{
+    
+    target.draw(this->hm_sprite);
+
+}
+
+
 void Game::render() { //open your eyes visual
 
     /*
@@ -475,9 +522,11 @@ void Game::render() { //open your eyes visual
     this->window->clear();
 
     //Draw game objects
-    this->renderEnemies(*this->window);
+    //this->renderEnemies(*this->window);
 
     this->renderText(*this->window);
+
+    this->renderSprite(*this->window);
 
     this->window->display();
 
