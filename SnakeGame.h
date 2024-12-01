@@ -23,11 +23,24 @@ private:
     float bonusDuration = 5.0f;  // Bonus lasts for 5 seconds
     sf::Texture Backgroundimage;
     sf::Sprite BackgroundSprite;
+    sf::Vertex line1[2], line2[2], line3[2], line4[2];
+
     
 public:
      
 
     SnakeGame() {
+        line1[0] = sf::Vertex(sf::Vector2f(100, 100), sf::Color::White);
+        line1[1] = sf::Vertex(sf::Vector2f(700, 100), sf::Color::Blue);
+
+        line2[0] = sf::Vertex(sf::Vector2f(100, 500), sf::Color::Red);
+        line2[1] = sf::Vertex(sf::Vector2f(700, 500), sf::Color::Blue);
+
+        line3[0] = sf::Vertex(sf::Vector2f(100, 100), sf::Color::Red);
+        line3[1] = sf::Vertex(sf::Vector2f(100, 500), sf::Color::Blue);
+
+        line4[0] = sf::Vertex(sf::Vector2f(700, 100), sf::Color::Red);
+        line4[1] = sf::Vertex(sf::Vector2f(700, 500), sf::Color::Blue);
         Gameover.loadFromFile("gameover.jpg");
         GameoverSprite.setTexture(Gameover);
         GameoverSprite.setScale(0.8f, 0.3f);
@@ -104,7 +117,7 @@ public:
 
             window.clear();
             window.draw(BackgroundSprite);
-            s1.drawGridForSnake(window);
+            drawGridForSnake(window);
             f1.drawFood(window);
             s1.updateGridForFood(f1.getfoodpointx(), f1.getfoodpointy());
 
@@ -216,6 +229,11 @@ public:
 
     }
 
-
+    void drawGridForSnake(sf::RenderWindow& window) const {
+        window.draw(line1, 2, sf::Lines);
+        window.draw(line2, 2, sf::Lines);
+        window.draw(line3, 2, sf::Lines);
+        window.draw(line4, 2, sf::Lines);
+    }
 
 };

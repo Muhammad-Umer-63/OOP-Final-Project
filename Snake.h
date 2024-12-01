@@ -12,7 +12,6 @@ private:
     int cellLength = 10;
     int cellWidth = 10;
 
-    sf::Vertex line1[2], line2[2], line3[2], line4[2]; 
 
     sf::Texture snakeHead;
     sf::Sprite snakeHeadSprite;
@@ -62,17 +61,7 @@ public:
             snakeArray[i] = (i == snakeSize - 1) ? snakeHeadSprite : snakeBodySprite;
         }
 
-        line1[0] = sf::Vertex(sf::Vector2f(100, 100), sf::Color::White);
-        line1[1] = sf::Vertex(sf::Vector2f(700, 100), sf::Color::Blue);
-
-        line2[0] = sf::Vertex(sf::Vector2f(100, 500), sf::Color::Red);
-        line2[1] = sf::Vertex(sf::Vector2f(700, 500), sf::Color::Blue);
-
-        line3[0] = sf::Vertex(sf::Vector2f(100, 100), sf::Color::Red);
-        line3[1] = sf::Vertex(sf::Vector2f(100, 500), sf::Color::Blue);
-
-        line4[0] = sf::Vertex(sf::Vector2f(700, 100), sf::Color::Red);
-        line4[1] = sf::Vertex(sf::Vector2f(700, 500), sf::Color::Blue);
+       
 
         updateGrid();
     }
@@ -157,12 +146,7 @@ public:
         }
     }
 
-    void drawGridForSnake(sf::RenderWindow& window) const {
-        window.draw(line1, 2, sf::Lines);
-        window.draw(line2, 2, sf::Lines);
-        window.draw(line3, 2, sf::Lines);
-        window.draw(line4, 2, sf::Lines);
-    }
+    
 
     int getHeadPositionX() const {
         return snakePositionsXY[0][snakeSize - 1] / cellLength - 10;
