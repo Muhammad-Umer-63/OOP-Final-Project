@@ -9,309 +9,10 @@
 #include <string>
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
+#include "Category.h"
+#include "HangmanFigure.h"
 
 using namespace std;
-
-class HangmanFigure {
-
-private:
-
-	int left;
-	int top; 
-	int width;
-	int height;
-
-	sf::Texture hm_texture;
-	sf::Sprite hm_sprite;
-
-	int lives;
-
-	void initVariables();
-	void initTexture();
-	void initSprite();
-
-public:
-
-	HangmanFigure();
-	~HangmanFigure();
-
-	void updateSprite();
-	void renderSprite(sf::RenderTarget&);
-
-};
-
-void HangmanFigure::initVariables() {
-
-	this->left = 5;
-	this->top = 0;
-	this->width = 15;
-	this->height = 75;
-	this->lives = 7;
-
-}
-
-
-void HangmanFigure::initTexture() {
-
-	this->hm_texture.loadFromFile("Sprites/Hangman/Hangman Sprites Final.png", sf::IntRect(this->left, this->top, this->width, this->height));
-
-}
-
-void HangmanFigure::initSprite() {
-
-	this->hm_sprite.setTexture(this->hm_texture);
-	this->hm_sprite.setScale(8.f, 8.f);
-	this->hm_sprite.setPosition(50.0f, -225.0f);
-	this->hm_sprite.rotate(.0f);
-
-}
-
-HangmanFigure::HangmanFigure() {
-
-	this->initVariables();
-	this->initTexture();
-	this->initSprite();
-
-}
-
-HangmanFigure::~HangmanFigure() {}
-
-void HangmanFigure::updateSprite(){
-	
-	this->left += 15;
-	this->lives -= 1;
-	this->initTexture();
-	hm_sprite.setTexture(this->hm_texture);
-	
-}
-
-void HangmanFigure::renderSprite(sf::RenderTarget& target) {
-
-	target.draw(this->hm_sprite);
-
-}
-
-class Category {
-
-private:
-
-	sf::Font uiFont;
-	sf::Text uiText;
-	sf::Text historyText;
-
-	string* easy;
-	string* medium;
-	string* hard;
-	string* history;
-
-	int score;
-
-	void initVariables();
-	void initFont();
-	void initText();
-	void populateArrays();
-	
-
-public:
-
-	Category();
-	~Category();
-
-	string getRandomWord();
-	void initHistory(int);
-
-	void updateText();
-	void renderText(sf::RenderTarget&);
-
-};
-
-void Category::initVariables() {
-
-	this->easy = new string[100];
-	this->medium = new string[100];
-	this->hard = new string[100];
-	this->populateArrays();
-	this->history = NULL;
-	this->score = 0;
-
-}
-
-void Category::initFont() {
-
-	if (!this->uiFont.loadFromFile("Fonts/Roboto-Bold.ttf")) {
-
-		cout << "ERROR::GAME::INITFONTS::Failed to load Font!" << endl;
-
-	}
-
-}
-
-void Category::initText() {
-
-	this->uiText.setFont(this->uiFont);
-	this->uiText.setCharacterSize(24);
-	this->uiText.setFillColor(sf::Color::White);
-	this->uiText.setString("NONE");
-	this->uiText.setOrigin(sf::Vector2f(-700.f, 1.f)); //why ulta?? //Position 
-	this->uiText.setCharacterSize(24);
-
-	this->historyText.setFont(this->uiFont);
-	this->historyText.setCharacterSize(24);
-	this->historyText.setFillColor(sf::Color::Red);
-	this->historyText.setString("NONE");
-	this->historyText.setOrigin(sf::Vector2f(-700.f, -150.f)); //why ulta?? //Position 
-	this->historyText.setCharacterSize(24);
-
-}
-
-void Category::populateArrays() {
-
-	std::string easy_words[100] = {		"dog", "cat", "mouse", "ball", "fish", "apple", "sun", "moon", "star", "tree",
-										"car", "bird", "shoe", "hat", "house", "book", "pen", "cup", "phone", "door",
-										"chair", "clock", "frog", "plane", "boat", "cake", "glass", "key", "lamp", "milk",
-										"ring", "wall", "floor", "road", "grass", "beach", "shirt", "table", "plate", "bread",
-										"water", "river", "horse", "sheep", "goat", "duck", "train", "flower", "leaf", "cloud",
-										"drum", "piano", "guitar", "sugar", "salt", "pepper", "lemon", "lime", "orange", "grape",
-										"peach", "plum", "kiwi", "pear", "berry", "melon", "fig", "cherry", "candy", "jelly",
-										"honey", "juice", "coffee", "tea", "paper", "card", "box", "basket", "bag", "rope",
-										"iron", "wood", "brick", "stone", "stick", "bell", "horn", "fan", "light", "egg",
-										"fork", "knife", "spoon", "bowl", "soap", "towel", "candle", "bucket", "ladder", "map"
-	};
-
-	std::string medium_words[100] = {	"quantum", "entropy", "symmetry", "calculus", "neutron", "electron", "proton", "molecule", "photon", "algorithm",
-										"cryptography", "metamorphosis", "photosynthesis", "relativity", "thermodynamics", "supernova", "constellation", "paradox", "hyperbole", "synesthesia",
-										"onomatopoeia", "catalyst", "euphoria", "dystopia", "utopia", "eschatology", "millenarianism", "apocalypse", "revelation", "eschaton",
-										"armageddon", "deconstruction", "structuralism", "avant-garde", "surrealism", "cubism", "abstract", "expressionism", "pointillism", "fauvism",
-										"constructivism", "suprematism", "vorticism", "precisionism", "magic realism", "neoclassicism", "romanticism", "realism", "naturalism", "impressionism",
-										"symbolism", "existentialist", "philosophy", "metaphysics", "ontology", "hermeneutics", "semiotics", "aesthetics", "phenomenology", "dialectics",
-										"synecdoche", "metonymy", "chiaroscuro", "anachronism", "euphemism", "oxymoron", "poetic", "allegory", "epistemology", "existentialism",
-										"monotheism", "pantheon", "sacred", "transcendence", "divine", "sacrifice", "covenant", "liturgical", "hallowed", "paradigm",
-										"cosmology", "anthropology", "sociology", "biochemistry", "astrophysics", "microbiology", "neurobiology", "psychotherapy", "cognitive", "phenotype",
-										"archaeology", "linguistics", "etymology", "syntax", "grammar", "lexicon", "semantics", "phonology", "pragmatics", "dialect"
-	};
-
-	// 100 distinct hard words
-	std::string hard_words[100] = {		"neuroscience", "psychoanalysis", "existentialism", "phenomenology", "dialectical", "determinism", "utilitarianism", "epistemological", "axiological", "ontological",
-										"deconstructionism", "empirical", "methodological", "phenotypic", "hermeneutical", "paradigmatic", "quantitative", "qualitative", "substantive", "functionalism",
-										"structuralism", "postmodernism", "poststructuralism", "constructivism", "positivism", "romanticism", "materialism", "idealism", "naturalism", "reductionism",
-										"essentialism", "pragmatism", "instrumentalism", "voluntarism", "humanitarianism", "transcendentalism", "synecdoche", "dialectic", "existentialist", "epistemic",
-										"metaethical", "teleological", "descriptive", "prescriptive", "aestheticism", "utilitarian", "deontological", "axiomatic", "holistic", "systematic",
-										"philosophical", "symbiotic", "synthetic", "abstracted", "contextual", "referential", "phenomenological", "ecological", "evolutionary", "ontogenetic",
-										"philological", "etymological", "morphological", "phonological", "semantic", "pragmatic", "syntactical", "dialectical", "holistic", "materialistic",
-										"sociological", "anthropological", "biological", "psychological", "neurological", "cybernetic", "computational", "algorithmic", "technological", "mechanical",
-										"systematic", "statistical", "geometrical", "arithmetical", "numerical", "topological", "combinatorial", "probabilistic", "analytic", "synthetic" "combinatorial", "probabilistic", "analytic", "synthetic",
-										"heuristic","epigenetic","symmetrical","dialecticism","conceptualism","categorical","ontogenesis"
-	};
-
-	for (int i = 0; i < 100; i++) {
-
-		this->easy[i] = easy_words[i];
-		this->medium[i] = medium_words[i];
-		this->hard[i] = hard_words[i];
-
-	}
-
-	
-}
-
-Category::Category() {
-
-	this->initVariables();
-	this->initFont();
-	this->initText();
-
-}
-
-Category::~Category() {
-
-	delete[] easy; easy = NULL;
-	delete[] medium; medium = NULL;
-	delete[] hard; hard = NULL;
-
-}
-
-
-string Category::getRandomWord() {
-
-	int index = rand() % 100;
-	int option = (rand() % 3) + 1;
-
-	if (option == 1) {
-
-		return this->easy[index];
-
-	}
-
-	else if (option == 2) {
-
-		return this->medium[index];
-
-	}
-	
-	else if (option == 3) {
-
-		return hard[index];
-
-	}
-
-	return easy[index];
-
-}
-
-void Category::initHistory(int size){
-
-	if (history != NULL) {
-
-		delete[] history;
-
-		this->history = new string[size];
-		for (int i = 0; i < size; i++) {
-
-			history[i] = '_';
-
-		}
-
-	}
-
-	else {
-
-		this->history = new string[size];
-		for (int i = 0; i < size; i++) {
-
-			history[i] = '_';
-
-		}
-
-	}
-
-}
-
-void Category::updateText() {
-
-	stringstream ui;
-	stringstream his;
-
-	ui << "Points : " << "\n" << "Lives : " << "\n";
-	this->uiText.setString(ui.str());
- 
-	/*for (int i = 0; history->length(); i++) {
-
-		his << history[i] << " ";
-
-	}
-	
-	this->historyText.setString(his.str());
-	his.clear();*/
-
-}
-
-
-void Category::renderText(sf::RenderTarget& target) {
-
-		target.draw(this->uiText);
-		target.draw(this->historyText);
-
-}
 
 class Hangman {
 
@@ -321,6 +22,9 @@ private:
 	sf::RenderWindow* window;
 	sf::Event ev;
 	sf::VideoMode video;
+
+	sf::Texture keyboard_texture;
+	sf::Sprite keyboard_sprite;
 
 	//class HangmanFigure
 
@@ -337,7 +41,8 @@ private:
 	//initializing functions
 	void initVariables();
 	void initWindow();
-
+	void initTexture();
+	void initSprite();
 
 
 
@@ -353,9 +58,13 @@ public:
 	const bool getEndGame() const;
 	void gameLoop();
 
+	void updateSprite();
+
+	void renderSprite(sf::RenderTarget&);
 
 	//Events Handling
 	void pollEvents();
+	void handleInput(string);
 
 	//Updating
 	void update();
@@ -370,9 +79,11 @@ void Hangman::initVariables() {
 	this->window = nullptr;
 	this->endGame = false;
 	this->hiddenWord = category.getRandomWord();
+	cout << hiddenWord << endl;
 	this->hiddenWord_len = hiddenWord.length();
+	//cout << "HiddenWord_Len : " << hiddenWord_len << endl;
 	this->category.initHistory(hiddenWord_len);
-
+	//cout << "History Lenght:::::::" << category.getCurrentHistoryLen() << endl;
 }
 
 
@@ -382,6 +93,29 @@ void Hangman::initWindow() {
 	this->video.height = 600;
 	this->window = new sf::RenderWindow(sf::VideoMode(video), "Hangman", sf::Style::Default);
 	this->window->setFramerateLimit(60);
+
+}
+
+
+void Hangman::initTexture() {
+
+	this->keyboard_texture.loadFromFile("Sprites/Hangman/Keyboard.png");
+
+}
+
+void Hangman::initSprite() {
+
+	this->keyboard_sprite.setTexture(this->keyboard_texture);
+	this->keyboard_sprite.setOrigin(sf::Vector2f(10.f,10.f));
+	this->keyboard_sprite.scale(sf::Vector2f(1.f, 1.f));
+
+}
+
+void Hangman::updateSprite() {}
+
+void Hangman::renderSprite(sf::RenderTarget& target) {
+
+	target.draw(this->keyboard_sprite);
 
 }
 
@@ -401,6 +135,8 @@ Hangman::~Hangman() { delete this->window; }
 
 void Hangman::pollEvents() {
 
+	string inputChar;
+
 	while (this->window->pollEvent(this->ev)) {
 
 		switch (this->ev.type) {
@@ -419,6 +155,202 @@ void Hangman::pollEvents() {
 
 			}
 
+			else if (this->ev.key.code == sf::Keyboard::A) {
+
+				inputChar = "a";
+				this->handleInput(inputChar);
+				break;
+			}
+
+			else if (this->ev.key.code == sf::Keyboard::B) {
+
+				inputChar = "b";
+				this->handleInput(inputChar);
+				break;
+
+			}
+			else if (this->ev.key.code == sf::Keyboard::C) {
+
+				inputChar = "c";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::D) {
+
+				inputChar = "d";
+				this->handleInput(inputChar);
+				break;
+
+			}
+			else if (this->ev.key.code == sf::Keyboard::E) {
+
+				inputChar = "e";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::F) {
+
+				inputChar = "f";
+				this->handleInput(inputChar);
+				break;
+			}
+
+			else if (this->ev.key.code == sf::Keyboard::G) {
+
+				inputChar = "g";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::H) {
+
+				inputChar = "h";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::I) {
+
+				inputChar = "i";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::J) {
+
+				inputChar = "j";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::K) {
+
+				inputChar = "k";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::L) {
+
+				inputChar = "l";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::M) {
+
+				inputChar = "m";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::N) {
+
+				inputChar = "n";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::O) {
+
+				inputChar = "o";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::P) {
+
+				inputChar = "p";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::Q) {
+
+				inputChar = "q";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::R) {
+
+				inputChar = "r";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::S) {
+
+				inputChar = "s";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::T) {
+
+				inputChar = "t";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::U) {
+
+				inputChar = "u";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::V) {
+
+				inputChar = "v";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::W) {
+
+				inputChar = "w";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::X) {
+
+				inputChar = "x";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::Y) {
+
+				inputChar = "y";
+				this->handleInput(inputChar);
+				break;
+			}
+			else if (this->ev.key.code == sf::Keyboard::Z) {
+
+				inputChar = "z";
+				this->handleInput(inputChar);
+				break;
+			}
+			
+
+
+		}
+
+	}
+
+}
+
+void Hangman::handleInput(string word)
+{
+	if (this->endGame == false) {
+
+		/*int choice;
+		cout << "Option : "; cin >> choice;
+		if (choice == 1)
+		*/
+
+		//string word;
+
+		//cout << "Enter a word : "; cin >> word; // hnadle input ka aik function ban sakta hai?
+		////cout << "\nHidden Word Len: " << hiddenWord_len << endl;
+
+		bool checkForChange = category.compareWithHiddenWord(hiddenWord, hiddenWord_len, word);
+
+		if (!checkForChange) {
+
+			figure.updateSprite();
+
+		}
+
+		else {
+
+			this->category.updateText();
+			this->updateSprite();
+
 		}
 
 	}
@@ -434,16 +366,46 @@ void Hangman::update() {
 		/*int choice;
 		cout << "Option : "; cin >> choice;
 		if (choice == 1)
-		figure.updateSprite();*/
-		this->category.updateText();
+		*/
 
+		//string word;
+
+		//cout << "Enter a word : "; cin >> word; // hnadle input ka aik function ban sakta hai?
+		////cout << "\nHidden Word Len: " << hiddenWord_len << endl;
+		//bool checkForChange = category.compareWithHiddenWord(hiddenWord, hiddenWord_len, word);
+
+		//if (!checkForChange) {
+
+		//	figure.updateSprite();
+		//	
+		//}
+
+		//else {
+
+		//	this->category.updateText();
+		//	this->updateSprite();
+
+		//}
 	}
 
 	//End game condition
-	/*if (this->health <= 0) {
+	if (this->figure.handleLives() == 0) {
 
-		
-	}*/
+		string* history = category.getHistory();
+
+		cout << "HiddenWord Is : ";
+
+		for (int i = 0; i < hiddenWord_len; i++) {
+
+			cout << history[i] << " ";
+
+		}
+
+		cout << endl;
+
+		this->endGame = true;
+	
+	}
 
 }
 
@@ -454,6 +416,8 @@ void Hangman::render() { //open your eyes visual
 	this->figure.renderSprite(*this->window);
 
 	this->category.renderText(*this->window);
+
+	this->renderSprite(*this->window);
 
 	this->window->display();
 
