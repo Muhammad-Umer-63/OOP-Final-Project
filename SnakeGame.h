@@ -56,7 +56,7 @@ public:
         buffer.loadFromFile("scam_1992.ogg");
         sf::Sound sound;
         sound.setBuffer(buffer);
-       // sound.play();
+        sound.play();
 
         sf::SoundBuffer zohaib;
         zohaib.loadFromFile("zohaibfirst.ogg");
@@ -122,27 +122,27 @@ public:
             s1.updateGridForFood(f1.getfoodpointx(), f1.getfoodpointy());
 
             s1.drawSnake(window);
-            outofbound(window,wrrgyasound);
+            outofbound(window,wrrgyasound,sound);
 
-            checkcollision(window, ZohaibSound, wrrgyasound);
+            checkcollision(window, ZohaibSound, wrrgyasound,sound);
            
             window.display();
         }
     }
     /////////////////////////////////////////////////////////
-    void checkcollision(sf::RenderWindow& window, sf::Sound& sound1, sf::Sound& sound2) {
+    void checkcollision(sf::RenderWindow& window, sf::Sound& sound1, sf::Sound& sound2,sf::Sound& sound3) {
         getfoodpositionfromfood();
         getheadpositionfromsnake();
         
         if (headcoord.x >= f1.getfoodpointx() && headcoord.y >= f1.getfoodpointy() && headcoord.x <= f1.getfoodpointx()+1 && headcoord.y <= f1.getfoodpointy()+1) {
             cout << "Collision detected! ....Score:" << f1.score << endl;
-            collision(window, sound1);
+            collision(window, sound1,sound3);
 
         }
         if (s1.selfCollision()) { 
             f1.score -= 1,--lives;
             cout << "lives: " << lives << endl;
-            if (lives <= 0)outoflives(window,sound2);
+            if (lives <= 0)outoflives(window,sound2,sound3);
         }
 
         //if (headcoord.x == f1.getbonuspointx() && headcoord.y == f1.getbonuspointy()) {
@@ -158,40 +158,40 @@ public:
     }
 
 
-    void outofbound(sf::RenderWindow& window,sf::Sound& sound1 ) {
+    void outofbound(sf::RenderWindow& window,sf::Sound& sound1,sf::Sound& sound3 ) {
         
         if (headcoord.x <= 0.5) {
             --lives;
             cout << "lives: " << lives << endl;
-            if(lives<=0)outoflives(window,sound1);
+            if(lives<=0)outoflives(window,sound1,sound3);
             s1.setHeadPositionaftercollision();
             
         }
         else if (headcoord.x >= 58) {
             --lives;
             cout << "lives: " << lives << endl;
-            if (lives <= 0)outoflives(window,sound1);
+            if (lives <= 0)outoflives(window,sound1,sound3);
             s1.setHeadPositionaftercollision();
 
          }
         else if (headcoord.y<=0) {
             --lives;
             cout << "lives: " << lives << endl;
-            if (lives <= 0)outoflives(window,sound1);
+            if (lives <= 0)outoflives(window,sound1,sound3);
             s1.setHeadPositionaftercollision();
 
             }
         else if (headcoord.y>=39) {
             --lives;
             cout << "lives: " << lives << endl;
-            if (lives <= 0)outoflives(window,sound1);
+            if (lives <= 0)outoflives(window,sound1,sound3);
             s1.setHeadPositionaftercollision();
 
 
         }
 
     }
-    void collision(sf::RenderWindow& window,sf::Sound& sound1) {
+    void collision(sf::RenderWindow& window,sf::Sound& sound1,sf::Sound& sound3) {
         sound1.play();
         f1.repositionFood(); 
         f1.increaseVelocity();  
@@ -214,8 +214,9 @@ public:
         headcoord.y = s1.getHeadPositionY();
     }
   
-    void outoflives(sf::RenderWindow& window, sf::Sound& sound1) {
+    void outoflives(sf::RenderWindow& window, sf::Sound& sound1,  sf::Sound& sound3) {
         std::cout << "\nYOU ARE OUT OF LIVES\n";
+        sound3.pause();
         sound1.play();
         window.clear();
         window.draw(GameoverSprite);
