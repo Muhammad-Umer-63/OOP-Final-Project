@@ -317,7 +317,6 @@ void Hangman::pollEvents() {
 			}
 			
 
-
 		}
 
 	}
