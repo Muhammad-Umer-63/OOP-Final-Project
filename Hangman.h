@@ -21,6 +21,9 @@ private:
 	sf::Event ev;
 	sf::VideoMode video;
 
+	sf::Clock clock;
+	int timer;
+
 	sf::Texture keyboard_texture;
 	sf::Sprite keyboard_sprite;
 
@@ -42,8 +45,6 @@ private:
 	void initTexture();
 	void initSprite();
 
-
-
 public:
 
 	//Constructor / Destructor
@@ -57,6 +58,7 @@ public:
 	void gameLoop();
 
 	void updateSprite();
+	void updateClock();
 
 	void renderSprite(sf::RenderTarget&);
 
@@ -82,6 +84,8 @@ void Hangman::initVariables() {
 	//cout << "HiddenWord_Len : " << hiddenWord_len << endl;
 	this->category.initHistory(hiddenWord_len);
 	//cout << "History Lenght:::::::" << category.getCurrentHistoryLen() << endl;
+	this->timer = 0;
+
 }
 
 
@@ -110,6 +114,15 @@ void Hangman::initSprite() {
 }
 
 void Hangman::updateSprite() {}
+
+void Hangman::updateClock()
+{
+
+	this->clock.getElapsedTime().asSeconds();
+	this->timer++;
+
+
+}
 
 void Hangman::renderSprite(sf::RenderTarget& target) {
 
@@ -385,7 +398,9 @@ void Hangman::update() {
 	}
 
 	//End game condition
-	if (this->figure.handleLives() == 0) {
+
+	//cout << this->timer << endl;
+	if (this->figure.handleLives() == 0 || timer == 1000) {  //some thing is definaltely happening //10 seconds???
 
 		string* history = category.getHistory();
 
@@ -430,6 +445,8 @@ void Hangman::render() { //open your eyes visual
 	this->figure.renderSprite(*this->window);
 
 	this->category.renderText(*this->window);
+
+	this->updateClock();
 
 	this->renderSprite(*this->window);
 

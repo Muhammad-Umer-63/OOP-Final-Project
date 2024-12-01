@@ -50,7 +50,6 @@ void HangmanFigure::initVariables() {
 
 }
 
-
 void HangmanFigure::initTexture() {
 
 	this->hm_texture.loadFromFile("Sprites/Hangman/Hangman Sprites Final.png", sf::IntRect(this->left, this->top, this->width, this->height));
