@@ -22,6 +22,7 @@ private:
 	string* medium;
 	string* hard;
 	string* history;
+	string* totalHistory;
 	
 	int history_len;
 	int score;

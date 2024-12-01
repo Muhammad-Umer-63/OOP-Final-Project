@@ -66,6 +66,9 @@ public:
 	void pollEvents();
 	void handleInput(string);
 
+	//starting again
+	void startOver();
+
 	//Updating
 	void update();
 
@@ -79,7 +82,7 @@ void Hangman::initVariables() {
 	this->window = nullptr;
 	this->endGame = false;
 	this->hiddenWord = category.getRandomWord();
-	cout << hiddenWord << endl;
+	//cout << hiddenWord << endl;
 	this->hiddenWord_len = hiddenWord.length();
 	//cout << "HiddenWord_Len : " << hiddenWord_len << endl;
 	this->category.initHistory(hiddenWord_len);
@@ -120,7 +123,7 @@ void Hangman::updateClock()
 
 	this->clock.getElapsedTime().asSeconds();
 	this->timer++;
-
+	this->clock.restart();
 
 }
 
@@ -366,6 +369,16 @@ void Hangman::handleInput(string word)
 
 }
 
+void Hangman::startOver()
+{
+
+	this->hiddenWord = category.getRandomWord();
+	this->hiddenWord_len = hiddenWord.length();
+	this->category.initHistory(hiddenWord_len);
+
+
+}
+
 void Hangman::update() {
 
 	this->pollEvents(); //order very important //game management
@@ -428,13 +441,14 @@ void Hangman::update() {
 
 	}
 
-	if (category.checkIfWordHasMatchedTillEnd(hidden) && figure.handleLives() > 0) {
+	if (category.checkIfWordHasMatchedTillEnd(hidden) && figure.handleLives() > 0) {//yahan pe aik aur loop lag sakta
 
-		cout << "You Have Won" << endl;
-		delete[] hidden;
-		this->endGame = true;
+		//cout << "You Have Won" << endl;
+		//this->endGame = true;
 
 	}
+
+	delete[] hidden;
 
 }
 
@@ -467,3 +481,5 @@ void Hangman::gameLoop() {
 	}
 
 }// game logic interaction?
+
+//while loop which you have to make and do khuoobsorti and stuff
