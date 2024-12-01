@@ -48,10 +48,10 @@ public:
         snakeBodySprite.setScale(0.4f, 0.4f);
 
         snakeHead.loadFromFile("SnakeHead.png");
-       // snakeHead.loadFromFile("gerlunsaab.jpg");
+        //snakeHead.loadFromFile("gerlunsaab.jpg");
         snakeHeadSprite.setTexture(snakeHead);
        snakeHeadSprite.setScale(0.4f, 0.4f);
-        //snakeHeadSprite.setScale(0.06f, 0.06f);
+       //snakeHeadSprite.setScale(0.06f, 0.06f);
 
 
 
