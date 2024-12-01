@@ -79,6 +79,7 @@ HangmanFigure::~HangmanFigure() {}
 void HangmanFigure::updateSprite(){
 	
 	this->left += 15;
+	this->lives -= 1;
 	this->initTexture();
 	hm_sprite.setTexture(this->hm_texture);
 	
@@ -309,6 +310,7 @@ void Category::renderText(sf::RenderTarget& target) {
 
 		target.draw(this->uiText);
 		target.draw(this->historyText);
+
 }
 
 class Hangman {
