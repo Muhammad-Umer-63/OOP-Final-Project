@@ -1,11 +1,9 @@
-#pragma once
+#pragma once*
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
 #include <cmath>
 #include <sstream> //string stream
-#include <istream>
-#include <ostream>
 #include <string>
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
@@ -47,6 +45,8 @@ public:
 	void storeInHistory(string, int);
 	string* getHistory();
 	int getCurrentHistoryLen();
+	bool checkIfWordHasMatchedTillEnd(string*);
+
 
 	void updateText();
 	void renderText(sf::RenderTarget&);
@@ -238,6 +238,8 @@ bool Category::compareWithHiddenWord(string hiddenWord, int size, string word)
 				index = i;
 
 				storeInHistory(word, index);
+				this->score += 1;
+				cout << "\nScore : " << this->score << endl;
 				checkIfWordExists = true;
 
 			}
@@ -246,19 +248,30 @@ bool Category::compareWithHiddenWord(string hiddenWord, int size, string word)
 
 	}
 
+	else{
+	
+		checkIfWordExists = true; //juggad //still ain't right
+		this->score -= 2;
+		return checkIfWordExists;
+		
+	}
+
+	if (!checkIfWordExists) { this->score -= 2; cout << "\nScore : " << this->score << endl; } //incorrect guess
 	return checkIfWordExists;
 	
 }
 
-bool Category::compareWithHistory(string word)
+bool Category::compareWithHistory(string word) // for used word
 {
 
-	for (int i = 0; i < history->length(); i++) {
+	for (int i = 0; i < history_len; i++) {
 
 		if (word == history[i]) {
 
+			this->score -= 1;
+			cout << "\nScore : " << this->score << endl;
 			return true;
-
+			
 		}
 
 	}
@@ -287,6 +300,24 @@ int Category::getCurrentHistoryLen()
 
 	//cout << "His Len : ::::" << history_len << endl;
 	return history_len;
+
+}
+
+bool Category::checkIfWordHasMatchedTillEnd(string* hiddenWord)
+{
+
+	for (int i = 0; i < history_len; i++) {
+
+		if (hiddenWord[i] != history[i]) {
+
+			return false;
+
+		}
+
+	}
+	
+	cout << "\nYour Won\n";
+	return true;
 
 }
 
@@ -323,7 +354,6 @@ void Category::updateText() {
 	his.clear();
 
 }
-
 
 void Category::renderText(sf::RenderTarget& target) {
 

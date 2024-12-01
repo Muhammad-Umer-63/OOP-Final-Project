@@ -4,8 +4,6 @@
 #include <cstdlib>
 #include <cmath>
 #include <sstream> //string stream
-#include <istream>
-#include <ostream>
 #include <string>
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
@@ -316,7 +314,6 @@ void Hangman::pollEvents() {
 				break;
 			}
 			
-
 		}
 
 	}
@@ -392,7 +389,7 @@ void Hangman::update() {
 
 		string* history = category.getHistory();
 
-		cout << "HiddenWord Is : ";
+		cout << "\nHiddenWord Was : ";
 
 		for (int i = 0; i < hiddenWord_len; i++) {
 
@@ -402,8 +399,26 @@ void Hangman::update() {
 
 		cout << endl;
 
+		cout << "Womp Womp You Lost" << endl;
+
 		this->endGame = true;
 	
+	}
+
+	string* hidden = new string [hiddenWord_len];
+
+	for (int i = 0; i < hiddenWord_len; i++) {
+
+		hidden[i] = hiddenWord[i];
+
+	}
+
+	if (category.checkIfWordHasMatchedTillEnd(hidden) && figure.handleLives() > 0) {
+
+		cout << "You Have Won" << endl;
+		delete[] hidden;
+		this->endGame = true;
+
 	}
 
 }

@@ -4,8 +4,6 @@
 #include <cstdlib>
 #include <cmath>
 #include <sstream> //string stream
-#include <istream>
-#include <ostream>
 #include <string>
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
