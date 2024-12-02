@@ -413,7 +413,7 @@ void Hangman::update() {
 	//End game condition
 
 	//cout << this->timer << endl;
-	if (this->figure.handleLives() == 0 || timer == 1000) {  //some thing is definaltely happening //10 seconds???
+	if (this->figure.handleLives() == 0 /* || timer == 1000 */ ) {  //some thing is definaltely happening //10 seconds???
 
 		string* history = category.getHistory();
 
