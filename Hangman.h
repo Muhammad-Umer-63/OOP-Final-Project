@@ -82,9 +82,9 @@ void Hangman::initVariables() {
 	this->window = nullptr;
 	this->endGame = false;
 	this->hiddenWord = category.getRandomWord();
-	//cout << hiddenWord << endl;
+	cout << hiddenWord << endl;
 	this->hiddenWord_len = hiddenWord.length();
-	//cout << "HiddenWord_Len : " << hiddenWord_len << endl;
+	cout << "HiddenWord_Len : " << hiddenWord_len << endl;
 	this->category.initHistory(hiddenWord_len);
 	//cout << "History Lenght:::::::" << category.getCurrentHistoryLen() << endl;
 	this->timer = 0;
@@ -340,16 +340,6 @@ void Hangman::handleInput(string word)
 {
 	if (this->endGame == false) {
 
-		/*int choice;
-		cout << "Option : "; cin >> choice;
-		if (choice == 1)
-		*/
-
-		//string word;
-
-		//cout << "Enter a word : "; cin >> word; // hnadle input ka aik function ban sakta hai?
-		////cout << "\nHidden Word Len: " << hiddenWord_len << endl;
-
 		bool checkForChange = category.compareWithHiddenWord(hiddenWord, hiddenWord_len, word);
 
 		if (!checkForChange) {
@@ -367,12 +357,26 @@ void Hangman::handleInput(string word)
 
 	}
 
+	string* hidden = new string[hiddenWord_len];
+
+	for (int i = 0; i < hiddenWord_len; i++) { hidden[i] = hiddenWord[i]; }
+
+	if (category.checkIfWordHasMatchedTillEnd(hidden) && figure.handleLives() > 0) {//yahan pe aik aur loop lag sakta
+
+		this->startOver();
+		cout << "HiddenWord_Len : " << hiddenWord_len << endl;
+
+	}
+
+	delete[] hidden;
+
 }
 
 void Hangman::startOver()
 {
 
 	this->hiddenWord = category.getRandomWord();
+	cout << hiddenWord << endl;
 	this->hiddenWord_len = hiddenWord.length();
 	this->category.initHistory(hiddenWord_len);
 
@@ -383,7 +387,6 @@ void Hangman::update() {
 
 	this->pollEvents(); //order very important //game management
 	
-	if (this->endGame == false) {
 
 		/*int choice;
 		cout << "Option : "; cin >> choice;
@@ -408,47 +411,21 @@ void Hangman::update() {
 		//	this->updateSprite();
 
 		//}
-	}
+
+		
+
 
 	//End game condition
 
 	//cout << this->timer << endl;
-	if (this->figure.handleLives() == 0 /* || timer == 1000 */ ) {  //some thing is definaltely happening //10 seconds???
+	if (this->figure.handleLives() == 0) {  //some thing is definaltely happening //10 seconds???
 
-		string* history = category.getHistory();
-
-		cout << "\nHiddenWord Was : ";
-
-		for (int i = 0; i < hiddenWord_len; i++) {
-
-			cout << history[i] << " ";
-
-		}
-
-		cout << endl;
-
+		cout << "\nHiddenWord Was : " << this->hiddenWord << endl;
 		cout << "Womp Womp You Lost" << endl;
-
 		this->endGame = true;
 	
 	}
 
-	string* hidden = new string [hiddenWord_len];
-
-	for (int i = 0; i < hiddenWord_len; i++) {
-
-		hidden[i] = hiddenWord[i];
-
-	}
-
-	if (category.checkIfWordHasMatchedTillEnd(hidden) && figure.handleLives() > 0) {//yahan pe aik aur loop lag sakta
-
-		//cout << "You Have Won" << endl;
-		//this->endGame = true;
-
-	}
-
-	delete[] hidden;
 
 }
 

@@ -25,13 +25,13 @@ private:
 	string* totalHistory;
 	
 	int history_len;
+	int recent_word_len;
 	int score;
 
 	void initVariables();
 	void initFont();
 	void initText();
 	void populateArrays();
-
 
 public:
 
@@ -47,7 +47,7 @@ public:
 	string* getHistory();
 	int getCurrentHistoryLen();
 	bool checkIfWordHasMatchedTillEnd(string*);
-
+	void initTotalHistory(string*);
 
 	void updateText();
 	void renderText(sf::RenderTarget&);
@@ -62,7 +62,10 @@ void Category::initVariables() {
 	this->populateArrays();
 	this->history = NULL;
 	this->history_len = 0;
+	this->recent_word_len = 0;
+	this->totalHistory = NULL;
 	this->score = 0;
+
 
 }
 
@@ -157,15 +160,16 @@ Category::~Category() {
 	delete[] medium; medium = NULL;
 	delete[] hard; hard = NULL;
 	delete[] history; history = NULL;
+	delete[] totalHistory; totalHistory = NULL;
 
 }
 
 string Category::getRandomWord() {
 
 	int index = rand() % 100;
-	int option = (rand() % 3) + 1;
+	//int option = (rand() % 3) + 1;
 
-	if (option == 1) {
+	/*if (option == 1) {
 
 		return this->easy[index];
 
@@ -181,7 +185,7 @@ string Category::getRandomWord() {
 
 		return hard[index];
 
-	}
+	}*/
 
 	return easy[index];
 
@@ -317,8 +321,92 @@ bool Category::checkIfWordHasMatchedTillEnd(string* hiddenWord)
 
 	}
 	
+	this->recent_word_len += history_len;
+	this->initTotalHistory(this->history);
+
 	cout << "\nYour Won\n";
 	return true;
+
+}
+
+void Category::initTotalHistory(string* word)
+{
+
+	if (this->totalHistory != NULL) {
+
+		int len = recent_word_len + 1;
+
+		string* temp = new string[len];
+
+		cout << "fook : ";
+
+		for (int i = 0; i < recent_word_len - history_len; i++) {
+			
+			cout << totalHistory[i];
+			temp[i] = this->totalHistory[i];
+
+		}
+
+		cout << endl;
+
+		delete[] totalHistory;
+		totalHistory = temp;
+
+		cout << "what : ";
+		for (int i = 0; i < len; i++) {
+
+			cout << totalHistory[i];
+
+		}
+		cout << endl;
+
+		cout << "\nskip\n";
+
+		cout << "siup : ";
+
+		for (int i = 0; i < history_len; i++) {
+
+			cout << totalHistory[i] << " ";
+			this->totalHistory[recent_word_len - history_len + i + 1] = this->history[i];
+
+		}
+
+		cout << endl;
+
+		this->totalHistory[len - 1] = " ";
+
+		cout << "\nTotal History : ";
+
+		for (int i = 0; i < len; i++) {
+
+			cout << totalHistory[i] << " ";
+
+		}
+
+		cout << endl;
+
+	}
+
+	else {
+
+		this->totalHistory = new string[this->recent_word_len + 1];
+
+		for (int i = 0; i < history_len; i++) {
+
+			this->totalHistory[i] = this->history[i];
+
+		}
+
+		this->totalHistory[recent_word_len] = " ";
+
+		for (int i = 0; i < history_len; i++) {
+
+			cout << totalHistory[i];
+
+		}
+
+		cout << endl;
+	}
 
 }
 
