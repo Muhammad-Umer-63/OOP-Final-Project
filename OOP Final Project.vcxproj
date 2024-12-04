@@ -143,7 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Letter.h" />
     <ClInclude Include="WordDictionary.h" />
+    <ClInclude Include="Wordle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
