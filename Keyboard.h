@@ -22,6 +22,8 @@ public:
 	Keyboard();
 	~Keyboard();
 
+	void handleInput();
+
 	void updateKeyboard();
 	void renderKeyboard();
 
@@ -40,11 +42,19 @@ Keyboard::Keyboard() {
 
 }
 
-Keyboard::~Keyboard() {
+Keyboard::~Keyboard() {}
 
-	
+void Keyboard::handleInput()
+{
+
+	//if (sf::Keyboard::) {
+
+
+
+	//}
 
 }
+
 
 void Keyboard::updateKeyboard()
 {
