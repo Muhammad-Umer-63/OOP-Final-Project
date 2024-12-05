@@ -13,7 +13,7 @@ int main()
     
     Wordle* wordle = new Wordle;
     wordle->gameLoop();
-    delete[] wordle;
+    delete wordle;
     wordle = NULL;
 
     

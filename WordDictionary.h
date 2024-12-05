@@ -22,10 +22,10 @@ private:
 	string* medium;
 	string* hard;
 	string* history;
-	string* totalHistory;
+	//string* totalHistory;
 
 	int history_len;
-	int recent_word_len;
+	//int recent_word_len;
 	int score;
 
 	void initVariables();
@@ -41,13 +41,15 @@ public:
 	string getRandomWord();
 	void initHistory(int); //size
 
-	bool compareWithHiddenWord(string, int, string);
-	bool compareWithHistory(string);
+	int* compareWithHiddenWord(string, int, string*);
+	/*bool compareWithHistory(string);
 	void storeInHistory(string, int);
 	string* getHistory();
 	int getCurrentHistoryLen();
-	bool checkIfWordHasMatchedTillEnd(string*);
-	void initTotalHistory(string*);
+	bool checkIfWordHasMatchedTillEnd(string*);*/
+	//void initTotalHistory(string*);
+	bool checkWithFullWordList(string*);
+
 
 	void updateText();
 	void renderText(sf::RenderTarget&);
@@ -62,8 +64,8 @@ void WordDictionary::initVariables() {
 	this->populateArrays();
 	this->history = NULL;
 	this->history_len = 0;
-	this->recent_word_len = 0;
-	this->totalHistory = NULL;
+	//this->recent_word_len = 0;
+	//this->totalHistory = NULL;
 	this->score = 0;
 
 
@@ -85,14 +87,14 @@ void WordDictionary::initText() {
 	this->uiText.setCharacterSize(24);
 	this->uiText.setFillColor(sf::Color::White);
 	this->uiText.setString("Points:0\nLives:7");
-	this->uiText.setOrigin(sf::Vector2f(-700.f, 1.f)); //why ulta?? //Position 
+	this->uiText.setOrigin(sf::Vector2f(-300.f, -250.f)); //why ulta?? //Position 
 	this->uiText.setCharacterSize(24);
 
 	this->historyText.setFont(this->uiFont);
 	this->historyText.setCharacterSize(24);
-	this->historyText.setFillColor(sf::Color::Red);
+	this->historyText.setFillColor(sf::Color::Black);
 	this->historyText.setString("Guess The Word:");
-	this->historyText.setOrigin(sf::Vector2f(-400.f, -150.f)); //why ulta?? //Position 
+	this->historyText.setOrigin(sf::Vector2f(-242.f, -110.f)); //why ulta?? //Position 
 	this->historyText.setCharacterSize(24);
 
 }
@@ -147,7 +149,6 @@ void WordDictionary::populateArrays() {
 
 	}
 
-
 }
 
 WordDictionary::WordDictionary() {
@@ -164,7 +165,7 @@ WordDictionary::~WordDictionary() {
 	delete[] medium; medium = NULL;
 	delete[] hard; hard = NULL;
 	delete[] history; history = NULL;
-	delete[] totalHistory; totalHistory = NULL;
+	//delete[] totalHistory; totalHistory = NULL;
 
 }
 
@@ -208,7 +209,7 @@ void WordDictionary::initHistory(int size) {
 		this->history = new string[size];
 		for (int i = 0; i < size; i++) {
 
-			history[i] = "_";
+			history[i] = " ";
 
 		}
 
@@ -222,7 +223,7 @@ void WordDictionary::initHistory(int size) {
 		this->history = new string[size];
 		for (int i = 0; i < size; i++) {
 
-			history[i] = "_";
+			history[i] = " ";
 
 		}
 
@@ -230,19 +231,32 @@ void WordDictionary::initHistory(int size) {
 
 }
 
-bool WordDictionary::compareWithHiddenWord(string hiddenWord, int size, string word)
+int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size ,string* word)
 {
+	//this->checkWithFullWordList(word);
 
 	int index = 0;
-	bool checkIfWordExists = false;
+	bool checkIfNotWordExists = false;
+	int colorArray[5];
 
-	if (!compareWithHistory(word)) {
+	string* hidden = NULL;
+
+	for (int i = 0; i < size; i++) {
+
+		hidden[i] = hiddenWord[i];
+
+	}
+
+
+	//if (!compareWithHistory(word)) {
 
 		for (int i = 0; i < size; i++) {
 
+			bool checkIfNotWordExists = false;
+
 			//checkIfWordExists = false;
 
-			if (hiddenWord[i] == word[0]) {
+			/*if (hiddenWord[i] == word[0]) {
 
 				index = i;
 
@@ -251,168 +265,234 @@ bool WordDictionary::compareWithHiddenWord(string hiddenWord, int size, string w
 				cout << "\nScore : " << this->score << endl;
 				checkIfWordExists = true;
 
+			}*/
+
+			for (int j = 0; j < size; j++) {
+
+
+				if (word[i] == hidden[j]) {
+
+					if (i == j) {
+
+						colorArray[i] = 2;
+						checkIfNotWordExists = true;
+
+					}
+
+					else if(i != j){
+
+						colorArray[i] = 1;
+						checkIfNotWordExists = true;
+
+					}
+
+				}
+
+
+			}
+
+			if (!checkIfNotWordExists) {
+
+				colorArray[i] = 0;
+
+			}
+			
+
+
+		}
+
+	//}
+
+	for (int i = 0; i < 5; i++) {
+
+		cout << colorArray[i];
+
+	}
+	cout << endl;
+
+	return colorArray;
+
+
+	//else {
+
+	//	checkIfWordExists = true; //juggad //still ain't right
+	//	this->score -= 2;
+	//	return checkIfWordExists;
+
+	//}
+
+	//if (!checkIfWordExists) { this->score -= 2; cout << "\nScore : " << this->score << endl; } //incorrect guess
+	//return checkIfWordExists;
+
+}
+
+//bool WordDictionary::compareWithHistory(string word) // for used word
+//{
+//
+//	for (int i = 0; i < history_len; i++) {
+//
+//		if (word == history[i]) {
+//
+//			this->score -= 1;
+//			cout << "\nScore : " << this->score << endl;
+//			return true;
+//
+//		}
+//
+//	}
+//
+//	return false;
+//
+//}
+//
+//void WordDictionary::storeInHistory(string word, int index)
+//{
+//
+//	//cout << "Index : " << index << endl;
+//	this->history[index] = word[0];
+//
+//}
+//
+//string* WordDictionary::getHistory()
+//{
+//
+//	return history;
+//
+//}
+
+//int WordDictionary::getCurrentHistoryLen()
+//{
+//
+//	//cout << "His Len : ::::" << history_len << endl;
+//	return history_len;
+//
+//}
+
+//bool WordDictionary::checkIfWordHasMatchedTillEnd(string* hiddenWord)
+//{
+//
+//	for (int i = 0; i < history_len; i++) {
+//
+//		if (hiddenWord[i] != history[i]) {
+//
+//			return false;
+//
+//		}
+//
+//	}
+//
+//	//this->recent_word_len += history_len;
+//	//this->initTotalHistory(this->history);
+//
+//	cout << "\nYour Won\n";
+//	return true;
+//
+//}
+
+bool WordDictionary::checkWithFullWordList(string* word)
+{
+	
+	for (int i = 0; i < 100; i++) {
+
+		for (int j = 0; j < 5; j++) {
+
+			if (word[i] == this->easy[i]) {
+
+				return true;
+
 			}
 
 		}
 
 	}
+	
 
-	else {
 
-		checkIfWordExists = true; //juggad //still ain't right
-		this->score -= 2;
-		return checkIfWordExists;
-
-	}
-
-	if (!checkIfWordExists) { this->score -= 2; cout << "\nScore : " << this->score << endl; } //incorrect guess
-	return checkIfWordExists;
-
-}
-
-bool WordDictionary::compareWithHistory(string word) // for used word
-{
-
-	for (int i = 0; i < history_len; i++) {
-
-		if (word == history[i]) {
-
-			this->score -= 1;
-			cout << "\nScore : " << this->score << endl;
-			return true;
-
-		}
-
-	}
-
+	cout << "Word Doesn't Exists in Inventory: ";
 	return false;
 
 }
 
-void WordDictionary::storeInHistory(string word, int index)
-{
-
-	//cout << "Index : " << index << endl;
-	this->history[index] = word[0];
-
-}
-
-string* WordDictionary::getHistory()
-{
-
-	return history;
-
-}
-
-int WordDictionary::getCurrentHistoryLen()
-{
-
-	//cout << "His Len : ::::" << history_len << endl;
-	return history_len;
-
-}
-
-bool WordDictionary::checkIfWordHasMatchedTillEnd(string* hiddenWord)
-{
-
-	for (int i = 0; i < history_len; i++) {
-
-		if (hiddenWord[i] != history[i]) {
-
-			return false;
-
-		}
-
-	}
-
-	this->recent_word_len += history_len;
-	this->initTotalHistory(this->history);
-
-	cout << "\nYour Won\n";
-	return true;
-
-}
-
-void WordDictionary::initTotalHistory(string* word)
-{
-
-	if (this->totalHistory != NULL) {
-
-		int len = recent_word_len + 1;
-
-		string* temp = new string[len];
-
-		cout << "fook : ";
-
-		for (int i = 0; i < recent_word_len - history_len; i++) {
-
-			cout << totalHistory[i];
-			temp[i] = this->totalHistory[i];
-
-		}
-
-		cout << endl;
-
-		delete[] totalHistory;
-		totalHistory = temp;
-
-		cout << "what : ";
-		for (int i = 0; i < len; i++) {
-
-			cout << totalHistory[i];
-
-		}
-		cout << endl;
-
-		cout << "\nskip\n";
-
-		cout << "siup : ";
-
-		for (int i = 0; i < history_len; i++) {
-
-			cout << totalHistory[i] << " ";
-			this->totalHistory[recent_word_len - history_len + i + 1] = this->history[i];
-
-		}
-
-		cout << endl;
-
-		this->totalHistory[len - 1] = " ";
-
-		cout << "\nTotal History : ";
-
-		for (int i = 0; i < len; i++) {
-
-			cout << totalHistory[i] << " ";
-
-		}
-
-		cout << endl;
-
-	}
-
-	else {
-
-		this->totalHistory = new string[this->recent_word_len + 1];
-
-		for (int i = 0; i < history_len; i++) {
-
-			this->totalHistory[i] = this->history[i];
-
-		}
-
-		this->totalHistory[recent_word_len] = " ";
-
-		for (int i = 0; i < history_len; i++) {
-
-			cout << totalHistory[i];
-
-		}
-
-		cout << endl;
-	}
-
-}
+//void WordDictionary::initTotalHistory(string* word)
+//{
+//
+//	if (this->totalHistory != NULL) {
+//
+//		int len = recent_word_len + 1;
+//
+//		string* temp = new string[len];
+//
+//		cout << "fook : ";
+//
+//		for (int i = 0; i < recent_word_len - history_len; i++) {
+//
+//			cout << totalHistory[i];
+//			temp[i] = this->totalHistory[i];
+//
+//		}
+//
+//		cout << endl;
+//
+//		delete[] totalHistory;
+//		totalHistory = temp;
+//
+//		cout << "what : ";
+//		for (int i = 0; i < len; i++) {
+//
+//			cout << totalHistory[i];
+//
+//		}
+//		cout << endl;
+//
+//		cout << "\nskip\n";
+//
+//		cout << "siup : ";
+//
+//		for (int i = 0; i < history_len; i++) {
+//
+//			cout << totalHistory[i] << " ";
+//			this->totalHistory[recent_word_len - history_len + i + 1] = this->history[i];
+//
+//		}
+//
+//		cout << endl;
+//
+//		this->totalHistory[len - 1] = " ";
+//
+//		cout << "\nTotal History : ";
+//
+//		for (int i = 0; i < len; i++) {
+//
+//			cout << totalHistory[i] << " ";
+//
+//		}
+//
+//		cout << endl;
+//
+//	}
+//
+//	else {
+//
+//		this->totalHistory = new string[this->recent_word_len + 1];
+//
+//		for (int i = 0; i < history_len; i++) {
+//
+//			this->totalHistory[i] = this->history[i];
+//
+//		}
+//
+//		this->totalHistory[recent_word_len] = " ";
+//
+//		for (int i = 0; i < history_len; i++) {
+//
+//			cout << totalHistory[i];
+//
+//		}
+//
+//		cout << endl;
+//	}
+//
+//}
 
 void WordDictionary::updateText() {
 
@@ -422,25 +502,25 @@ void WordDictionary::updateText() {
 	ui << "Points : " << this->score << "\n" << "Lives : " << "\n";
 	this->uiText.setString(ui.str());
 
-	string* hit = getHistory();
+	//string* hit = getHistory();
 
 	//cout << "Size :->-> " << getCurrentHistoryLen() << endl;
 
-	for (int i = 0; i < getCurrentHistoryLen(); i++) {
+	/*for (int i = 0; i < 5; i++) {
 
 		cout << hit[i] << " ";
 
-	}
+	}*/
 
 	cout << endl;
 
-	his << "    Guess The Word " << endl << endl;
+	his << "G\t\t  U\t\t  E\t\t  S\t\t  S" << endl << endl; //this correct use some counter to clear this thing
 
-	for (int i = 0; i < getCurrentHistoryLen(); i++) {
+	/*for (int i = 0; i < 5; i++) {
 
 		his << hit[i] << " ";
 
-	}
+	}*/
 
 
 	this->historyText.setString(his.str());
