@@ -1,22 +1,32 @@
 #include <SFML/Graphics.hpp>
 #include"SFML/Audio.hpp"
-#include "C:\Users\DELL\OneDrive\Desktop\OOP GITHUB\Snake.h"
-#include"C:\Users\DELL\OneDrive\Desktop\OOP GITHUB\include\SFML\Audio\Music.hpp"
-#include"SnakeGame.h"
+#include"Game.h"
+#include"Gameboy.h"
 #include<iostream>
 using namespace std;
 
-int main(){
+
+/*class Game {
+private:
+
+public:
+    Game() {
+        srand(static_cast<unsigned int>(time(0)));
+        int selection;
+        cout << "enter 1 if you wanna play snake game: ";
+        cin >> selection;
+        if (selection == 1) {
+            SnakeGame Game1;
+        }
+
+}
+};
+*/
+
+int main() {
     
-
-    srand(static_cast<unsigned int>(time(0)));
-    int selection;
-    cout << "enter 1 if you wanna play snake game: ";
-    cin >> selection;
-    if (selection == 1) {
-        SnakeGame Game1;
-    }
-
+    Gameboy gameboy;
+    
 
     return 0;
 }

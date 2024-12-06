@@ -1,13 +1,285 @@
 
 #include "SFML/Graphics.hpp"
 #include"SFML/Audio/Music.hpp"
-#include "Food.h"
-#include"Snake.h"
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+using namespace std;
 
-class SnakeGame {
+
+
+class Food {
+private:
+    sf::Texture foodTexture;
+    sf::Sprite foodSprite;
+    sf::Vector2f foodPosition;
+    sf::Texture bonusTexture;
+    sf::Sprite bonusSprite;
+    sf::Vector2f bonusPosition;
+    int randi = 0;
+    int randj = 0;
+    float xvelocity = 0, yvelocity = 0;
+
+public:
+
+    int score;
+
+
+    Food() {
+
+        score = 0;
+        randi = rand() % 500 + 150;
+        randj = rand() % 300 + 150;
+        foodPosition.x = randi;
+        foodPosition.y = randj;
+        //foodTexture.loadFromFile("rabbit.png");
+        foodTexture.loadFromFile("flag.jpeg");
+        foodSprite.setTexture(foodTexture);
+        //foodSprite.setScale(0.85f, 0.85f);
+        foodSprite.setScale(0.07f, 0.07f);
+        bonusTexture.loadFromFile("bonus.jpeg");
+        bonusSprite.setTexture(bonusTexture);
+        bonusSprite.setScale(0.2f, 0.2f);
+        bonusPosition.x = 450;
+        bonusPosition.y = 450;
+
+
+
+    }
+
+
+    void drawFood(sf::RenderWindow& window) {
+        if (foodPosition.x > 700 - 20 || foodPosition.x < 100) {
+            xvelocity *= -1;
+        }
+        if (foodPosition.y > 500 - 20 || foodPosition.y < 100) {
+            yvelocity *= -1;
+        }
+        if (score >= 5)foodPosition.x += xvelocity, foodPosition.y += yvelocity;
+
+        foodSprite.setPosition(foodPosition.x, foodPosition.y);
+        window.draw(foodSprite);
+
+    }
+
+
+    int getfoodpointx()const {
+        //cout << "Food: "<< foodPosition.x/10-10 << " ";
+        return(foodPosition.x / 10 - 10);
+    }
+    int getfoodpointy()const {
+        //cout << foodPosition.y/10-10 << " \n";
+        return(foodPosition.y / 10 - 10);
+    }
+    void increaseVelocity() {
+        randi = 320;
+        randj = 320;
+        xvelocity += 0.1;
+        yvelocity += 0.1;
+    }
+    void repositionFood() {
+        int randi = rand() % 500 + 120;
+        int randj = rand() % 300 + 120;
+        foodPosition.x = randi;
+        foodPosition.y = randj;
+
+        xvelocity = 0.5f;
+        yvelocity = 0.5f;
+    }
+
+    void bonus(sf::RenderWindow& window) {
+        bonusPosition.x = randi;
+        bonusPosition.y = randj;
+        bonusSprite.setPosition(bonusPosition.x, bonusPosition.y);
+        window.draw(bonusSprite);
+    }
+
+    int getbonuspointx()const {
+        //cout << "bonus: "<< bonusPosition.x/10-10 << " ";
+        return(bonusPosition.x / 10 - 10);
+    }
+    int getbonuspointy()const {
+        //cout << bonusPosition.y/10-10 << " \n";
+        return(bonusPosition.y / 10 - 10);
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+class Snake {
+private:
+    int cellLength = 10;
+    int cellWidth = 10;
+
+
+    sf::Texture snakeHead;
+    sf::Sprite snakeHeadSprite;
+    sf::Texture snakeBody;
+    sf::Sprite snakeBodySprite;
+
+    int** Grid;
+    int gridWidth = 60, gridHeight = 40;
+
+    int** snakePositionsXY;
+    sf::Sprite* snakeArray;
+    int snakeSize;
+    int maxSnakeSize;
+
+public:
+    Snake() {
+
+        Grid = new int* [gridWidth];
+        for (int i = 0; i < gridWidth; ++i) {
+            Grid[i] = new int[gridHeight] {0};
+        }
+
+
+        maxSnakeSize = 50;
+        snakeSize = 5;
+        snakePositionsXY = new int* [2];
+        snakePositionsXY[0] = new int[maxSnakeSize];
+        snakePositionsXY[1] = new int[maxSnakeSize];
+
+        snakeArray = new sf::Sprite[maxSnakeSize];
+
+        snakeBody.loadFromFile("snake111.png");
+        snakeBodySprite.setTexture(snakeBody);
+        snakeBodySprite.setScale(0.4f, 0.4f);
+
+        //snakeHead.loadFromFile("SnakeHead.png");
+        snakeHead.loadFromFile("gerlunsaab.jpg");
+        snakeHeadSprite.setTexture(snakeHead);
+        //snakeHeadSprite.setScale(0.4f, 0.4f);
+        snakeHeadSprite.setScale(0.05f, 0.05f);
+
+
+
+        for (int i = 0; i < snakeSize; ++i) {
+            snakePositionsXY[0][i] = 100 + i * cellLength;
+            snakePositionsXY[1][i] = 200;
+            snakeArray[i] = (i == snakeSize - 1) ? snakeHeadSprite : snakeBodySprite;
+        }
+
+
+
+        updateGrid();
+    }
+
+
+    void updateGrid() {
+        for (int i = 0; i < gridWidth; ++i) {
+            for (int j = 0; j < gridHeight; ++j) {
+                Grid[i][j] = 0;
+            }
+        }
+
+        for (int i = 0; i < snakeSize; ++i) {
+            int gridX = snakePositionsXY[0][i] / cellLength - 10;
+            int gridY = snakePositionsXY[1][i] / cellWidth - 10;
+            if (i < snakeSize - 1) {
+                Grid[gridX][gridY] = 1;
+            }
+            else {
+                Grid[gridX][gridY] = 2;
+            }
+        }
+    }
+    void updateGridForFood(int dx, int dy) {
+        Grid[dx][dy] = 3;
+        // cout <<"food: " << dx << " " << dy << " ";
+        // cout << Grid[dx][dy+1] << " " << Grid[dx][dy-1]<<" " << Grid[dx + 1][dy] <<" " << Grid[dx - 1][dy] << endl;
+
+    }
+    void updateGridForBonus(int dx, int dy) {
+        Grid[dx][dy] = 4;
+        // cout <<"food: " << dx << " " << dy << " ";
+        // cout << Grid[dx][dy+1] << " " << Grid[dx][dy-1]<<" " << Grid[dx + 1][dy] <<" " << Grid[dx - 1][dy] << endl;
+
+    }
+
+    void moveSnake(int dx, int dy) {
+        for (int i = 0; i < snakeSize - 1; ++i) {
+            snakePositionsXY[0][i] = snakePositionsXY[0][i + 1];
+            snakePositionsXY[1][i] = snakePositionsXY[1][i + 1];
+        }
+
+        snakePositionsXY[0][snakeSize - 1] += dx * cellLength;
+        snakePositionsXY[1][snakeSize - 1] += dy * cellWidth;
+        updateGrid();
+    }
+
+    void growSnake() {
+        if (snakeSize < maxSnakeSize) {
+            for (int i = snakeSize; i > 0; --i) {
+                snakePositionsXY[0][i] = snakePositionsXY[0][i - 1];
+                snakePositionsXY[1][i] = snakePositionsXY[1][i - 1];
+                snakeArray[i] = snakeArray[i - 1];
+            }
+
+            snakePositionsXY[0][0] = snakePositionsXY[0][1];
+            snakePositionsXY[1][0] = snakePositionsXY[1][1];
+            snakeArray[0] = snakeBodySprite;
+            snakeSize++;
+
+            updateGrid();
+        }
+    }
+
+
+    void drawSnake(sf::RenderWindow& window) {
+        /*sa   cout << "Grid after update:" << endl;
+      for (int i = 0; i < 40; ++i) { // Rows (height, second index)
+          for (int j = 0; j < 60; ++j) { // Columns (width, first index)
+              if (Grid[j][i] == 1)cout << "#"<<" ";
+              else if (Grid[j][i] == 2)cout << "O"<<" ";
+              else if (Grid[j][i] == 3)cout << "F" << " ";
+              else if (Grid[j][i]==4)cout<<"B"<<" ";
+              else { cout << "." << " "; }
+          }
+          cout << endl; // Move to the next row after printing a row
+      }*/
+
+        for (int i = 0; i < snakeSize; ++i) {
+            snakeArray[i].setPosition(snakePositionsXY[0][i], snakePositionsXY[1][i]);
+            window.draw(snakeArray[i]);
+        }
+    }
+
+
+
+    int getHeadPositionX() const {
+        return snakePositionsXY[0][snakeSize - 1] / cellLength - 10;
+    }
+
+    int getHeadPositionY() const {
+        return snakePositionsXY[1][snakeSize - 1] / cellWidth - 10;
+    }
+    void setHeadPositionaftercollision() {
+        snakePositionsXY[0][snakeSize - 1] = 400;
+        snakePositionsXY[1][snakeSize - 1] = 300;
+
+    }
+    bool selfCollision() {
+        if (snakeSize > 5) {
+            for (int i = 0; i < snakeSize - 1; ++i) {
+                if (snakePositionsXY[0][snakeSize - 1] == snakePositionsXY[0][i] &&
+                    snakePositionsXY[1][snakeSize - 1] == snakePositionsXY[1][i]) {
+                    std::cout << "SELF COLLISION DETECTED!" << std::endl;
+                    setHeadPositionaftercollision();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
+};
+////////////////////////////////////////////////////////////////////////////////
+class SnakeGame : public Game{
 private:
     Snake s1;
     Food f1;
@@ -18,7 +290,7 @@ private:
     float moveDelay = 0.1f;
     sf::Texture Gameover;
     sf::Sprite GameoverSprite;
-    bool isBonusActive = true;  // Tracks if the bonus is active
+   // bool isBonusActive = true;  // Tracks if the bonus is active
     sf::Clock bonusClock;        // Tracks time for bonus appearance
     float bonusDuration = 5.0f;  // Bonus lasts for 5 seconds
     sf::Texture Backgroundimage;
@@ -29,7 +301,7 @@ private:
 public:
      
 
-    SnakeGame() {
+    SnakeGame(sf::RenderWindow& window) {
         line1[0] = sf::Vertex(sf::Vector2f(100, 100), sf::Color::White);
         line1[1] = sf::Vertex(sf::Vector2f(700, 100), sf::Color::Blue);
 
@@ -50,8 +322,7 @@ public:
         BackgroundSprite.setTexture(Backgroundimage);
         BackgroundSprite.setPosition(0, 0);
 
-        sf::RenderWindow window(sf::VideoMode(800, 600), "OOP Project by 23i-0754 & 23i-0006");
-        window.setFramerateLimit(60);
+       
         sf::SoundBuffer buffer;
         buffer.loadFromFile("scam_1992.ogg");
         sf::Sound sound;
@@ -104,16 +375,13 @@ public:
                 elapsedTime = 0.001f;   
             }
 
-            if (!isBonusActive && f1.score != 0 && f1.score % 5 == 0) {
+            if ( f1.score != 0 && f1.score % 5 == 0) {
                 s1.updateGridForBonus(f1.getbonuspointx(), f1.getbonuspointy());
                 f1.bonus(window);
-                isBonusActive = true;  
                 bonusClock.restart(); 
             }
 
-            if (isBonusActive && bonusClock.getElapsedTime().asSeconds() >= bonusDuration) {
-                isBonusActive = false;  
-            }
+            
 
             window.clear();
             window.draw(BackgroundSprite);
@@ -149,9 +417,8 @@ public:
         //    cout << "\n\n\nbonus collided\n\n\n";
           //  f1.score += 5;
         //}
-        if (isBonusActive && headcoord.x == f1.getbonuspointx() && headcoord.y == f1.getbonuspointy()) {
-            isBonusActive = false;  // Deactivate bonus after collision
-            std::cout << "\n\n\nBonus collided\n\n\n";
+        if (headcoord.x == f1.getbonuspointx() && headcoord.y == f1.getbonuspointy()) {
+            cout << "\n\n\nBonus collided\n\n\n";
             f1.score += 5;
         }
 
@@ -238,3 +505,6 @@ public:
     }
 
 };
+/////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////
