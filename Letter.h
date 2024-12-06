@@ -77,6 +77,8 @@ Letter::~Letter()
 void Letter::updateLetter(int i)  //use this for coloring
 {
 
+	cout << "Value: " << i << endl;
+
 	/*if (this->count_X <= 5) {
 
 		this->x_pos += 50;

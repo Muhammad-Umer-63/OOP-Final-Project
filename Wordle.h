@@ -33,6 +33,7 @@ private:
 
 	void initVariables();
 	void initWindow();
+	void drawGrid();
 
 public :
 
@@ -74,10 +75,42 @@ void Wordle::initWindow(){
 
 }
 
+void Wordle::drawGrid()
+{
+
+	float x = 225.0;
+	float y = 100.0;
+
+	//int count;
+	//cout << "count : "; cin >> count; //for chnage letter[0][i] //draw grid
+	//if (count == 1){
+	for (int i = 0; i < 6; i++) { //aleda function
+
+		if (i > 0) { y += 75.0; }
+
+		for (int j = 0; j < 5; j++) {
+
+			if (j > 0) { x += 75.0; }
+
+			this->letter[i][j].initRectangle(x, y);
+
+		}
+
+		x = 225.0;
+	}
+
+	y = 100.0;
+
+	//}
+
+
+}
+
 Wordle::Wordle() {
 
 	this->initVariables();
 	this->initWindow();
+	//this->drawGrid();
 
 }
 
@@ -104,23 +137,55 @@ void Wordle::pollEvents()
 {
 	while (this->window->pollEvent(this->ev)) {
 
-		switch (this->ev.type) {
+		if (this->ev.type == sf::Event::Closed) {
 
-		case sf::Event::Closed:
-
+			cout << "\Cress Pressed\n";
 			this->window->close();
-			break;
 
-		case sf::Event::KeyPressed:
+		}
 
-			if (this->ev.key.code == sf::Keyboard::Escape) {
+		else if (this->ev.type == sf::Keyboard::Escape) {
 
-				this->window->close();
-				break;
+			cout << "\nEscape Pressed\n";
+			this->window->close();
+
+		}
+
+		this->keyboard.handleInputKeyboard(this->ev);
+		cout << "\nboool : " << keyboard.isInputComplete() << endl;
+
+		if (keyboard.isInputComplete()) {
+
+			int* check;
+			string* something = this->keyboard.getInputArray();
+			string word;
+
+			for (int i = 0; i < 5; i++) {
+
+				cout << "Something : " << something[i] << endl;
+				word += something[i];
 
 			}
-			
+
+			wordDictionary.updateText(word);
+
+			cout << "\nword: " << word;
+
+			check = wordDictionary.compareWithHiddenWord(hiddenWord, hiddenWord_len, word);
+
+				for (int j = 0; j < 5; j++) {
+
+					this->letter[counter][j].updateLetter(check[j]);
+					
+					cout << "LOOP Counter : " << counter << endl;
+
+				}
+
+				counter++;
+				this->keyboard.resetInput();
+
 		}
+
 
 	}
 
@@ -128,7 +193,7 @@ void Wordle::pollEvents()
 				string st;
 				cout << "Enter String : "; cin >> st;*/
 
-	cout << "Here\n";
+	/*cout << "Here\n";
 
 	string* something = this->keyboard.handleInputKeyboard(this->ev);
 	int* check;
@@ -154,42 +219,21 @@ void Wordle::pollEvents()
 
 		this->countForChar++;
 
-	}
+	}*/
 
 
 }
 
 void Wordle::update() {
 
+	cout << "\n" << hiddenWord << "\n";
+
 	this->pollEvents(); //order very important
 
 	//if (this->endGame == false) {
 
 
-			float x = 225.0;
-			float y = 100.0;
-
-			//int count;
-			//cout << "count : "; cin >> count; //for chnage letter[0][i] //draw grid
-			//if (count == 1){
-				for (int i = 0; i < 6; i++) { //aleda function
-
-					if (i > 0) { y += 75.0; }
-
-					for (int j = 0; j < 5; j++) {
-
-						if (j > 0) { x += 75.0; }
-
-						this->letter[i][j].initRectangle(x,y);
-
-					}
-
-					x = 225.0;
-				}
-
-					y = 100.0;
-
-			//}
+		
 
 					/*cout << "\nHidden Word : " << hiddenWord << endl;
 					string st;
@@ -233,11 +277,13 @@ void Wordle::update() {
 		
 	//}
 
-	if (this->endGame == false) {
+	/*if (this->endGame == false) {
 
 		this->wordDictionary.updateText();
 
-	}
+	}*/
+
+	this->drawGrid();
 
 	//End game condition
 	if (this->endGame == true || counter >=6) {
