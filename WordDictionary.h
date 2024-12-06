@@ -16,15 +16,17 @@ private:
 
 	sf::Font uiFont;
 	sf::Text uiText;
-	sf::Text historyText;
+	sf::Text txt1;
+	sf::Text txt2;
+	sf::Text txt3;
+	sf::Text txt4;
+	sf::Text txt5;
+	sf::Text txt6;
 
 	string* easy;
 	string* medium;
 	string* hard;
-	//string* history;
-	//string* totalHistory;
 
-	//int recent_word_len;
 	int counter;
 
 	void initVariables();
@@ -38,17 +40,9 @@ public:
 	~WordDictionary();
 
 	string getRandomWord();
-	//void initHistory(int); //size
 
 	int* compareWithHiddenWord(string, int, string);
-	/*bool compareWithHistory(string);
-	void storeInHistory(string, int);
-	string* getHistory();
-	int getCurrentHistoryLen();
-	bool checkIfWordHasMatchedTillEnd(string*);*/
-	//void initTotalHistory(string*);
 	bool checkWithFullWordList(string);
-
 
 	void updateText(string);
 	void renderText(sf::RenderTarget&);
@@ -62,10 +56,7 @@ void WordDictionary::initVariables() {
 	this->hard = new string[100];
 	this->populateArrays();
 	this->counter = 0;
-	//this->recent_word_len = 0;
-	//this->totalHistory = NULL;
-
-
+	
 }
 
 void WordDictionary::initFont() {
@@ -83,16 +74,51 @@ void WordDictionary::initText() {
 	this->uiText.setFont(this->uiFont);
 	this->uiText.setCharacterSize(24);
 	this->uiText.setFillColor(sf::Color::White);
-	this->uiText.setString("Points:0\nLives:7");
+	this->uiText.setString("");
 	this->uiText.setOrigin(sf::Vector2f(-300.f, -250.f)); //why ulta?? //Position 
 	this->uiText.setCharacterSize(24);
 
-	this->historyText.setFont(this->uiFont);
-	this->historyText.setCharacterSize(24);
-	this->historyText.setFillColor(sf::Color::Black);
-	this->historyText.setString("Guess The Word:");
-	this->historyText.setOrigin(sf::Vector2f(-242.f, -110.f)); //why ulta?? //Position 
-	this->historyText.setCharacterSize(24);
+	this->txt1.setFont(this->uiFont);
+	this->txt1.setCharacterSize(24);
+	this->txt1.setFillColor(sf::Color::Black);
+	this->txt1.setString("");
+	this->txt1.setOrigin(sf::Vector2f(-242.f, -110.f)); //why ulta?? //Position 
+	this->txt1.setCharacterSize(24);
+	
+	this->txt2.setFont(this->uiFont);
+	this->txt2.setCharacterSize(24);
+	this->txt2.setFillColor(sf::Color::Black);
+	this->txt2.setString("");
+	this->txt2.setOrigin(sf::Vector2f(-242.f, -185.f)); //why ulta?? //Position 
+	this->txt2.setCharacterSize(24);
+
+	this->txt3.setFont(this->uiFont);
+	this->txt3.setCharacterSize(24);
+	this->txt3.setFillColor(sf::Color::Black);
+	this->txt3.setString("");
+	this->txt3.setOrigin(sf::Vector2f(-242.f, -260.f)); //why ulta?? //Position 
+	this->txt3.setCharacterSize(24);
+
+	this->txt4.setFont(this->uiFont);
+	this->txt4.setCharacterSize(24);
+	this->txt4.setFillColor(sf::Color::Black);
+	this->txt4.setString("");
+	this->txt4.setOrigin(sf::Vector2f(-242.f, -335.f)); //why ulta?? //Position 
+	this->txt4.setCharacterSize(24);
+
+	this->txt5.setFont(this->uiFont);
+	this->txt5.setCharacterSize(24);
+	this->txt5.setFillColor(sf::Color::Black);
+	this->txt5.setString("");
+	this->txt5.setOrigin(sf::Vector2f(-242.f, -410.f)); //why ulta?? //Position 
+	this->txt5.setCharacterSize(24);
+
+	this->txt6.setFont(this->uiFont);
+	this->txt6.setCharacterSize(24);
+	this->txt6.setFillColor(sf::Color::Black);
+	this->txt6.setString("");
+	this->txt6.setOrigin(sf::Vector2f(-242.f, -585.f)); //why ulta?? //Position 
+	this->txt6.setCharacterSize(24);
 
 }
 
@@ -161,9 +187,7 @@ WordDictionary::~WordDictionary() {
 	delete[] easy; easy = NULL;
 	delete[] medium; medium = NULL;
 	delete[] hard; hard = NULL;
-	//delete[] history; history = NULL;
-	//delete[] totalHistory; totalHistory = NULL;
-
+	
 }
 
 string WordDictionary::getRandomWord() {
@@ -193,48 +217,15 @@ string WordDictionary::getRandomWord() {
 
 }
 
-//void WordDictionary::initHistory(int size) {
-//
-//	if (history != NULL) {
-//
-//		delete[] history;
-//
-//		//cout << "Size : " << size << endl;
-//
-//		this->history_len = size;
-//
-//		this->history = new string[size];
-//		for (int i = 0; i < size; i++) {
-//
-//			history[i] = " ";
-//
-//		}
-//
-//	}
-//
-//	else {
-//
-//		//cout << "Size : " << size << endl;
-//
-//		this->history_len = size;
-//		this->history = new string[size];
-//		for (int i = 0; i < size; i++) {
-//
-//			history[i] = " ";
-//
-//		}
-//
-//	}
-
-//}
-
 int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size ,string word)
 {
-	//this->checkWithFullWordList(word);
+	this->checkWithFullWordList(word);
 
 	int index = 0;
 	bool checkIfNotWordExists = false;
-	int colorArray[5];
+	//int colorArray[5]; // have to use dynamic memory here;
+
+	int* colorArray = new int[5];
 
 	cout << "\nSiuu\n";
 
@@ -283,7 +274,7 @@ int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size ,string w
 	}
 	cout << endl;
 
-	return colorArray;
+	return colorArray; //why is it returning garbage?
 }
 
 
@@ -311,41 +302,67 @@ bool WordDictionary::checkWithFullWordList(string word)
 
 void WordDictionary::updateText(string alpha) {
 
-	//stringstream ui;
 	stringstream his;
 
-	/*ui << "Points : " << "\n" << "Lives : " << "\n";
-	this->uiText.setString(ui.str());*/
+	if (counter == 0) {
 
-	//string* hit = getHistory();
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		this->txt1.setString(his.str());
+		his.clear();
 
-	//cout << "Size :->-> " << getCurrentHistoryLen() << endl;
+	}
 
-	/*for (int i = 0; i < 5; i++) {
+	else if (counter == 1) {
 
-		cout << hit[i] << " ";
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		this->txt2.setString(his.str());
+		his.clear();
 
-	}*/
+	}
 
-	
+	else if (counter == 2) {
 
-	his << alpha[0] << "\t\t  " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t  " << alpha[5] << endl << endl; //this correct use some counter to clear this thing
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		this->txt3.setString(his.str());
+		his.clear();
 
-	/*for (int i = 0; i < 5; i++) {
+	}
 
-		his << hit[i] << " ";
+	else if (counter == 3) {
 
-	}*/
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		this->txt4.setString(his.str());
+		his.clear();
 
+	}
 
-	this->historyText.setString(his.str());
-	his.clear();
+	else if (counter == 4) {
 
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		this->txt5.setString(his.str());
+		his.clear();
+
+	}
+
+	else if (counter == 5) {
+
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		this->txt6.setString(his.str());
+		his.clear();
+
+	}
+
+	counter++;
 }
 
 void WordDictionary::renderText(sf::RenderTarget& target) {
 
 	target.draw(this->uiText);
-	target.draw(this->historyText);
+	target.draw(this->txt1);
+	target.draw(this->txt2);
+	target.draw(this->txt3);
+	target.draw(this->txt4);
+	target.draw(this->txt5);
+	target.draw(this->txt6);
 
 }

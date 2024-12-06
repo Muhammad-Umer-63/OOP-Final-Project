@@ -104,7 +104,7 @@ void Letter::updateLetter(int i)  //use this for coloring
 
 			if (i == 0) {
 
-				this->rectangle.setFillColor(sf::Color::Red);
+				this->rectangle.setFillColor(sf::Color{149,165,166});
 			}
 
 			else if (i == 1) {
@@ -121,7 +121,7 @@ void Letter::updateLetter(int i)  //use this for coloring
 
 		}
 
-	this->row++;
+	//this->row++;
 
 }
 

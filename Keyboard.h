@@ -273,7 +273,7 @@ bool Keyboard::isInputComplete()
 void Keyboard::resetInput()
 {
 
-	this->counter == 0;
+	this->counter = 0;
 	for (int i = 0; i < 5; i++) {
 
 		this->inputArray[i] = " ";
