@@ -334,7 +334,7 @@ void Category::initTotalHistory(string* word)
 
 	if (this->totalHistory != NULL) {
 
-		int len = recent_word_len + 1;
+		int len = recent_word_len + 3;
 
 		string* temp = new string[len];
 
@@ -373,7 +373,7 @@ void Category::initTotalHistory(string* word)
 
 		cout << endl;
 
-		this->totalHistory[len - 1] = " ";
+		this->totalHistory[len - 2] = " ";
 
 		cout << "\nTotal History : ";
 
@@ -389,7 +389,9 @@ void Category::initTotalHistory(string* word)
 
 	else {
 
-		this->totalHistory = new string[this->recent_word_len + 1];
+		int len = recent_word_len + 2;
+
+		this->totalHistory = new string[len];
 
 		for (int i = 0; i < history_len; i++) {
 
@@ -397,7 +399,7 @@ void Category::initTotalHistory(string* word)
 
 		}
 
-		this->totalHistory[recent_word_len] = " ";
+		this->totalHistory[len - 1] = " ";
 
 		for (int i = 0; i < history_len; i++) {
 
