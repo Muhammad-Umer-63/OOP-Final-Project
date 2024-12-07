@@ -1,20 +1,31 @@
 #pragma once
-#include"Game.h"
+//#include"Game.h"
 #include<iostream>
+//#include"SnakeGame.h"
 using namespace std;
 
 class Menu {
-public:
+private:
     sf::Texture menutexture;
-    sf::Sprite menusprite;
+
 public:
-    Menu() {}
-    sf::Sprite displayMenu() {
-        menutexture.loadFromFile("gameboy.png");
+    sf::Sprite menusprite;
+
+    sf::Sprite displayMainMenu() {
+        if (!menutexture.loadFromFile("gameboy.png")) {
+            throw std::runtime_error("Failed to load gameboy.png");
+        }
         menusprite.setTexture(menutexture);
         return menusprite;
     }
 
+    sf::Sprite displayGameMenu() {
+        if (!menutexture.loadFromFile("game.png")) {
+            throw std::runtime_error("Failed to load game.png");
+        }
+        menusprite.setTexture(menutexture);
+        return menusprite;
+    }
 };
 //////////////////////////////////////////////////////////////////////
 class InputClass {
@@ -58,36 +69,61 @@ public:
     }
 };
 /////////////////////////////////////////////////////////
+
+
 class Screen {
-private:
-    sf::RenderWindow window;
 public:
-    Screen() {
-        sf::RenderWindow window(sf::VideoMode(800, 600), "OOP Project by 23i-0754 & 23i-0006");
+    sf::RenderWindow window;
+
+    Screen()
+        : window(sf::VideoMode(800, 600), "OOP Project by 23i-0754 & 23i-0006") {
         window.setFramerateLimit(60);
     }
-    void drawScreen(sf::Sprite sprite) {
+
+    void clear() {
+        window.clear(sf::Color::Black);
+    }
+
+    void display() {
+        window.display();
+    }
+
+    void draw(const sf::Sprite& sprite) {
         window.draw(sprite);
     }
 
+    bool isOpen() const {
+        return window.isOpen();
+    }
 
+    void handleEvents() {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+    }
 };
 ////////////////////////////////////////////////////////
 class Sound {
 private:
-    sf::Sound sound;
+    sf::Sound sound1;
+    sf::SoundBuffer buffer;
+    
 
 public:
-    Sound() {}
+    Sound() {
+        
+    }
 
     void playSound(const sf::SoundBuffer& externalBuffer) {
-        sound.setBuffer(externalBuffer);
-        sound.play();
+        sound1.setBuffer(externalBuffer);
+        sound1.play();
         cout << "Playing sound from provided buffer." << endl;
     }
 
     void stopSound() {
-        sound.stop();
+        sound1.stop();
         cout << "Sound stopped." << endl;
     }
 };
@@ -96,20 +132,34 @@ public:
 
 class Gameboy {
 private:
-	Screen *s1;
-	Menu m1;
-	InputClass *i1;
-	Sound sound1;
+    Screen screen;
+    Menu menu;
+    Sound sounddd;
+    sf::Sound soundscam;
+    sf::SoundBuffer bufferscam;
 
 public:
-	Gameboy(): i1(new InputClass), s1(new Screen) {
-		
-		s1->drawScreen(m1.displayMenu());
-		
-	}
+    Gameboy() {
+        if (!bufferscam.loadFromFile("scam_1992.ogg")) {
+            throw std::runtime_error("Failed to load sound file scam_1992.ogg");
+        }
+        soundscam.setBuffer(bufferscam);
+        sounddd.playSound(bufferscam);
+    }
+
+    void run() {
+        menu.displayMainMenu();
+
+        while (screen.isOpen()) {
+
+            screen.handleEvents();
+            screen.clear();
+            screen.draw(menu.menusprite);
+            screen.display();
 
 
-
-
+            
+        }
+    }
 };
 ///////////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include"SFML/Audio.hpp"
-#include"Game.h"
+//#include"Game.h"
 #include"Gameboy.h"
 #include<iostream>
 using namespace std;
@@ -26,7 +26,7 @@ public:
 int main() {
     
     Gameboy gameboy;
-    
+    gameboy.run();
 
     return 0;
 }

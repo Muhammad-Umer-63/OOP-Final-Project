@@ -1,3 +1,4 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cstdlib>
@@ -14,7 +15,7 @@ private:
     sf::RectangleShape snakeButton;  // Button for Snake Game
     sf::RectangleShape WordleButton;  // Button for Hangman Game
     sf::RectangleShape HangmanButton;
-    
+
 
 public:
     Game() {
@@ -60,7 +61,7 @@ public:
                     if (snakeButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
                         cout << "Snake Game selected!" << endl;
                         // Call SnakeGame constructor
-                        SnakeGame snakeGame(window);
+                        SnakeGame S1(window);
                     }
 
                     // Check if mouse is over the Hangman Game button
@@ -79,9 +80,9 @@ public:
             window.clear(sf::Color::Black);  // Clear with a background color
             window.draw(gameSprite);        // Draw the background
             window.draw(snakeButton);       // Draw the Snake button
-            window.draw(WordleButton); 
+            window.draw(WordleButton);
             window.draw(HangmanButton);
-                window.display();               // Display the window
+            window.display();               // Display the window
         }
     }
 
