@@ -11,6 +11,7 @@
 #include "Keyboard.h"
 #include "Letter.h"
 
+using namespace std;
 
 class Wordle {
 

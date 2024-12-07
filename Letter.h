@@ -8,6 +8,8 @@
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
 
+using namespace std;
+
 class Letter {
 
 private: //numbers according to array to choose color
