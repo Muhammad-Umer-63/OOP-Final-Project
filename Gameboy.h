@@ -14,14 +14,14 @@ public:
 public:
 
     sf::Sprite displayMainMenu() {
-        if (!menutexture.loadFromFile("gameboy.png")) {
+        if (!menutexture.loadFromFile("Sprites/Gameboy Sprites/gameboy.png")) {
         }
         menusprite.setTexture(menutexture);
         return menusprite;
     }
 
     sf::Sprite displayGameMenu() {
-        if (!menutexture.loadFromFile("game.png")) {
+        if (!menutexture.loadFromFile("Sprites/Gameboy Sprites/game.png")) {
         }
         menusprite.setTexture(menutexture);
         return menusprite;
@@ -87,10 +87,9 @@ public:
 
 public:
     Sound() {
-        background.loadFromFile("scam_1992.ogg");
+        background.loadFromFile("Sound/scam_1992.ogg");
         backgroundsound.setBuffer(background);
       
-            
     }
 
     void playSound(const sf::SoundBuffer& externalBuffer) {
@@ -146,7 +145,7 @@ public:
         HangmanButton.setPosition(240, 320);
 
        
-        if (!bufferscam.loadFromFile("scam_1992.ogg")) {
+        if (!bufferscam.loadFromFile("Sound/scam_1992.ogg")) {
             throw std::runtime_error("Failed to load sound file scam_1992.ogg");
         }
         soundscam.setBuffer(bufferscam);

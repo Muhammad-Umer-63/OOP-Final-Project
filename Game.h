@@ -11,9 +11,6 @@ protected:
    // InputClass* input1;
     sf::Sound hitSound;
 
-
-
-
 public:
     Game(){}
    // Game(InputClass* input) : input1(input), score(0) {}
@@ -72,11 +69,11 @@ public:
         foodPosition.x = randi;
         foodPosition.y = randj;
         //foodTexture.loadFromFile("rabbit.png");
-        foodTexture.loadFromFile("flag.jpeg");
+        foodTexture.loadFromFile("Sprites/Snake Sprites/flag.jpeg");
         foodSprite.setTexture(foodTexture);
         //foodSprite.setScale(0.85f, 0.85f);
         foodSprite.setScale(0.07f, 0.07f);
-        bonusTexture.loadFromFile("bonus.jpeg");
+        bonusTexture.loadFromFile("Sprites/Snake Sprites/bonus.jpeg");
         bonusSprite.setTexture(bonusTexture);
         bonusSprite.setScale(0.2f, 0.2f);
         bonusPosition.x = 450;
@@ -180,12 +177,12 @@ public:
 
         snakeArray = new sf::Sprite[maxSnakeSize];
 
-        snakeBody.loadFromFile("snake111.png");
+        snakeBody.loadFromFile("Sprites/Snake Sprites/snake111.png");
         snakeBodySprite.setTexture(snakeBody);
         snakeBodySprite.setScale(0.4f, 0.4f);
 
         //snakeHead.loadFromFile("SnakeHead.png");
-        snakeHead.loadFromFile("gerlunsaab.jpg");
+        snakeHead.loadFromFile("Sprites/Snake Sprites/gerlunsaab.jpg");
         snakeHeadSprite.setTexture(snakeHead);
         //snakeHeadSprite.setScale(0.4f, 0.4f);
         snakeHeadSprite.setScale(0.05f, 0.05f);
@@ -343,13 +340,6 @@ private:
     sf::Sound boundarysound;
 
 
-
-
-
-
-
-
-
 public:
     virtual void StartGame(sf::RenderWindow& window) override{
     
@@ -428,12 +418,12 @@ public:
 
         line4[0] = sf::Vertex(sf::Vector2f(700, 100), sf::Color::Red);
         line4[1] = sf::Vertex(sf::Vector2f(700, 500), sf::Color::Blue);
-        Gameover.loadFromFile("gameover.jpg");
+        Gameover.loadFromFile("Sprites/Snake Sprites/gameover.jpg");
         GameoverSprite.setTexture(Gameover);
         GameoverSprite.setScale(0.8f, 0.3f);
         GameoverSprite.setPosition(100, 100);
 
-        Backgroundimage.loadFromFile("background.jpg");
+        Backgroundimage.loadFromFile("Sprites/Snake Sprites/background.jpg");
         BackgroundSprite.setTexture(Backgroundimage);
         BackgroundSprite.setPosition(0, 0);
 
@@ -446,13 +436,13 @@ public:
 
         
 
-        zohaib1.loadFromFile("hit.ogg");
+        zohaib1.loadFromFile("Sound/hit.ogg");
         ZohaibSound.setBuffer(zohaib1);
 
-        wrrgya.loadFromFile("turrgaye.ogg");
+        wrrgya.loadFromFile("Sound/turrgaye.ogg");
         wrrgyasound.setBuffer(wrrgya);
 
-        boundary.loadFromFile("boundary.ogg");
+        boundary.loadFromFile("Sound/boundary.ogg");
         boundarysound.setBuffer(boundary);
 
 
