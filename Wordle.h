@@ -19,6 +19,9 @@ private:
 	sf::RenderWindow* window;
 	sf::VideoMode video;
 	sf::Event ev;
+	
+	sf::Texture background_texture;
+	sf::Sprite background_sprite;
 
 	bool endGame;
 	int endCounter;
@@ -35,6 +38,8 @@ private:
 
 	void initVariables();
 	void initWindow();
+	void initTexture();
+	void initSprite();
 	void drawGrid();
 
 public :
@@ -46,6 +51,7 @@ public :
 	const bool getEndGame() const;
 
 	void pollEvents();
+	void renderBackground(sf::RenderTarget&);
 	void update();
 	void render();
 
@@ -77,6 +83,24 @@ void Wordle::initWindow(){
 
 }
 
+void Wordle::initTexture()
+{
+
+	if (!this->background_texture.loadFromFile("Sprites/Wordle/wordle Background.png")){
+
+		cout<<"\nFailed to load Background.png\n";
+
+	}
+
+}
+
+void Wordle::initSprite()
+{
+
+	this->background_sprite.setTexture(this->background_texture);
+
+}
+
 void Wordle::drawGrid()
 {
 
@@ -105,6 +129,8 @@ Wordle::Wordle() {
 
 	this->initVariables();
 	this->initWindow();
+	this->initTexture();
+	this->initSprite();
 	this->drawGrid();
 
 }
@@ -193,7 +219,7 @@ void Wordle::pollEvents()
 
 				for (int j = 0; j < 5; j++) {
 
-					this->letter[counter][j].updateLetter(check[j]); 
+					this->letter[counter][j].updateLetter(check[j]); //int ptr
 					cout << "Counter : " << counter << " J : " << j << endl;
 					cout << "LOOP Counter : " << counter << endl;
 
@@ -214,6 +240,7 @@ void Wordle::pollEvents()
 
 					if (check[i] != 2) {
 						
+						this->endCounter;
 						break;
 						
 					}
@@ -251,6 +278,13 @@ void Wordle::pollEvents()
 
 }
 
+void Wordle::renderBackground(sf::RenderTarget& target)
+{
+
+	target.draw(this->background_sprite);
+
+}
+
 void Wordle::update() { //also rendeer it with ttaht
 
 	this->pollEvents(); //order very important
@@ -276,6 +310,8 @@ void Wordle::render() {
 
 	this->window->clear();
 
+	this->renderBackground(*this->window);
+
 	for (int i = 0; i < 6; i++) { // you have create logic around here so that it doesn't get affected
 
 		for (int j = 0; j < 5; j++) {
@@ -296,6 +332,8 @@ void Wordle::gameLoop() {
 	while (running() && !getEndGame()) {
 
 		update();
+		
+		//this->window->draw(this->background_sprite);
 
 		render();
 

@@ -135,7 +135,7 @@ void WordDictionary::initText() {
 	this->txt6.setCharacterSize(24);
 	this->txt6.setFillColor(sf::Color::Black);
 	this->txt6.setString("");
-	this->txt6.setOrigin(sf::Vector2f(-242.f, -585.f)); //why ulta?? //Position 
+	this->txt6.setOrigin(sf::Vector2f(-242.f, -485.f)); //why ulta?? //Position 
 	this->txt6.setCharacterSize(24);
 
 }
@@ -249,7 +249,7 @@ int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size ,string w
 
 	int* colorArray = new int[5] {0};
 
-	if (this->checkWithFullWordList(word)) {
+	//if (this->checkWithFullWordList(word)) {
 
 		this->updateHistory(word, size);
 
@@ -312,13 +312,13 @@ int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size ,string w
 	
 		return colorArray; //why is it returning garbage?
 
-	}
+	//}
 
-	else {
+	/*else {
 
 		return colorArray;
 
-	}
+	}*/
 }
 
 
@@ -373,7 +373,7 @@ void WordDictionary::updateHistory(string word, int historySize)
 
 		int previousSize = getHistorySize();
 
-		this->historySize += 7;
+		this->historySize += 1;
 		string* temp = new string [this->historySize];
 		
 		for (int i = 0; i < previousSize; i++) {
@@ -385,13 +385,10 @@ void WordDictionary::updateHistory(string word, int historySize)
 		delete[] this->history;
 		history = temp;
 
-		for (int i = 0; i < this->historySize - previousSize; i++) {
+		
+		this->history[previousSize] = word;
 
-			this->history[this->historySize - previousSize + i] = word[i];
-
-		}
-
-		this->history[this->historySize - 2] = " ";
+		//this->history[this->historySize - 1] = " ";
 
 		cout << "Hello 3333: ";
 
@@ -406,25 +403,21 @@ void WordDictionary::updateHistory(string word, int historySize)
 
 	}
 
-	else {
+	else { //pointer takes in the full string so be carefull with that
 
-		this->historySize = 7;
+		this->historySize = 1;
 
 		this->history = new string[this->historySize];
 
-		for (int i = 0; i < historySize; i++) {
+			this->history[0] = word;
 
-			this->history[i] = word[i];
-
-		}
-
-		this->history[this->historySize - 2] = " ";
+		//this->history[this->historySize - 1] = " ";
 
 		cout << "Hello : ";
 
 		for (int i = 0; i < this->historySize; i++) {
 
-			cout  << this->history[i];
+			cout << this->history[i];
 
 		}
 
@@ -433,7 +426,7 @@ void WordDictionary::updateHistory(string word, int historySize)
 
 }
 
-void WordDictionary::updateText(string alpha, string space) {
+void WordDictionary::updateText(string alpha, string space) { //you can treat it like that aswell
 
 	stringstream his;
 	stringstream used;
@@ -442,23 +435,13 @@ void WordDictionary::updateText(string alpha, string space) {
 
 	for (int i = 0; i < this->historySize; i++) {
 
-		if (i == 0) {
+		for (int j = 0; j < 5; j++) {
 
-			used << this->history[i] << " ";
-			
-		}
-
-		else if ((i + 1) % 3 == 0) {
-
-			used << this->history[i] << endl;
+			used << this->history[i][j];
 
 		}
-		
-		else {
 
-			used << this->history[i] << " ";
-
-		}
+		used << "\n";
 
 	}
 
@@ -467,7 +450,7 @@ void WordDictionary::updateText(string alpha, string space) {
 
 	if (counter >= 0 && counter < 5) {
 
-		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt1.setString(his.str());
 		his.clear();
 
@@ -475,7 +458,7 @@ void WordDictionary::updateText(string alpha, string space) {
 
 	else if (counter >= 5 && counter < 10) {
 
-		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt2.setString(his.str());
 		his.clear();
 
@@ -483,7 +466,7 @@ void WordDictionary::updateText(string alpha, string space) {
 
 	else if (counter >= 10 && counter < 15) {
 
-		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt3.setString(his.str());
 		his.clear();
 
@@ -491,7 +474,7 @@ void WordDictionary::updateText(string alpha, string space) {
 
 	else if (counter >= 15 && counter < 20) {
 
-		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt4.setString(his.str());
 		his.clear();
 
@@ -499,7 +482,7 @@ void WordDictionary::updateText(string alpha, string space) {
 
 	else if (counter >= 20 && counter < 25) {
 
-		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt5.setString(his.str());
 		his.clear();
 
@@ -507,7 +490,7 @@ void WordDictionary::updateText(string alpha, string space) {
 
 	else if (counter >= 25 && counter < 30) {
 
-		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt6.setString(his.str());
 		his.clear();
 
@@ -539,51 +522,3 @@ void WordDictionary::renderText(sf::RenderTarget& target) {
 	target.draw(this->txt6);
 
 }
-
-
-
-
-	/*hfsjhuis
-	
-	Game{
-
-
-	protected:
-
-
-	public:
-
-
-		virtual ManageSound(){
-
-		if(1)
-			Sound s1.fun1(jhjhsjhjdhjs);
-
-		else if()
-
-			Sound s1.fun2(jhjhsjhjdhjs);
-
-		}
-
-
-
-	}
-	
-
-	SnakeGame: public Game{
-
-
-		Managesound(parementers, p2, p4, index ,1, 2 )
-
-		ManagrSound
-
-
-
-
-		}
-
-
-		Sound
-
-	
-	*/
