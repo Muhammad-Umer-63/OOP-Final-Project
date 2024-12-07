@@ -25,6 +25,8 @@ private:
 	sf::Texture background_texture;
 	sf::Sprite background_sprite;
 
+	sf::SoundBuffer thak;
+
 	bool endGame;
 	int endCounter;
 	bool endCheck;
@@ -73,6 +75,7 @@ void Wordle::initVariables() {
 	this->counter = 0;
 	this->countForChar = 0;
 	this->endCounter = 0;
+	this->thak.loadFromFile("Sound/Wordle Sound/thak sound.ogg");
 
 }
 
@@ -193,6 +196,7 @@ void Wordle::pollEvents(sf::RenderWindow& window)
 		if (this->keyboard.checkIFKeyIsPressed(this->keyboard.getKey())) {
 
 			wordDictionary.updateText(word, this->keyboard.getKey());
+			this->PlayhitSound(this->thak);
 			this->keyboard.resetKey();
 
 		}
