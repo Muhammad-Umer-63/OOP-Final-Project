@@ -1,6 +1,7 @@
 #pragma once
 #include"Game.h"
-#include "Word"
+#include "Wordle.h"
+#include "Hangman.h"
 #include<iostream>
 //#include"SnakeGame.h"
 using namespace std;
@@ -116,6 +117,7 @@ private:
     Sound sounddd;
     Game* g1;
     Game* g2;
+    Game* g3;
     sf::Sound soundscam;
     sf::SoundBuffer bufferscam;
     sf::RectangleShape GamesButton;  
@@ -194,11 +196,18 @@ public:
                         if (HangmanButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
                             cout << "hangman game selected!" << endl;
                             screen.window.clear();
-                            g2 = new Wordle(screen.window);
-                            g2->StartGame(screen.window);
+                            g3 = new Hangman;
+                            g3->StartGame(screen.window);
+                            delete[] g3;
+
+
                         }
                         if (WordleButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
                             cout << "Wordle game selected!" << endl;
+                            screen.window.clear();
+                            g2 = new Wordle(screen.window);
+                            g2->StartGame(screen.window);
+                            delete[] g2;
                         }
                     }
                 }

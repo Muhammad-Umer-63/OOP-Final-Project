@@ -9,15 +9,16 @@
 #include "SFML/Audio.hpp"
 #include "Category.h"
 #include "HangmanFigure.h"
+#include "Game.h"
 
 using namespace std;
 
-class Hangman {
+class Hangman : public Game {
 
 private:
 
 	//Rendering Varibles
-	sf::RenderWindow* window;
+	//sf::RenderWindow* window;
 	sf::Event ev;
 	sf::VideoMode video;
 
@@ -41,7 +42,7 @@ private:
 
 	//initializing functions
 	void initVariables();
-	void initWindow();
+	//void initWindow();
 	void initTexture();
 	void initSprite();
 
@@ -53,9 +54,9 @@ public:
 
 	//Accessors // to keep in game loop
 
-	const bool running() const;
+	const bool running(sf::RenderWindow&) const;
 	const bool getEndGame() const;
-	void gameLoop();
+	void StartGame(sf::RenderWindow&);
 
 	void updateSprite();
 	void updateClock();
@@ -63,23 +64,23 @@ public:
 	void renderSprite(sf::RenderTarget&);
 
 	//Events Handling
-	void pollEvents();
+	void pollEvents(sf::RenderWindow&);
 	void handleInput(string);
 
 	//starting again
 	void startOver();
 
 	//Updating
-	void update();
+	void update(sf::RenderWindow&);
 
 	//Rendering
-	void render();
+	void render(sf::RenderWindow&);
 
 };
 
 void Hangman::initVariables() {
 
-	this->window = nullptr;
+	//this->window = nullptr;
 	this->endGame = false;
 	this->hiddenWord = category.getRandomWord();
 	cout << hiddenWord << endl;
@@ -92,14 +93,14 @@ void Hangman::initVariables() {
 }
 
 
-void Hangman::initWindow() {
-
-	this->video.width = 800;
-	this->video.height = 600;
-	this->window = new sf::RenderWindow(sf::VideoMode(video), "Hangman", sf::Style::Default);
-	this->window->setFramerateLimit(60);
-
-}
+//void Hangman::initWindow() {
+//
+//	this->video.width = 800;
+//	this->video.height = 600;
+//	this->window = new sf::RenderWindow(sf::VideoMode(video), "Hangman", sf::Style::Default);
+//	this->window->setFramerateLimit(60);
+//
+//}
 
 
 void Hangman::initTexture() {
@@ -133,38 +134,40 @@ void Hangman::renderSprite(sf::RenderTarget& target) {
 
 }
 
-const bool Hangman::running() const { return this->window->isOpen(); }
+const bool Hangman::running(sf::RenderWindow& window) const { return window.isOpen(); }
 
 const bool Hangman::getEndGame() const { return this->endGame; }
 
 Hangman::Hangman() {
 
 	this->initVariables();
-	this->initWindow();
+	//this->initWindow();
 
 }
 
-Hangman::~Hangman() { delete this->window; }
+Hangman::~Hangman() { //delete this->window; 
+
+}
 
 
-void Hangman::pollEvents() {
+void Hangman::pollEvents(sf::RenderWindow& window) {
 
 	string inputChar;
 
-	while (this->window->pollEvent(this->ev)) {
+	while (window.pollEvent(this->ev)) {
 
 		switch (this->ev.type) {
 
 		case sf::Event::Closed:
 
-			this->window->close();
+			window.close();
 			break;
 
 		case sf::Event::KeyPressed:
 
 			if (this->ev.key.code == sf::Keyboard::Escape) {
 
-				this->window->close();
+				window.close();
 				break;
 
 			}
@@ -383,9 +386,9 @@ void Hangman::startOver()
 
 }
 
-void Hangman::update() {
+void Hangman::update(sf::RenderWindow& window) {
 
-	this->pollEvents(); //order very important //game management
+	this->pollEvents(window); //order very important //game management
 
 
 	/*int choice;
@@ -429,31 +432,31 @@ void Hangman::update() {
 
 }
 
-void Hangman::render() { //open your eyes visual
+void Hangman::render(sf::RenderWindow& window) { //open your eyes visual
 
-	this->window->clear();
+	window.clear();
 
-	this->figure.renderSprite(*this->window);
+	this->figure.renderSprite(window);
 
-	this->category.renderText(*this->window);
+	this->category.renderText(window);
 
 	this->updateClock();
 
-	this->renderSprite(*this->window);
+	this->renderSprite(window);
 
-	this->window->display();
+	window.display();
 
 }
 
-void Hangman::gameLoop() {
+void Hangman::StartGame(sf::RenderWindow& window) {
 
-	while (this->running() && !getEndGame()) {
+	while (this->running(window) && !getEndGame()) {
 
 		//update
-		this->update();
+		this->update(window);
 
 		//render
-		this->render();
+		this->render(window);
 
 	}
 

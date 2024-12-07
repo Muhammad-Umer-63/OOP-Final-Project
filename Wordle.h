@@ -11,10 +11,8 @@
 #include "Keyboard.h"
 #include "Letter.h"
 #include "Game.h"
-#include "Gameboy.h"
 
 using namespace std;
-
 
 class Wordle : public Game{
 
@@ -90,7 +88,7 @@ void Wordle::initVariables() {
 void Wordle::initTexture()
 {
 
-	if (!this->background_texture.loadFromFile("Sprites/Wordle/wordle Background.png")) {
+	if (!this->background_texture.loadFromFile("Sprites/Wordle Sprites/wordle Background.png")) {
 
 		cout << "\nFailed to load Background.png\n";
 
@@ -331,7 +329,7 @@ void Wordle::render(sf::RenderWindow& window) {
 
 }
 
-void Wordle::StartGame(sf::RenderWindow& window) {
+void Wordle::StartGame(sf::RenderWindow& window){
 
 	while (running(window) && !getEndGame()) {
 
