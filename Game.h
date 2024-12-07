@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include "Wordle.h"
+
 using namespace std;
 
 class Game {
@@ -12,7 +14,16 @@ protected:
     sf::Sound hitSound;
 
 public:
-    Game(){}
+
+    Game(){
+    
+        this->score = 0;
+        this->hitSound.stop();
+
+    }
+
+    virtual ~Game(){}
+    
    // Game(InputClass* input) : input1(input), score(0) {}
 
 

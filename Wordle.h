@@ -10,15 +10,18 @@
 #include "WordDictionary.h"
 #include "Keyboard.h"
 #include "Letter.h"
+#include "Game.h"
+#include "Gameboy.h"
 
 using namespace std;
 
-class Wordle {
+
+class Wordle : public Game{
 
 private:
 
-	sf::RenderWindow* window;
-	sf::VideoMode video;
+	/*sf::RenderWindow* window;*/
+	/*sf::VideoMode video;*/
 	sf::Event ev;
 
 	sf::Texture background_texture;
@@ -38,25 +41,25 @@ private:
 	Keyboard keyboard;
 
 	void initVariables();
-	void initWindow();
+	//void initWindow();
 	void initTexture();
 	void initSprite();
 	void drawGrid();
 
 public:
 
-	Wordle();
+	Wordle(sf::RenderWindow&);
 	virtual ~Wordle();
 
-	const bool running() const;
+	const bool running(sf::RenderWindow& ) const;
 	const bool getEndGame() const;
 
-	void pollEvents();
+	void pollEvents(sf::RenderWindow& );
 	void renderBackground(sf::RenderTarget&);
-	void update();
-	void render();
+	void update(sf::RenderWindow&);
+	void render(sf::RenderWindow&);
 
-	void gameLoop();
+	void StartGame(sf::RenderWindow&);
 
 
 };
@@ -64,7 +67,7 @@ public:
 
 void Wordle::initVariables() {
 
-	this->window = NULL;
+	//this->window = NULL;
 	this->endGame = false;
 	this->hiddenWord = wordDictionary.getRandomWord();
 	cout << "\n" << hiddenWord << "\n";
@@ -75,14 +78,14 @@ void Wordle::initVariables() {
 
 }
 
-void Wordle::initWindow() { //khatam
-
-	this->video.width = 800;
-	this->video.height = 600;
-	this->window = new sf::RenderWindow(sf::VideoMode(video), "Wordle", sf::Style::Default);
-	this->window->setFramerateLimit(60);
-
-}
+//void Wordle::initWindow() { //khatam
+//
+//	this->video.width = 800;
+//	this->video.height = 600;
+//	this->window = new sf::RenderWindow(sf::VideoMode(video), "Wordle", sf::Style::Default);
+//	this->window->setFramerateLimit(60);
+//
+//}
 
 void Wordle::initTexture()
 {
@@ -126,10 +129,10 @@ void Wordle::drawGrid()
 
 }
 
-Wordle::Wordle() {
+Wordle::Wordle(sf::RenderWindow& window) {
 
 	this->initVariables();
-	this->initWindow();
+	//this->initWindow();
 	this->initTexture();
 	this->initSprite();
 	this->drawGrid();
@@ -138,14 +141,14 @@ Wordle::Wordle() {
 
 Wordle::~Wordle() {
 
-	delete this->window;
+	//delete this->window;
 
 }
 
 //Accessors
-const bool Wordle::running() const {
+const bool Wordle::running(sf::RenderWindow& window) const {
 
-	return this->window->isOpen();
+	return window.isOpen();
 
 }
 
@@ -155,23 +158,23 @@ const bool Wordle::getEndGame() const
 
 }
 
-void Wordle::pollEvents()
+void Wordle::pollEvents(sf::RenderWindow& window)
 {
 	int* check = 0;
 
-	while (this->window->pollEvent(this->ev)) {
+	while (window.pollEvent(this->ev)) {
 
 		if (this->ev.type == sf::Event::Closed) {
 
 			cout << "\nCross Pressed\n";
-			this->window->close();
+			window.close();
 
 		}
 
 		else if (this->ev.type == sf::Keyboard::Escape) {
 
 			cout << "\nEscape Pressed\n";
-			this->window->close();
+			window.close();
 
 		}
 
@@ -286,9 +289,9 @@ void Wordle::renderBackground(sf::RenderTarget& target)
 
 }
 
-void Wordle::update() { //also rendeer it with ttaht
+void Wordle::update(sf::RenderWindow& window) { //also rendeer it with ttaht
 
-	this->pollEvents(); //order very important
+	this->pollEvents(window); //order very important
 
 	if (this->endCheck == true && counter < 6) {
 
@@ -307,36 +310,36 @@ void Wordle::update() { //also rendeer it with ttaht
 
 }
 
-void Wordle::render() {
+void Wordle::render(sf::RenderWindow& window) {
 
-	this->window->clear();
+	window.clear();
 
-	this->renderBackground(*this->window);
+	this->renderBackground(window);
 
 	for (int i = 0; i < 6; i++) { // you have create logic around here so that it doesn't get affected
 
 		for (int j = 0; j < 5; j++) {
 
-			this->letter[i][j].renderLetter(*this->window);
+			this->letter[i][j].renderLetter(window);
 
 		}
 
 	}
 
-	this->wordDictionary.renderText(*this->window);
-	this->window->display();
+	this->wordDictionary.renderText(window);
+	window.display();
 
 }
 
-void Wordle::gameLoop() {
+void Wordle::StartGame(sf::RenderWindow& window) {
 
-	while (running() && !getEndGame()) {
+	while (running(window) && !getEndGame()) {
 
-		update();
+		update(window);
 
 		//this->window->draw(this->background_sprite);
 
-		render();
+		render(window);
 
 	}
 
