@@ -226,7 +226,7 @@ int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size ,string w
 	bool checkIfNotWordExists = false;
 	//int colorArray[5]; // have to use dynamic memory here;
 
-	int* colorArray = new int[5];
+	int* colorArray = new int[5] {0};
 
 	cout << "\nSiuu\n";
 

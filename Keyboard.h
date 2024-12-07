@@ -34,7 +34,7 @@ public:
 	void resetKey();
 
 	string* getInputArray();
-	bool isInputComplete();
+	bool isInputComplete() const;
 	void resetInput();
 
 };
@@ -364,7 +364,7 @@ string* Keyboard::getInputArray()
 	
 }
 
-bool Keyboard::isInputComplete()
+bool Keyboard::isInputComplete() const
 {
 
 	return this->counter == 5;
