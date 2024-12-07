@@ -20,10 +20,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Snake.h">
+    <ClInclude Include="Gameboy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Food.h">
+    <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SnakeGame.h">
