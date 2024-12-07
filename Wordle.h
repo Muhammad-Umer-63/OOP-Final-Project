@@ -39,7 +39,6 @@ private:
 
 public :
 
-
 	Wordle();
 	virtual ~Wordle();
 
@@ -188,7 +187,9 @@ void Wordle::pollEvents()
 
 			}
 
-			cout << endl;
+			cout << endl; 
+
+			//yahan pe aik check lage ga
 
 				for (int j = 0; j < 5; j++) {
 

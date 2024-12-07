@@ -16,8 +16,6 @@ int main()
     delete wordle;
     wordle = NULL;
 
-    
-
     return 0;
 
 }

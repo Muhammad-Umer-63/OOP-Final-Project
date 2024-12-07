@@ -16,6 +16,9 @@ private:
 
 	sf::Font uiFont;
 	sf::Text uiText;
+
+	sf::Text usedCharachters;
+
 	sf::Text txt1;
 	sf::Text txt2;
 	sf::Text txt3;
@@ -26,8 +29,11 @@ private:
 	string* easy;
 	string* medium;
 	string* hard;
+	string* history;
 
+	int historySize;
 	int counter;
+	bool wordDoesntExist;
 
 	void initVariables();
 	void initFont();
@@ -40,11 +46,13 @@ public:
 	~WordDictionary();
 
 	string getRandomWord();
+	int getHistorySize();
 
 	int* compareWithHiddenWord(string, int, string);
 	bool checkWithFullWordList(string);
 	bool checkIfDuplicateExists(string, int, string);
 
+	void updateHistory(string, int); 
 	void updateText(string, string);
 	void renderText(sf::RenderTarget&);
 
@@ -57,6 +65,8 @@ void WordDictionary::initVariables() {
 	this->hard = new string[100];
 	this->populateArrays();
 	this->counter = 0;
+	this->history = NULL;
+	this->historySize = 0;
 	
 }
 
@@ -78,6 +88,13 @@ void WordDictionary::initText() {
 	this->uiText.setString("");
 	this->uiText.setOrigin(sf::Vector2f(-300.f, -250.f)); //why ulta?? //Position 
 	this->uiText.setCharacterSize(24);
+
+	this->usedCharachters.setFont(this->uiFont);
+	this->usedCharachters.setCharacterSize(24);
+	this->usedCharachters.setFillColor(sf::Color::White);
+	this->usedCharachters.setString("");
+	this->usedCharachters.setOrigin(sf::Vector2f(-75.f, -100.f)); //why ulta?? //Position 
+	this->usedCharachters.setCharacterSize(20);
 
 	this->txt1.setFont(this->uiFont);
 	this->txt1.setCharacterSize(24);
@@ -218,9 +235,13 @@ string WordDictionary::getRandomWord() {
 
 }
 
+int WordDictionary::getHistorySize()
+{
+	return historySize;
+}
+
 int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size ,string word)
 {
-	this->checkWithFullWordList(word);
 
 	int index = 0;
 	bool checkIfNotWordExists = false;
@@ -228,16 +249,19 @@ int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size ,string w
 
 	int* colorArray = new int[5] {0};
 
-	cout << "\nSiuu\n";
+	if (this->checkWithFullWordList(word)) {
 
-	cout << "Word : " << word << endl;
+		this->updateHistory(word, size);
+
+		cout << "\nSiuu\n";
+
+		cout << "Word : " << word << endl;
 
 		for (int i = 0; i < size; i++) {
 
 			bool checkIfNotWordExists = false;
 
 			for (int j = 0; j < size; j++) {
-
 
 				if (word[i] == hiddenWord[j]) {
 
@@ -246,21 +270,22 @@ int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size ,string w
 						colorArray[i] = 2;
 						checkIfNotWordExists = true;
 
+
 					}
 
-					else if(i != j){ //yahan pe duplicate wali logic lage gi
+					else if (i != j) { //yahan pe duplicate wali logic lage gi
 
 						/*if (checkIfDuplicateExists(hiddenWord, size, word)) {
 
 							colorArray[i] = 2;
 							checkIfNotWordExists = true;
-
+							break; ????
 						}
 
 						else {*/
 
-							colorArray[i] = 1;
-							checkIfNotWordExists = true;
+						colorArray[i] = 1;
+						checkIfNotWordExists = true;
 
 						// }
 
@@ -278,15 +303,22 @@ int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size ,string w
 
 		}
 
+		for (int i = 0; i < 5; i++) {
 
-	for (int i = 0; i < 5; i++) {
+			cout << colorArray[i];
 
-		cout << colorArray[i];
+		}
+		cout << endl;
+	
+		return colorArray; //why is it returning garbage?
 
 	}
-	cout << endl;
 
-	return colorArray; //why is it returning garbage?
+	else {
+
+		return colorArray;
+
+	}
 }
 
 
@@ -334,9 +366,104 @@ bool WordDictionary::checkIfDuplicateExists(string hiddenWord, int size, string 
 
 }
 
+void WordDictionary::updateHistory(string word, int historySize)
+{
+
+	if (history != NULL) {
+
+		int previousSize = getHistorySize();
+
+		this->historySize += 7;
+		string* temp = new string [this->historySize];
+		
+		for (int i = 0; i < previousSize; i++) {
+
+			temp[i] = this->history[i];
+
+		}
+
+		delete[] this->history;
+		history = temp;
+
+		for (int i = 0; i < this->historySize - previousSize; i++) {
+
+			this->history[this->historySize - previousSize + i] = word[i];
+
+		}
+
+		this->history[this->historySize - 2] = " ";
+
+		cout << "Hello 3333: ";
+
+		for (int i = 0; i < this->historySize; i++) {
+
+			cout << this->history[i];
+
+		}
+
+		cout << endl;
+
+
+	}
+
+	else {
+
+		this->historySize = 7;
+
+		this->history = new string[this->historySize];
+
+		for (int i = 0; i < historySize; i++) {
+
+			this->history[i] = word[i];
+
+		}
+
+		this->history[this->historySize - 2] = " ";
+
+		cout << "Hello : ";
+
+		for (int i = 0; i < this->historySize; i++) {
+
+			cout  << this->history[i];
+
+		}
+
+		cout << endl;
+	}
+
+}
+
 void WordDictionary::updateText(string alpha, string space) {
 
 	stringstream his;
+	stringstream used;
+
+	used << "Guessed\nWords :\n\n";
+
+	for (int i = 0; i < this->historySize; i++) {
+
+		if (i == 0) {
+
+			used << this->history[i] << " ";
+			
+		}
+
+		else if ((i + 1) % 3 == 0) {
+
+			used << this->history[i] << endl;
+
+		}
+		
+		else {
+
+			used << this->history[i] << " ";
+
+		}
+
+	}
+
+	this->usedCharachters.setString(used.str());
+	used.clear();
 
 	if (counter >= 0 && counter < 5) {
 
@@ -386,8 +513,6 @@ void WordDictionary::updateText(string alpha, string space) {
 
 	}
 
-
-
 	if (space != " ") {
 
 		counter++;
@@ -405,6 +530,7 @@ void WordDictionary::updateText(string alpha, string space) {
 void WordDictionary::renderText(sf::RenderTarget& target) {
 
 	target.draw(this->uiText);
+	target.draw(this->usedCharachters);
 	target.draw(this->txt1);
 	target.draw(this->txt2);
 	target.draw(this->txt3);
@@ -413,3 +539,51 @@ void WordDictionary::renderText(sf::RenderTarget& target) {
 	target.draw(this->txt6);
 
 }
+
+
+
+
+	/*hfsjhuis
+	
+	Game{
+
+
+	protected:
+
+
+	public:
+
+
+		virtual ManageSound(){
+
+		if(1)
+			Sound s1.fun1(jhjhsjhjdhjs);
+
+		else if()
+
+			Sound s1.fun2(jhjhsjhjdhjs);
+
+		}
+
+
+
+	}
+	
+
+	SnakeGame: public Game{
+
+
+		Managesound(parementers, p2, p4, index ,1, 2 )
+
+		ManagrSound
+
+
+
+
+		}
+
+
+		Sound
+
+	
+	*/
