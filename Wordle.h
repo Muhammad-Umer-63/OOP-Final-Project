@@ -21,6 +21,8 @@ private:
 	sf::Event ev;
 
 	bool endGame;
+	int endCounter;
+	bool endCheck;
 
 	string hiddenWord;
 	int hiddenWord_len;
@@ -59,10 +61,11 @@ void Wordle::initVariables() {
 	this->window = NULL;
 	this->endGame = false;	
 	this->hiddenWord = wordDictionary.getRandomWord();
-	//cout << "\n" << hiddenWord << "\n";
+	cout << "\n" << hiddenWord << "\n";
 	this->hiddenWord_len = hiddenWord.length();
 	this->counter = 0;
 	this->countForChar = 0;
+	this->endCounter = 0;
 
 }
 
@@ -128,6 +131,8 @@ const bool Wordle::getEndGame() const
 
 void Wordle::pollEvents()
 {
+	int* check = 0;
+
 	while (this->window->pollEvent(this->ev)) {
 
 		if (this->ev.type == sf::Event::Closed) {
@@ -147,24 +152,32 @@ void Wordle::pollEvents()
 		this->keyboard.handleInputKeyboard(this->ev);
 		cout << "\nboool : " << keyboard.isInputComplete() << endl; //this check stays true i think that may be the case why this is happening //change back to false
 
+		
+		string* something = this->keyboard.getInputArray();
+		string word;
+
+		for (int i = 0; i < 5; i++) {
+
+			cout << "Something : " << something[i] << endl;
+			word += something[i];
+
+		}
+
+		if (this->keyboard.checkIFKeyIsPressed(this->keyboard.getKey())) {
+
+			wordDictionary.updateText(word, this->keyboard.getKey());
+			this->keyboard.resetKey();
+
+		}
+
+
+
+		//this->wordDictionary.renderText(*this->window);
+		cout << "\nword: " << word;
+
 		if (keyboard.isInputComplete()) {
 
 			cout << "What : " << endl;
-
-			int* check = 0;
-			string* something = this->keyboard.getInputArray();
-			string word;
-
-			for (int i = 0; i < 5; i++) {
-
-				cout << "Something : " << something[i] << endl;
-				word += something[i];
-
-			}
-
-			wordDictionary.updateText(word);
-			this->wordDictionary.renderText(*this->window);
-			cout << "\nword: " << word;
 
 			check = wordDictionary.compareWithHiddenWord(hiddenWord, hiddenWord_len, word);
 			cout << "\nCHECK : \n";
@@ -179,17 +192,59 @@ void Wordle::pollEvents()
 
 				for (int j = 0; j < 5; j++) {
 
-					this->letter[counter][j].updateLetter(check[j]); //their some issue happenening here and i don't know why it is happening //yeh baki sub kiyun chal rahe hain saath
+					this->letter[counter][j].updateLetter(check[j]); 
 					cout << "Counter : " << counter << " J : " << j << endl;
 					cout << "LOOP Counter : " << counter << endl;
 
 				}
 
+				cout << "\nCHECK non : \n";
+
+				for (int i = 0; i < 5; i++) {
+
+					cout << check[i] << " ";
+
+				}
+
+				cout << endl;
+
+
+				for (int i = 0; i < 5; i++) {
+
+					if (check[i] != 2) {
+						
+						break;
+						
+					}
+
+					else {
+
+						this->endCounter++;
+
+					}
+
+				}
+
 				counter++;
 				this->keyboard.resetInput();
-				delete[] check;
 
 		}
+
+		cout << "\nEnd Counter : " << this->endCounter << endl;
+
+		if (this->endCounter == 5) {
+
+			this->endCheck = true;
+			this->endGame = true;
+			break;
+
+		}
+
+	}
+
+	if(check != NULL){
+
+		delete[] check;
 
 	}
 
@@ -198,6 +253,14 @@ void Wordle::pollEvents()
 void Wordle::update() { //also rendeer it with ttaht
 
 	this->pollEvents(); //order very important
+
+	if (this->endCheck == true && counter < 6) {
+
+		cout << "\nYOU WON\n";
+		this->endGame = true;
+
+	}
+
 
 	//End game condition
 	if (this->endGame == true || counter >= 6) {

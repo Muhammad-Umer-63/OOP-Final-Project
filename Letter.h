@@ -64,43 +64,17 @@ void Letter::initRectangle(float x_pos, float y_pos)
 Letter::Letter() {
 
 	this->initVariables();
-	//this->initRectangle();
 
 }
 
-Letter::~Letter()
-{
-
-
-}
+Letter::~Letter(){}
 
 void Letter::updateLetter(int i)  //use this for coloring
 {
 
 	cout << "Value: " << i << endl;
 
-	/*if (this->count_X <= 5) {
-
-		this->x_pos += 50;
-		this->count_X++;
-		this->rectangle.setPosition(this->x_pos,this->y_pos);
-
-	}
-
-	else {
-
-		this->x_pos = 250.0;
-		this->y_pos += 100.0;
-		this->count_X = 0;
-		this->count_Y++;
-		this->rectangle.setPosition(this->x_pos, this->y_pos);
-
-
-	}*/
-
-	//int r = rand() % 3; // yup have to do something here // aik array lo gay aur uske saath aap kaam karo ge you have to basically give some numbers based on correctness of that and do that
-
-		for (int j = 0; j < 5; j++) { //changing eveyr single rectangle //should i make rectangle for each box?
+		for (int j = 0; j < 5; j++) { 
 
 			if (i == 0) {
 

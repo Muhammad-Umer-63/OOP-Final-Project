@@ -43,8 +43,9 @@ public:
 
 	int* compareWithHiddenWord(string, int, string);
 	bool checkWithFullWordList(string);
+	bool checkIfDuplicateExists(string, int, string);
 
-	void updateText(string);
+	void updateText(string, string);
 	void renderText(sf::RenderTarget&);
 
 };
@@ -247,10 +248,21 @@ int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size ,string w
 
 					}
 
-					else if(i != j){
+					else if(i != j){ //yahan pe duplicate wali logic lage gi
 
-						colorArray[i] = 1;
-						checkIfNotWordExists = true;
+						/*if (checkIfDuplicateExists(hiddenWord, size, word)) {
+
+							colorArray[i] = 2;
+							checkIfNotWordExists = true;
+
+						}
+
+						else {*/
+
+							colorArray[i] = 1;
+							checkIfNotWordExists = true;
+
+						// }
 
 					}
 
@@ -300,11 +312,33 @@ bool WordDictionary::checkWithFullWordList(string word)
 
 }
 
-void WordDictionary::updateText(string alpha) {
+bool WordDictionary::checkIfDuplicateExists(string hiddenWord, int size, string word)
+{
+
+	for (int i = 0; i < size; i++) {
+
+		for (int j = 0; j < size; j++) {
+
+			if (word[i] == hiddenWord[j] && i != j) {
+
+				return true;
+
+			}
+
+
+		}
+
+	}
+	
+	return false;
+
+}
+
+void WordDictionary::updateText(string alpha, string space) {
 
 	stringstream his;
 
-	if (counter == 0) {
+	if (counter >= 0 && counter < 5) {
 
 		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt1.setString(his.str());
@@ -312,7 +346,7 @@ void WordDictionary::updateText(string alpha) {
 
 	}
 
-	else if (counter == 1) {
+	else if (counter >= 5 && counter < 10) {
 
 		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt2.setString(his.str());
@@ -320,7 +354,7 @@ void WordDictionary::updateText(string alpha) {
 
 	}
 
-	else if (counter == 2) {
+	else if (counter >= 10 && counter < 15) {
 
 		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt3.setString(his.str());
@@ -328,7 +362,7 @@ void WordDictionary::updateText(string alpha) {
 
 	}
 
-	else if (counter == 3) {
+	else if (counter >= 15 && counter < 20) {
 
 		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt4.setString(his.str());
@@ -336,7 +370,7 @@ void WordDictionary::updateText(string alpha) {
 
 	}
 
-	else if (counter == 4) {
+	else if (counter >= 20 && counter < 25) {
 
 		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt5.setString(his.str());
@@ -344,7 +378,7 @@ void WordDictionary::updateText(string alpha) {
 
 	}
 
-	else if (counter == 5) {
+	else if (counter >= 25 && counter < 30) {
 
 		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t   " << alpha[3] << "\t\t  " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt6.setString(his.str());
@@ -352,7 +386,20 @@ void WordDictionary::updateText(string alpha) {
 
 	}
 
-	counter++;
+
+
+	if (space != " ") {
+
+		counter++;
+
+	}
+
+	else {
+
+		counter--;
+
+	}
+
 }
 
 void WordDictionary::renderText(sf::RenderTarget& target) {
