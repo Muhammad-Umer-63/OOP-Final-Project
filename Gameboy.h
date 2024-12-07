@@ -32,41 +32,13 @@ class InputClass {
 public:
     InputClass() {}
 
-    char mapKey() {
-        char key;
-        cout << "Enter a key: ";
-        cin >> key;
+    char mapKey(char key) {
+       
         return key;
     }
 
-    void handleInput() {
-        char key = mapKey();
-
-        switch (key) {
-        case 'w':
-        case 'W':
-            cout << "Move Up\n";
-            break;
-        case 's':
-        case 'S':
-            cout << "Move Down\n";
-            break;
-        case 'a':
-        case 'A':
-            cout << "Move Left\n";
-            break;
-        case 'd':
-        case 'D':
-            cout << "Move Right\n";
-            break;
-        case 'q':
-        case 'Q':
-            cout << "Quit Game\n";
-            break;
-        default:
-            cout << "Invalid Key Pressed: " << key << "\n";
-        }
-    }
+   
+    
 };
 /////////////////////////////////////////////////////////
 
@@ -106,15 +78,19 @@ public:
 };
 ////////////////////////////////////////////////////////
 class Sound {
-private:
+public:
     sf::Sound sound1;
     sf::SoundBuffer buffer;
-    
-    
+    sf::SoundBuffer background;
+    sf::Sound backgroundsound;
+      
 
 public:
     Sound() {
-        
+        background.loadFromFile("scam_1992.ogg");
+        backgroundsound.setBuffer(background);
+      
+            
     }
 
     void playSound(const sf::SoundBuffer& externalBuffer) {
@@ -127,6 +103,8 @@ public:
         sound1.stop();
         cout << "Sound stopped." << endl;
     }
+    
+
 };
 ////////////////////////////////////////////////////
 
@@ -207,6 +185,8 @@ public:
                             cout << "Snake game selected!" << endl;
                             screen.window.clear();
                             g1 = new SnakeGame(screen.window);
+                            g1->StartGame(screen.window);
+                           // g1->PlaySound(sounddd.hit);
                             
 
                         }

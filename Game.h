@@ -3,23 +3,31 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include "SnakeGame.h"
 using namespace std;
 
 class Game {
 protected:
     int score;
+   // InputClass* input1;
+    sf::Sound hitSound;
+
+
+
+
 public:
-    Game() {
-        score = 0;
-       
+    Game(){}
+   // Game(InputClass* input) : input1(input), score(0) {}
 
-      
-        
+
+    virtual void StartGame(sf::RenderWindow& window) = 0;
+       
+    void PlayhitSound(sf::SoundBuffer& buffer) {
+        hitSound.setBuffer(buffer);
+        hitSound.play();
     }
-
-    virtual void StartGame() = 0;
-       
+    //char GetInput(char key) {
+    //    return input1->mapKey(key);
+   // }
 
     
 
@@ -195,7 +203,7 @@ public:
         updateGrid();
     }
 
-
+    
     void updateGrid() {
         for (int i = 0; i < gridWidth; ++i) {
             for (int j = 0; j < gridHeight; ++j) {
@@ -327,66 +335,41 @@ private:
     sf::Texture Backgroundimage;
     sf::Sprite BackgroundSprite;
     sf::Vertex line1[2], line2[2], line3[2], line4[2];
+    sf::SoundBuffer zohaib1;
+    sf::Sound ZohaibSound;
+    sf::SoundBuffer wrrgya;
+    sf::Sound wrrgyasound;
+    sf::SoundBuffer boundary;
+    sf::Sound boundarysound;
+
+
+
+
+
+
+
 
 
 public:
-    virtual void StartGame() { cout << "iafbiuadfba"; }
-
-    SnakeGame(sf::RenderWindow& window) {
-        line1[0] = sf::Vertex(sf::Vector2f(100, 100), sf::Color::White);
-        line1[1] = sf::Vertex(sf::Vector2f(700, 100), sf::Color::Blue);
-
-        line2[0] = sf::Vertex(sf::Vector2f(100, 500), sf::Color::Red);
-        line2[1] = sf::Vertex(sf::Vector2f(700, 500), sf::Color::Blue);
-
-        line3[0] = sf::Vertex(sf::Vector2f(100, 100), sf::Color::Red);
-        line3[1] = sf::Vertex(sf::Vector2f(100, 500), sf::Color::Blue);
-
-        line4[0] = sf::Vertex(sf::Vector2f(700, 100), sf::Color::Red);
-        line4[1] = sf::Vertex(sf::Vector2f(700, 500), sf::Color::Blue);
-        Gameover.loadFromFile("gameover.jpg");
-        GameoverSprite.setTexture(Gameover);
-        GameoverSprite.setScale(0.8f, 0.3f);
-        GameoverSprite.setPosition(100, 100);
-
-        Backgroundimage.loadFromFile("background.jpg");
-        BackgroundSprite.setTexture(Backgroundimage);
-        BackgroundSprite.setPosition(0, 0);
-
-
-        sf::SoundBuffer buffer;
-        buffer.loadFromFile("scam_1992.ogg");
-        sf::Sound sound;
-        sound.setBuffer(buffer);
-        sound.play();
-
-        
-
-        sf::SoundBuffer zohaib;
-        zohaib.loadFromFile("zohaibfirst.ogg");
-        sf::Sound ZohaibSound;
-        ZohaibSound.setBuffer(zohaib);
-
-        sf::SoundBuffer wrrgya;
-        wrrgya.loadFromFile("turrgaye.ogg");
-        sf::Sound wrrgyasound;
-        wrrgyasound.setBuffer(wrrgya);
-
-
-
-
+    virtual void StartGame(sf::RenderWindow& window) override{
+    
         sf::Clock clock;
         float elapsedTime = 0.0f;
 
         while (window.isOpen()) {
+            
             sf::Event event;
             while (window.pollEvent(event)) {
+
+            
                 if (event.type == sf::Event::Closed) {
                     window.close();
                 }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
                     window.close();
                 }
+                
+
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
                     if (dx != 0 && dy != -1)
                         dx = 0, dy = 1;
@@ -413,7 +396,7 @@ public:
                 f1.bonus(window);
                 bonusClock.restart();
             }
-
+            
 
 
             window.clear();
@@ -423,27 +406,76 @@ public:
             s1.updateGridForFood(f1.getfoodpointx(), f1.getfoodpointy());
 
             s1.drawSnake(window);
-            outofbound(window, wrrgyasound, sound);
+            outofbound(window);
 
-            checkcollision(window, ZohaibSound, wrrgyasound, sound);
+           checkcollision(window);
 
             window.display();
         }
+    
+    }
+    
+
+    SnakeGame(sf::RenderWindow& window) {
+        line1[0] = sf::Vertex(sf::Vector2f(100, 100), sf::Color::White);
+        line1[1] = sf::Vertex(sf::Vector2f(700, 100), sf::Color::Blue);
+
+        line2[0] = sf::Vertex(sf::Vector2f(100, 500), sf::Color::Red);
+        line2[1] = sf::Vertex(sf::Vector2f(700, 500), sf::Color::Blue);
+
+        line3[0] = sf::Vertex(sf::Vector2f(100, 100), sf::Color::Red);
+        line3[1] = sf::Vertex(sf::Vector2f(100, 500), sf::Color::Blue);
+
+        line4[0] = sf::Vertex(sf::Vector2f(700, 100), sf::Color::Red);
+        line4[1] = sf::Vertex(sf::Vector2f(700, 500), sf::Color::Blue);
+        Gameover.loadFromFile("gameover.jpg");
+        GameoverSprite.setTexture(Gameover);
+        GameoverSprite.setScale(0.8f, 0.3f);
+        GameoverSprite.setPosition(100, 100);
+
+        Backgroundimage.loadFromFile("background.jpg");
+        BackgroundSprite.setTexture(Backgroundimage);
+        BackgroundSprite.setPosition(0, 0);
+
+        
+        //sf::SoundBuffer buffer;
+        //buffer.loadFromFile("scam_1992.ogg");
+        //sf::Sound sound;
+        //sound.setBuffer(buffer);
+        //sound.play();
+
+        
+
+        zohaib1.loadFromFile("hit.ogg");
+        ZohaibSound.setBuffer(zohaib1);
+
+        wrrgya.loadFromFile("turrgaye.ogg");
+        wrrgyasound.setBuffer(wrrgya);
+
+        boundary.loadFromFile("boundary.ogg");
+        boundarysound.setBuffer(boundary);
+
+
+
+
+        
+
+       
     }
     /////////////////////////////////////////////////////////
-    void checkcollision(sf::RenderWindow& window, sf::Sound& sound1, sf::Sound& sound2, sf::Sound& sound3) {
+    void checkcollision(sf::RenderWindow& window) {
         getfoodpositionfromfood();
         getheadpositionfromsnake();
 
         if (headcoord.x >= f1.getfoodpointx() && headcoord.y >= f1.getfoodpointy() && headcoord.x <= f1.getfoodpointx() + 1 && headcoord.y <= f1.getfoodpointy() + 1) {
             cout << "Collision detected! ....Score:" << f1.score << endl;
-            collision(window, sound1, sound3);
+            collision(window);
 
         }
         if (s1.selfCollision()) {
             f1.score -= 1, --lives;
             cout << "lives: " << lives << endl;
-            if (lives <= 0)outoflives(window, sound2, sound3);
+            if (lives <= 0)outoflives(window);
         }
 
         //if (headcoord.x == f1.getbonuspointx() && headcoord.y == f1.getbonuspointy()) {
@@ -458,41 +490,45 @@ public:
     }
 
 
-    void outofbound(sf::RenderWindow& window, sf::Sound& sound1, sf::Sound& sound3) {
+    void outofbound(sf::RenderWindow& window) {
 
         if (headcoord.x <= 0.5) {
+            PlayhitSound(boundary);
             --lives;
             cout << "lives: " << lives << endl;
-            if (lives <= 0)outoflives(window, sound1, sound3);
+            if (lives <= 0)outoflives(window);
             s1.setHeadPositionaftercollision();
 
         }
         else if (headcoord.x >= 58) {
+            PlayhitSound(boundary);
             --lives;
             cout << "lives: " << lives << endl;
-            if (lives <= 0)outoflives(window, sound1, sound3);
+            if (lives <= 0)outoflives(window);
             s1.setHeadPositionaftercollision();
 
         }
         else if (headcoord.y <= 0) {
+            PlayhitSound(boundary);
             --lives;
             cout << "lives: " << lives << endl;
-            if (lives <= 0)outoflives(window, sound1, sound3);
+            if (lives <= 0)outoflives(window);
             s1.setHeadPositionaftercollision();
 
         }
         else if (headcoord.y >= 39) {
+            PlayhitSound(boundary);
             --lives;
             cout << "lives: " << lives << endl;
-            if (lives <= 0)outoflives(window, sound1, sound3);
+            if (lives <= 0)outoflives(window);
             s1.setHeadPositionaftercollision();
 
 
         }
 
     }
-    void collision(sf::RenderWindow& window, sf::Sound& sound1, sf::Sound& sound3) {
-        sound1.play();
+    void collision(sf::RenderWindow& window) {
+        PlayhitSound(zohaib1);
         f1.repositionFood();
         f1.increaseVelocity();
         s1.growSnake();
@@ -514,10 +550,9 @@ public:
         headcoord.y = s1.getHeadPositionY();
     }
 
-    void outoflives(sf::RenderWindow& window, sf::Sound& sound1, sf::Sound& sound3) {
+    void outoflives(sf::RenderWindow& window) {
         std::cout << "\nYOU ARE OUT OF LIVES\n";
-        sound3.pause();
-        sound1.play();
+        PlayhitSound(wrrgya);
         window.clear();
         window.draw(GameoverSprite);
         window.display();
