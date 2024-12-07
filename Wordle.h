@@ -74,7 +74,7 @@ void Wordle::initVariables() {
 
 }
 
-void Wordle::initWindow(){
+void Wordle::initWindow(){ //khatam
 
 	this->video.width = 800;
 	this->video.height = 600;
