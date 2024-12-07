@@ -142,8 +142,11 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Category.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gameboy.h" />
+    <ClInclude Include="Hangman.h" />
+    <ClInclude Include="HangmanFigure.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Letter.h" />
     <ClInclude Include="WordDictionary.h" />
