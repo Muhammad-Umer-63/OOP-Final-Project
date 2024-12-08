@@ -40,4 +40,12 @@ public:
 
     }
 
+    void stopMusic(const string& externalBuffer) {
+        
+        m1.openFromFile(externalBuffer);
+        m1.stop();
+        
+
+    }
+
 };

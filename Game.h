@@ -47,6 +47,12 @@ public:
 
     }
 
+    void stopMusic(const string& filename) {
+
+        music.stopMusic(filename);
+
+    }
+
     //char GetInput(char key) {
     //    return input1->mapKey(key);
    // }
@@ -366,6 +372,7 @@ private:
     sf::SoundBuffer boundary;
     sf::Sound boundarysound;
 
+    bool endGame;
     int soundCounter;
     string backMusic;
 
@@ -377,7 +384,7 @@ public:
         sf::Clock clock;
         float elapsedTime = 0.0f;
 
-        while (screen.isOpen()) {
+        while (screen.isOpen() && !getEndGame()) {
             
             sf::Event event;
             while (screen.window.pollEvent(event)) {
@@ -481,6 +488,8 @@ public:
         boundary.loadFromFile("Sound/boundary.ogg");
         boundarysound.setBuffer(boundary);
         
+        this->endGame = false;
+
         this->backMusic = "Sound/scam_1992.ogg";
         this->PlayMusic(this->backMusic);
 
@@ -488,6 +497,10 @@ public:
 
        
     }
+
+
+    const bool getEndGame() const { return this->endGame; }
+
     /////////////////////////////////////////////////////////
     void checkcollision(Screen& screen) {
         getfoodpositionfromfood();
@@ -578,6 +591,7 @@ public:
 
     void outoflives(Screen& screen) {
         std::cout << "\nYOU ARE OUT OF LIVES\n";
+        this->stopMusic(this->backMusic);
         PlayhitSound(wrrgya);
         screen.clear();
         screen.drawSprite(GameoverSprite);
@@ -587,8 +601,9 @@ public:
         while (pauseClock.getElapsedTime().asSeconds() < 4.0f) {
         }
 
-        screen.close();
-
+       // screen.close();
+        this->endGame = true;
+       
     }
 
     void drawGridForSnake(Screen& screen) const {
