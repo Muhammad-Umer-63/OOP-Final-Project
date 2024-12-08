@@ -3,7 +3,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <cmath>
-#include <sstream> //string stream
+#include <sstream> 
 #include <string>
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
@@ -454,7 +454,7 @@ void WordDictionary::updateText(string alpha, string space) { //you can treat it
 
 	if (counter >= 0 && counter < 5) {
 
-		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t   " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt1.setString(his.str());
 		his.clear();
 
@@ -462,7 +462,7 @@ void WordDictionary::updateText(string alpha, string space) { //you can treat it
 
 	else if (counter >= 5 && counter < 10) {
 
-		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t   " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt2.setString(his.str());
 		his.clear();
 
@@ -470,7 +470,7 @@ void WordDictionary::updateText(string alpha, string space) { //you can treat it
 
 	else if (counter >= 10 && counter < 15) {
 
-		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t   " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt3.setString(his.str());
 		his.clear();
 
@@ -478,7 +478,7 @@ void WordDictionary::updateText(string alpha, string space) { //you can treat it
 
 	else if (counter >= 15 && counter < 20) {
 
-		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t   " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt4.setString(his.str());
 		his.clear();
 
@@ -486,7 +486,7 @@ void WordDictionary::updateText(string alpha, string space) { //you can treat it
 
 	else if (counter >= 20 && counter < 25) {
 
-		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t   " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt5.setString(his.str());
 		his.clear();
 
@@ -494,7 +494,7 @@ void WordDictionary::updateText(string alpha, string space) { //you can treat it
 
 	else if (counter >= 25 && counter < 30) {
 
-		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
+		his << alpha[0] << "\t\t   " << alpha[1] << "\t\t  " << alpha[2] << "\t\t  " << alpha[3] << "\t\t   " << alpha[4] << endl << endl; //this correct use some counter to clear this thing
 		this->txt6.setString(his.str());
 		his.clear();
 

@@ -3,7 +3,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <cmath>
-#include <sstream> //string stream
+#include <sstream> 
 #include <string>
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
@@ -51,7 +51,6 @@ void Keyboard::initVariables() {
 
 
 }
-
 
 Keyboard::Keyboard() {
 

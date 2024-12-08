@@ -3,7 +3,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <cmath>
-#include <sstream> //string stream
+#include <sstream> 
 #include <string>
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
@@ -25,6 +25,9 @@ private:
 
 	sf::Texture background_texture;
 	sf::Sprite background_sprite;
+
+	sf::Texture Gameover;
+	sf::Sprite GameoverSprite;
 
 	sf::SoundBuffer thak;
 
@@ -71,7 +74,7 @@ void Wordle::initVariables() {
 	//this->window = NULL;
 	this->endGame = false;
 	this->hiddenWord = wordDictionary.getRandomWord();
-	cout << "\n" << hiddenWord << "\n";
+	//cout << "\n" << hiddenWord << "\n";
 	this->hiddenWord_len = hiddenWord.length();
 	this->counter = 0;
 	this->countForChar = 0;
@@ -92,11 +95,13 @@ void Wordle::initVariables() {
 void Wordle::initTexture()
 {
 
-	if (!this->background_texture.loadFromFile("Sprites/Wordle Sprites/wordle Background.png")) {
+	if (!this->background_texture.loadFromFile("Sprites/Wordle Sprites/Background.png")) {
 
 		cout << "\nFailed to load Background.png\n";
 
 	}
+	this->background_texture.loadFromFile("Sprites/Hangman/hangman background.png");
+	this->Gameover.loadFromFile("Sprites/Snake Sprites/gameover.jpg");
 
 }
 
@@ -104,6 +109,9 @@ void Wordle::initSprite()
 {
 
 	this->background_sprite.setTexture(this->background_texture);
+	GameoverSprite.setTexture(Gameover);
+	GameoverSprite.setScale(0.8f, 0.3f);
+	GameoverSprite.setPosition(100, 100);
 
 }
 
@@ -298,6 +306,13 @@ void Wordle::update(Screen& s1) { //also rendeer it with ttaht
 
 	if (this->endCheck == true && counter < 6) {
 
+		s1.clear();
+		s1.display();
+
+		sf::Clock pauseClock;
+		while (pauseClock.getElapsedTime().asSeconds() < 1.5f) {
+		}
+
 		cout << "\nYOU WON\n";
 		this->endGame = true;
 
@@ -306,6 +321,14 @@ void Wordle::update(Screen& s1) { //also rendeer it with ttaht
 
 	//End game condition
 	if (this->endGame == true || counter >= 6) {
+
+		s1.clear();
+		s1.drawSprite(GameoverSprite);
+		s1.display();
+
+		sf::Clock pauseClock;
+		while (pauseClock.getElapsedTime().asSeconds() < 4.0f) {
+		}
 
 		this->endGame = true;
 

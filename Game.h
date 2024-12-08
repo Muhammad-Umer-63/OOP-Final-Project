@@ -51,6 +51,12 @@ public:
 
     }
     int getHighScore()const { return highscore; }
+
+    void resetLeaderBoard() {
+        highscore = 0;
+        saveHighScore();
+    }
+
 };
 
 
@@ -137,11 +143,11 @@ public:
         randj = rand() % 300 + 150;
         foodPosition.x = randi;
         foodPosition.y = randj;
-        //foodTexture.loadFromFile("rabbit.png");
-        foodTexture.loadFromFile("Sprites/Snake Sprites/flag.jpeg");
+        foodTexture.loadFromFile("Sprites/Snake Sprites/rabbit.png");
+        //foodTexture.loadFromFile("Sprites/Snake Sprites/flag.jpeg");
         foodSprite.setTexture(foodTexture);
-        //foodSprite.setScale(0.85f, 0.85f);
-        foodSprite.setScale(0.07f, 0.07f);
+        foodSprite.setScale(0.85f, 0.85f);
+        //foodSprite.setScale(0.07f, 0.07f);
         bonusTexture.loadFromFile("Sprites/Snake Sprites/bonus.jpeg");
         bonusSprite.setTexture(bonusTexture);
         bonusSprite.setScale(0.2f, 0.2f);
@@ -255,11 +261,11 @@ public:
         snakeBodySprite.setTexture(snakeBody);
         snakeBodySprite.setScale(0.4f, 0.4f);
 
-        //snakeHead.loadFromFile("SnakeHead.png");
-        snakeHead.loadFromFile("Sprites/Snake Sprites/gerlunsaab.jpg");
+        snakeHead.loadFromFile("Sprites/Snake Sprites/SnakeHead.png");
+        //snakeHead.loadFromFile("Sprites/Snake Sprites/gerlunsaab.jpg");
         snakeHeadSprite.setTexture(snakeHead);
-        //snakeHeadSprite.setScale(0.4f, 0.4f);
-        snakeHeadSprite.setScale(0.05f, 0.05f);
+        snakeHeadSprite.setScale(0.4f, 0.4f);
+        //snakeHeadSprite.setScale(0.05f, 0.05f);
 
 
 
@@ -416,7 +422,9 @@ private:
     sf::Font font;
     sf::Text score_text;
     sf::Text lives_text;
+    sf::Text high_score;
 
+    int localScore;
     bool endGame;
     int soundCounter;
     string backMusic;
@@ -476,13 +484,16 @@ public:
             drawGridForSnake(screen);
             f1.drawFood(screen);
             s1.updateGridForFood(f1.getfoodpointx(), f1.getfoodpointy());
+
             this->updateScore();
             this->updateText();
+            
 
             s1.drawSnake(screen);
             outofbound(screen);
 
             this->renderText(screen);
+
             checkcollision(screen);
 
            screen.display();
@@ -537,10 +548,13 @@ public:
         this->lives_text.setOrigin(sf::Vector2f(-675.f, -50.f));
         this->lives_text.setString("Lives : 5");
 
+        this->high_score.setFont(this->font);
+        this->high_score.setCharacterSize(20);
+        this->high_score.setFillColor(sf::Color::White);
+        this->high_score.setOrigin(sf::Vector2f(-100.f, -50.f));
+        this->high_score.setString("Previous HighScore : ");
+
     }
-
-
-
 
     SnakeGame(Screen& screen) {
 
@@ -583,7 +597,7 @@ public:
         this->PlayMusic(this->backMusic);
 
         this->soundCounter = 0;
-
+        this->localScore = leaderboard.getHighScore();
        
     }
     const bool getEndGame() const { return this->endGame; }
@@ -661,6 +675,7 @@ public:
         f1.score++;
         leaderboard.updateHighScore(f1.score);
         cout << "Highest score:" << leaderboard.getHighScore() << endl;
+        
 
         if (moveDelay > 0.05f) {
             moveDelay -= 0.01f;
@@ -695,16 +710,19 @@ public:
     }
 
     void drawGridForSnake(Screen& screen) const {
+
         screen.drawLine(line1, 2 /*sf::Lines*/);
         screen.drawLine(line2, 2 /*sf::Lines*/);
         screen.drawLine(line3, 2 /*sf::Lines*/);
         screen.drawLine(line4, 2 /*sf::Lines*/);
+
     }
 
     void updateText() {
 
         stringstream scr;
         stringstream liv;
+        stringstream high;
 
         cout << "\nScores : " << scores << endl;
 
@@ -718,6 +736,20 @@ public:
         this->lives_text.setString(liv.str());
         liv.clear();
 
+        if (this->localScore < leaderboard.getHighScore()) {
+
+            high << "You Achieved New Highscore : " << leaderboard.getHighScore() << "\n";
+            this->high_score.setString(high.str());
+            high.clear();
+
+        }
+        else {
+
+            high << "Previous Highscore : " << leaderboard.getHighScore() << "\n";
+            this->high_score.setString(high.str());
+            high.clear();
+
+        }
 
     }
 
@@ -725,6 +757,8 @@ public:
 
         screen.drawText(this->score_text);
         screen.drawText(this->lives_text);
+        screen.drawText(this->high_score);
+
     }
 
 

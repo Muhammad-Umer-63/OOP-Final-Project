@@ -59,8 +59,8 @@ void HangmanFigure::initTexture() {
 void HangmanFigure::initSprite() {
 
 	this->hm_sprite.setTexture(this->hm_texture);
-	this->hm_sprite.setScale(8.f, 8.f);
-	this->hm_sprite.setPosition(50.0f, -225.0f);
+	this->hm_sprite.setScale(9.f, 9.f);
+	this->hm_sprite.setPosition(100.0f, -225.0f);
 	this->hm_sprite.rotate(.0f);
 
 }

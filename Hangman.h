@@ -22,11 +22,21 @@ private:
 	sf::Event ev;
 	sf::VideoMode video;
 
+	sf::SoundBuffer thak;
+	sf::SoundBuffer ouch;
+
+	sf::Texture Gameover;
+	sf::Sprite GameoverSprite;
+
 	sf::Clock clock;
 	int timer;
+	int lives;
 
 	sf::Texture keyboard_texture;
 	sf::Sprite keyboard_sprite;
+
+	sf::Texture background_texture;
+	sf::Sprite background_sprite;
 
 	//class HangmanFigure
 
@@ -72,6 +82,7 @@ public:
 
 	//Updating
 	void update(Screen& s1);
+	void updateLives();
 
 	//Rendering
 	void render(Screen& s1);
@@ -83,12 +94,15 @@ void Hangman::initVariables() {
 	//this->window = nullptr;
 	this->endGame = false;
 	this->hiddenWord = category.getRandomWord();
-	cout << hiddenWord << endl;
+	//cout << hiddenWord << endl;
 	this->hiddenWord_len = hiddenWord.length();
-	cout << "HiddenWord_Len : " << hiddenWord_len << endl;
+	//cout << "HiddenWord_Len : " << hiddenWord_len << endl;
 	this->category.initHistory(hiddenWord_len);
 	//cout << "History Lenght:::::::" << category.getCurrentHistoryLen() << endl;
 	this->timer = 0;
+	this->lives = figure.handleLives();
+	this->thak.loadFromFile("Sound/Wordle Sound/thak sound.ogg");
+	this->ouch.loadFromFile("Sound/oww.ogg");
 
 }
 
@@ -105,8 +119,9 @@ void Hangman::initVariables() {
 
 void Hangman::initTexture() {
 
-	this->keyboard_texture.loadFromFile("Sprites/Hangman/Keyboard.png");
-
+	//this->keyboard_texture.loadFromFile("Sprites/Hangman/Keyboard.png");
+	this->background_texture.loadFromFile("Sprites/Hangman/hangman background.png");
+	this->Gameover.loadFromFile("Sprites/Snake Sprites/gameover.jpg");
 }
 
 void Hangman::initSprite() {
@@ -114,6 +129,12 @@ void Hangman::initSprite() {
 	this->keyboard_sprite.setTexture(this->keyboard_texture);
 	this->keyboard_sprite.setOrigin(sf::Vector2f(10.f, 10.f));
 	this->keyboard_sprite.scale(sf::Vector2f(1.f, 1.f));
+
+	this->background_sprite.setTexture(this->background_texture);
+
+	GameoverSprite.setTexture(Gameover);
+	GameoverSprite.setScale(0.8f, 0.3f);
+	GameoverSprite.setPosition(100, 100);
 
 }
 
@@ -130,7 +151,8 @@ void Hangman::updateClock()
 
 void Hangman::renderSprite(Screen& s1) {
 
-	s1.drawSprite(this->keyboard_sprite);
+	//s1.drawSprite(this->keyboard_sprite);
+	s1.drawSprite(this->background_sprite);
 
 }
 
@@ -141,13 +163,12 @@ const bool Hangman::getEndGame() const { return this->endGame; }
 Hangman::Hangman(Screen& s1) {
 
 	this->initVariables();
-	//this->initWindow();
+	this->initTexture();
+	this->initSprite();
 
 }
 
-Hangman::~Hangman() { //delete this->window; 
-
-}
+Hangman::~Hangman() { /*delete this->window;*/ }
 
 
 void Hangman::pollEvents(Screen& s1) {
@@ -155,6 +176,10 @@ void Hangman::pollEvents(Screen& s1) {
 	string inputChar;
 
 	while (s1.window.pollEvent(this->ev)) {
+
+		this->updateLives();
+		this->category.setSomeSizeLen(hiddenWord_len);
+		this->category.updateText();
 
 		switch (this->ev.type) {
 
@@ -347,12 +372,14 @@ void Hangman::handleInput(string word)
 
 		if (!checkForChange) {
 
+			this->PlayhitSound(this->ouch);
 			figure.updateSprite();
 
 		}
 
 		else {
 
+			this->PlayhitSound(this->thak);
 			this->category.updateText();
 			this->updateSprite();
 
@@ -379,7 +406,7 @@ void Hangman::startOver()
 {
 
 	this->hiddenWord = category.getRandomWord();
-	cout << hiddenWord << endl;
+	//cout << hiddenWord << endl;
 	this->hiddenWord_len = hiddenWord.length();
 	this->category.initHistory(hiddenWord_len);
 
@@ -390,38 +417,18 @@ void Hangman::update(Screen& s1) {
 
 	this->pollEvents(s1); //order very important //game management
 
-
-	/*int choice;
-	cout << "Option : "; cin >> choice;
-	if (choice == 1)
-	*/
-
-	//string word;
-
-	//cout << "Enter a word : "; cin >> word; // hnadle input ka aik function ban sakta hai?
-	////cout << "\nHidden Word Len: " << hiddenWord_len << endl;
-	//bool checkForChange = category.compareWithHiddenWord(hiddenWord, hiddenWord_len, word);
-
-	//if (!checkForChange) {
-
-	//	figure.updateSprite();
-	//	
-	//}
-
-	//else {
-
-	//	this->category.updateText();
-	//	this->updateSprite();
-
-	//}
-
-
-
-
 //End game condition
 
 //cout << this->timer << endl;
 	if (this->figure.handleLives() == 0) {  //some thing is definaltely happening //10 seconds???
+
+		s1.clear();
+		s1.drawSprite(GameoverSprite);
+		s1.display();
+
+		sf::Clock pauseClock;
+		while (pauseClock.getElapsedTime().asSeconds() < 4.0f) {
+		}
 
 		cout << "\nHiddenWord Was : " << this->hiddenWord << endl;
 		cout << "Womp Womp You Lost" << endl;
@@ -432,9 +439,19 @@ void Hangman::update(Screen& s1) {
 
 }
 
+void Hangman::updateLives()
+{
+
+	this->lives = figure.handleLives();
+	this->category.setLives(this->lives);
+
+}
+
 void Hangman::render(Screen& s1) { //open your eyes visual
 
 	s1.clear();
+
+	this->renderSprite(s1);
 
 	this->figure.renderSprite(s1);
 
@@ -442,7 +459,6 @@ void Hangman::render(Screen& s1) { //open your eyes visual
 
 	this->updateClock();
 
-	this->renderSprite(s1);
 
 	s1.display();
 

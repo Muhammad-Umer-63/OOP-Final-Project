@@ -34,17 +34,306 @@ public:
 //////////////////////////////////////////////////////////////////////
 class InputClass {
 
+	int counter;
+	string key;
+
 public:
 
-    InputClass() {}
+    InputClass() {
+	
+		this->key =" ";
+		this->counter = 0;
 
-    char mapKey(char key) {
+	}
+
+    string mapKey() {
        
-        return key;
+        return this->key;
 
     }
 
-   
+	void handleInputKeyboard(const sf::Event& ev, Screen& s1)
+	{
+		cout << "\nClick\n";
+
+		string inputChar;
+
+		if (ev.type == sf::Event::KeyPressed) {
+
+
+			if (ev.key.code == sf::Keyboard::Escape) {
+
+				cout << "Closed Pressed" << "\n";
+				s1.close();
+
+			}
+
+			if (ev.key.code == sf::Keyboard::Escape) {
+
+				cout << "\nEscape Pressed\n";
+				s1.close();
+
+			}
+
+			if (counter < 5) {
+
+				if (ev.key.code == sf::Keyboard::A) {
+
+					inputChar = "a";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+
+				else if (ev.key.code == sf::Keyboard::B) {
+
+					inputChar = "b";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+
+				}
+				else if (ev.key.code == sf::Keyboard::C) {
+
+					inputChar = "c";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::D) {
+
+					inputChar = "d";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::E) {
+
+					inputChar = "e";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::F) {
+
+					inputChar = "f";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+
+				else if (ev.key.code == sf::Keyboard::G) {
+
+					inputChar = "g";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::H) {
+
+					inputChar = "h";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::I) {
+
+					inputChar = "i";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::J) {
+
+					inputChar = "j";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::K) {
+
+					inputChar = "k";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::L) {
+
+					inputChar = "l";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::M) {
+
+					inputChar = "m";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::N) {
+
+					inputChar = "n";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::O) {
+
+					inputChar = "o";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::P) {
+
+					inputChar = "p";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::Q) {
+
+					inputChar = "q";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::R) {
+
+					inputChar = "r";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::S) {
+
+					inputChar = "s";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::T) {
+
+					inputChar = "t";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::U) {
+
+					inputChar = "u";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::V) {
+
+					inputChar = "v";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::W) {
+
+					inputChar = "w";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::X) {
+
+					inputChar = "x";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::Y) {
+
+					inputChar = "y";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+				else if (ev.key.code == sf::Keyboard::Z) {
+
+					inputChar = "z";
+					this->setKey(inputChar);
+					this->handleInput(inputChar);
+					//this->checkIFKeyIsPressed();
+
+				}
+
+			}
+
+			if (ev.key.code == sf::Keyboard::BackSpace && counter > 0) {
+
+				this->counter -= 1;
+				inputChar = " ";
+				this->setKey(inputChar);
+				cout << "BackSpace\n";
+				this->handleInput(inputChar);
+				//this->checkIFKeyIsPressed();
+
+			}
+
+
+		}
+
+	}
+
+	void handleInput(string charchter){}
+
+	bool checkIFKeyIsPressed(string word) //should reset aswell i think
+	{
+
+		if (word >= "a" && word <= "z" || word == " ") {
+
+			return true;
+
+		}
+
+		else {
+
+			return false;
+
+		}
+
+
+	}
+
+	void setKey(string key)
+	{
+
+		this->key = key;
+
+	}
+
     
 };
 /////////////////////////////////////////////////////////

@@ -17,6 +17,8 @@ private:
 	sf::Font uiFont;
 	sf::Text uiText;
 	sf::Text historyText;
+	sf::Text historyWord;
+	sf::Text Length_text;
 
 	string* easy;
 	string* medium;
@@ -27,11 +29,16 @@ private:
 	int history_len;
 	int recent_word_len;
 	int score;
+	int counter;
+	int lives;
+
+	int previous_word_total_len;
 
 	void initVariables();
 	void initFont();
 	void initText();
 	void populateArrays();
+
 
 public:
 
@@ -49,6 +56,11 @@ public:
 	bool checkIfWordHasMatchedTillEnd(string*);
 	void initTotalHistory(string*);
 
+	void setSomeSizeLen(int);
+	int getSomeSizeLen();
+
+	void setLives(int);
+
 	void updateText();
 	void renderText(Screen& s1);
 
@@ -65,7 +77,9 @@ void Category::initVariables() {
 	this->recent_word_len = 0;
 	this->totalHistory = NULL;
 	this->score = 0;
-
+	this->counter = 0;
+	this->previous_word_total_len = 0;
+	this->lives = 7;
 
 }
 
@@ -85,15 +99,29 @@ void Category::initText() {
 	this->uiText.setCharacterSize(24);
 	this->uiText.setFillColor(sf::Color::White);
 	this->uiText.setString("Points:0\nLives:7");
-	this->uiText.setOrigin(sf::Vector2f(-685.f, -10.f)); //why ulta?? //Position 
+	this->uiText.setOrigin(sf::Vector2f(-650.f, -10.f)); //why ulta?? //Position 
 	this->uiText.setCharacterSize(24);
 
 	this->historyText.setFont(this->uiFont);
-	this->historyText.setCharacterSize(24);
-	this->historyText.setFillColor(sf::Color::Red);
+	this->historyText.setCharacterSize(23);
+	this->historyText.setFillColor(sf::Color::White);
 	this->historyText.setString("Guess The Word:");
-	this->historyText.setOrigin(sf::Vector2f(-400.f, -150.f)); //why ulta?? //Position 
-	this->historyText.setCharacterSize(20);
+	this->historyText.setOrigin(sf::Vector2f(-450.f, -150.f)); //why ulta?? //Position 
+	this->historyText.setCharacterSize(23);
+
+	this->historyWord.setFont(this->uiFont);
+	this->historyWord.setCharacterSize(24);
+	this->historyWord.setFillColor(sf::Color::White);
+	this->historyWord.setString("");
+	this->historyWord.setOrigin(sf::Vector2f(-500.f, -200.f)); //why ulta?? //Position 
+	this->historyWord.setCharacterSize(23);
+	
+	this->Length_text.setFont(this->uiFont);
+	this->Length_text.setCharacterSize(24);
+	this->Length_text.setFillColor(sf::Color::Yellow);
+	this->Length_text.setString("");
+	this->Length_text.setOrigin(sf::Vector2f(-50.f, -100.f)); //why ulta?? //Position 
+	this->Length_text.setCharacterSize(23);
 
 }
 
@@ -167,26 +195,32 @@ Category::~Category() {
 string Category::getRandomWord() {
 
 	int index = rand() % 100;
-	//int option = (rand() % 3) + 1;
+	
+	if (counter >= 5) {
 
-	/*if (option == 1) {
+		int option = (rand() % 3) + 1;
 
-		return this->easy[index];
+		if (option == 1) {
+
+			return this->easy[index];
+
+		}
+
+		else if (option == 2) {
+
+			return this->medium[index];
+
+		}
+
+		else if (option == 3) {
+
+			return hard[index];
+
+		}
 
 	}
 
-	else if (option == 2) {
-
-		return this->medium[index];
-
-	}
-
-	else if (option == 3) {
-
-		return hard[index];
-
-	}*/
-
+	this->counter++;
 	return easy[index];
 
 }
@@ -230,6 +264,9 @@ bool Category::compareWithHiddenWord(string hiddenWord, int size, string word)
 {
 
 	int index = 0;
+
+	this->setSomeSizeLen(size);
+
 	bool checkIfWordExists = false;
 
 	if (!compareWithHistory(word)) {
@@ -412,12 +449,34 @@ void Category::initTotalHistory(string* word)
 
 }
 
+void Category::setSomeSizeLen(int size)
+{
+
+	this->previous_word_total_len = size;
+
+}
+
+int Category::getSomeSizeLen() {
+
+	return this->previous_word_total_len;
+
+}
+
+void Category::setLives(int lives)
+{
+
+	this->lives = lives;
+
+}
+
 void Category::updateText() {
 
 	stringstream ui;
 	stringstream his;
+	stringstream words;
+	stringstream length_ss;
 
-	ui << "Points : " << this->score << "\n" << "Lives : " << "\n";
+	ui << "Points : " << this->score << "\n" << "Lives : " << this->lives << "\n";
 	this->uiText.setString(ui.str());
 
 	string* hit = getHistory();
@@ -432,17 +491,21 @@ void Category::updateText() {
 
 	cout << endl;
 
-	his << "    Guess The Word " << endl << endl;
+	his << "Guess The Word " << endl << endl;
+	this->historyText.setString(his.str());
+	his.clear();
 
 	for (int i = 0; i < getCurrentHistoryLen(); i++) {
 
-		his << hit[i] << " ";
+		words << hit[i] << " ";
 
 	}
-
-
-	this->historyText.setString(his.str());
-	his.clear();
+	this->historyWord.setString(words.str());
+	words.clear();
+	
+	length_ss << "Current Word Length : " << getSomeSizeLen() << endl;
+	this->Length_text.setString(length_ss.str());
+	length_ss.clear();
 
 }
 
@@ -450,5 +513,7 @@ void Category::renderText(Screen& s1) {
 
 	s1.drawText(this->uiText);
 	s1.drawText(this->historyText);
+	s1.drawText(this->historyWord);
+	s1.drawText(this->Length_text);
 
 }
