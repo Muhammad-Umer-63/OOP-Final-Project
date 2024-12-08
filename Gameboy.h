@@ -2,7 +2,7 @@
 #include<iostream>
 #include"Game.h"
 #include "Wordle.h"
-//#include "Hangman.h"
+#include "Hangman.h"
 #include "SoundSystem.h"
 #include "Screen.h"
 //#include"SnakeGame.h"
@@ -202,25 +202,25 @@ public:
 
                         if (snakeButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
                             cout << "Snake game selected!" << endl;
-                           // screen.window.clear();
-                           // g1 = new SnakeGame(screen.window);
-                           // g1->StartGame(screen.window);
-                           //// g1->PlaySound(sounddd.hit);
-                           // delete g1;
+                            screen.window.clear();
+                            g1 = new SnakeGame(screen);
+                            g1->StartGame(screen);
+                           // g1->PlaySound(sounddd.hit);
+                            delete g1;
 
                         }
                         if (HangmanButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
                             cout << "hangman game selected!" << endl;
-                            //screen.window.clear();
-                            /*g3 = new Hangman;
-                            g3->StartGame(screen.window);
-                            delete g3;*/
+                            screen.window.clear();
+                            g3 = new Hangman(screen);
+                            g3->StartGame(screen);
+                            delete g3;
 
 
                         }
                         if (WordleButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
                             cout << "Wordle game selected!" << endl;
-                            //screen.window.clear();
+                            screen.window.clear();
                             g2 = new Wordle(screen);
                             g2->StartGame(screen);
                             delete g2;

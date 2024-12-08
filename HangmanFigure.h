@@ -36,7 +36,7 @@ public:
 	int handleLives();
 
 	void updateSprite();
-	void renderSprite(sf::RenderTarget&);
+	void renderSprite(Screen& s1);
 
 };
 
@@ -86,8 +86,8 @@ void HangmanFigure::updateSprite() {
 
 }
 
-void HangmanFigure::renderSprite(sf::RenderTarget& target) {
+void HangmanFigure::renderSprite(Screen& s1) {
 
-	target.draw(this->hm_sprite);
+	s1.drawSprite(this->hm_sprite);
 
 }

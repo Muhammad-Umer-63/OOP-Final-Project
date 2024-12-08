@@ -38,6 +38,12 @@ public:
 
     }
 
+    void drawLine(const sf::Vertex v1[], int a) {
+
+        window.draw(v1, a, sf::Lines);
+
+    }
+
     void close() {
         
         window.close();

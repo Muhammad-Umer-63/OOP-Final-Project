@@ -50,7 +50,7 @@ public:
 	void initTotalHistory(string*);
 
 	void updateText();
-	void renderText(sf::RenderTarget&);
+	void renderText(Screen& s1);
 
 };
 
@@ -446,9 +446,9 @@ void Category::updateText() {
 
 }
 
-void Category::renderText(sf::RenderTarget& target) {
+void Category::renderText(Screen& s1) {
 
-	target.draw(this->uiText);
-	target.draw(this->historyText);
+	s1.drawText(this->uiText);
+	s1.drawText(this->historyText);
 
 }

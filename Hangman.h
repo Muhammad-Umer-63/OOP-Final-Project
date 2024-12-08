@@ -9,11 +9,11 @@
 #include "SFML/Audio.hpp"
 #include "Category.h"
 #include "HangmanFigure.h"
-//#include "Game.h"
+#include "Game.h"
 
 using namespace std;
 
-class Hangman  /*: public Game*/ {
+class Hangman : public Game {
 
 private:
 
@@ -47,34 +47,34 @@ private:
 	void initSprite();
 
 public:
-
+	
 	//Constructor / Destructor
-	Hangman();
+	Hangman(Screen& s1);
 	virtual ~Hangman();
 
 	//Accessors // to keep in game loop
 
-	const bool running(sf::RenderWindow&) const;
+	const bool running(Screen& s1) const;
 	const bool getEndGame() const;
-	void StartGame(sf::RenderWindow&);
+	virtual void StartGame(Screen& s1);
 
 	void updateSprite();
 	void updateClock();
 
-	void renderSprite(sf::RenderTarget&);
+	void renderSprite(Screen& s1);
 
 	//Events Handling
-	void pollEvents(sf::RenderWindow&);
+	void pollEvents(Screen& s1);
 	void handleInput(string);
 
 	//starting again
 	void startOver();
 
 	//Updating
-	void update(sf::RenderWindow&);
+	void update(Screen& s1);
 
 	//Rendering
-	void render(sf::RenderWindow&);
+	void render(Screen& s1);
 
 };
 
@@ -128,17 +128,17 @@ void Hangman::updateClock()
 
 }
 
-void Hangman::renderSprite(sf::RenderTarget& target) {
+void Hangman::renderSprite(Screen& s1) {
 
-	target.draw(this->keyboard_sprite);
+	s1.drawSprite(this->keyboard_sprite);
 
 }
 
-const bool Hangman::running(sf::RenderWindow& window) const { return window.isOpen(); }
+const bool Hangman::running(Screen& s1) const { return s1.isOpen(); }
 
 const bool Hangman::getEndGame() const { return this->endGame; }
 
-Hangman::Hangman() {
+Hangman::Hangman(Screen& s1) {
 
 	this->initVariables();
 	//this->initWindow();
@@ -150,24 +150,24 @@ Hangman::~Hangman() { //delete this->window;
 }
 
 
-void Hangman::pollEvents(sf::RenderWindow& window) {
+void Hangman::pollEvents(Screen& s1) {
 
 	string inputChar;
 
-	while (window.pollEvent(this->ev)) {
+	while (s1.window.pollEvent(this->ev)) {
 
 		switch (this->ev.type) {
 
 		case sf::Event::Closed:
 
-			window.close();
+			s1.close();
 			break;
 
 		case sf::Event::KeyPressed:
 
 			if (this->ev.key.code == sf::Keyboard::Escape) {
 
-				window.close();
+				s1.close();
 				break;
 
 			}
@@ -386,9 +386,9 @@ void Hangman::startOver()
 
 }
 
-void Hangman::update(sf::RenderWindow& window) {
+void Hangman::update(Screen& s1) {
 
-	this->pollEvents(window); //order very important //game management
+	this->pollEvents(s1); //order very important //game management
 
 
 	/*int choice;
@@ -432,31 +432,31 @@ void Hangman::update(sf::RenderWindow& window) {
 
 }
 
-void Hangman::render(sf::RenderWindow& window) { //open your eyes visual
+void Hangman::render(Screen& s1) { //open your eyes visual
 
-	window.clear();
+	s1.clear();
 
-	this->figure.renderSprite(window);
+	this->figure.renderSprite(s1);
 
-	this->category.renderText(window);
+	this->category.renderText(s1);
 
 	this->updateClock();
 
-	this->renderSprite(window);
+	this->renderSprite(s1);
 
-	window.display();
+	s1.display();
 
 }
 
-void Hangman::StartGame(sf::RenderWindow& window) {
+void Hangman::StartGame(Screen& s1) {
 
-	while (this->running(window) && !getEndGame()) {
+	while (this->running(s1) && !getEndGame()) {
 
 		//update
-		this->update(window);
+		this->update(s1);
 
 		//render
-		this->render(window);
+		this->render(s1);
 
 	}
 
