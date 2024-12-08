@@ -659,7 +659,8 @@ public:
         f1.increaseVelocity();
         s1.growSnake();
         f1.score++;
-
+        leaderboard.updateHighScore(f1.score);
+        cout << "Highest score:" << leaderboard.getHighScore() << endl;
 
         if (moveDelay > 0.05f) {
             moveDelay -= 0.01f;
