@@ -9,11 +9,11 @@
 #include "SFML/Audio.hpp"
 #include "Category.h"
 #include "HangmanFigure.h"
-#include "Game.h"
+//#include "Game.h"
 
 using namespace std;
 
-class Hangman : public Game {
+class Hangman  /*: public Game*/ {
 
 private:
 

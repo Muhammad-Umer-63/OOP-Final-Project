@@ -25,7 +25,7 @@ public:
 	Keyboard();
 	~Keyboard();
 
-	void handleInputKeyboard(const sf::Event& ev);
+	void handleInputKeyboard(const sf::Event& ev, Screen& s1);
 	void handleInput(string);
 
 	bool checkIFKeyIsPressed(string);
@@ -61,13 +61,28 @@ Keyboard::Keyboard() {
 
 Keyboard::~Keyboard() {}
 
-void Keyboard::handleInputKeyboard(const sf::Event& ev)
+void Keyboard::handleInputKeyboard(const sf::Event& ev, Screen& s1)
 {
 	cout << "\nClick\n";
 
 	string inputChar;
 
 	if (ev.type == sf::Event::KeyPressed) {
+
+
+		if (ev.key.code == sf::Keyboard::Escape) {
+
+			cout << "Closed Pressed" << "\n";
+			s1.close();
+
+		}
+
+		if (ev.key.code == sf::Keyboard::Escape) {
+
+			cout << "\nEscape Pressed\n";
+			s1.close();
+
+		}
 
 		if (counter < 5) {
 

@@ -11,6 +11,7 @@
 #include "Keyboard.h"
 #include "Letter.h"
 #include "Game.h"
+#include "Screen.h"
 
 using namespace std;
 
@@ -48,18 +49,18 @@ private:
 
 public:
 
-	Wordle(sf::RenderWindow&);
+	Wordle(Screen& s1);
 	virtual ~Wordle();
 
-	const bool running(sf::RenderWindow& ) const;
+	const bool running(Screen& s1) const;
 	const bool getEndGame() const;
 
-	void pollEvents(sf::RenderWindow& );
-	void renderBackground(sf::RenderTarget&);
-	void update(sf::RenderWindow&);
-	void render(sf::RenderWindow&);
+	void pollEvents(Screen& s1);
+	void renderBackground(Screen& s1);
+	void update(Screen& s1);
+	void render(Screen& s1);
 
-	void StartGame(sf::RenderWindow&);
+	virtual void StartGame(Screen& s1);
 
 
 };
@@ -130,7 +131,7 @@ void Wordle::drawGrid()
 
 }
 
-Wordle::Wordle(sf::RenderWindow& window) {
+Wordle::Wordle(Screen& s1) {
 
 	this->initVariables();
 	//this->initWindow();
@@ -147,9 +148,9 @@ Wordle::~Wordle() {
 }
 
 //Accessors
-const bool Wordle::running(sf::RenderWindow& window) const {
+const bool Wordle::running(Screen& s1) const {
 
-	return window.isOpen();
+	return s1.isOpen();
 
 }
 
@@ -159,27 +160,27 @@ const bool Wordle::getEndGame() const
 
 }
 
-void Wordle::pollEvents(sf::RenderWindow& window)
+void Wordle::pollEvents(Screen& s1)
 {
 	int* check = 0;
 
-	while (window.pollEvent(this->ev)) {
+	while (s1.window.pollEvent(this->ev)) {
 
-		if (this->ev.type == sf::Event::Closed) {
+		/*if (this->ev.type == sf::Event::Closed) {
 
 			cout << "\nCross Pressed\n";
 			window.close();
 
-		}
+		}*/
 
-		else if (this->ev.type == sf::Keyboard::Escape) {
+		/*else if (this->ev.type == sf::Keyboard::Escape) {
 
 			cout << "\nEscape Pressed\n";
 			window.close();
 
-		}
+		}*/
 
-		this->keyboard.handleInputKeyboard(this->ev);
+		this->keyboard.handleInputKeyboard(this->ev, s1);
 		cout << "\nboool : " << keyboard.isInputComplete() << endl; //this check stays true i think that may be the case why this is happening //change back to false
 
 
@@ -246,7 +247,7 @@ void Wordle::pollEvents(sf::RenderWindow& window)
 
 				if (check[i] != 2) {
 
-					this->endCounter;
+					this->endCounter = 0;
 					break;
 
 				}
@@ -284,16 +285,16 @@ void Wordle::pollEvents(sf::RenderWindow& window)
 
 }
 
-void Wordle::renderBackground(sf::RenderTarget& target)
+void Wordle::renderBackground(Screen& s1)
 {
 
-	target.draw(this->background_sprite);
+	s1.drawSprite(this->background_sprite);
 
 }
 
-void Wordle::update(sf::RenderWindow& window) { //also rendeer it with ttaht
+void Wordle::update(Screen& s1) { //also rendeer it with ttaht
 
-	this->pollEvents(window); //order very important
+	this->pollEvents(s1); //order very important
 
 	if (this->endCheck == true && counter < 6) {
 
@@ -312,36 +313,36 @@ void Wordle::update(sf::RenderWindow& window) { //also rendeer it with ttaht
 
 }
 
-void Wordle::render(sf::RenderWindow& window) {
+void Wordle::render(Screen& s1) {
 
-	window.clear();
+	s1.clear();
 
-	this->renderBackground(window);
+	this->renderBackground(s1);
 
 	for (int i = 0; i < 6; i++) { // you have create logic around here so that it doesn't get affected
 
 		for (int j = 0; j < 5; j++) {
 
-			this->letter[i][j].renderLetter(window);
+			this->letter[i][j].renderLetter(s1);
 
 		}
 
 	}
 
-	this->wordDictionary.renderText(window);
-	window.display();
+	this->wordDictionary.renderText(s1);
+	s1.display();
 
 }
 
-void Wordle::StartGame(sf::RenderWindow& window){
+void Wordle::StartGame(Screen& s1){
 
-	while (running(window) && !getEndGame()) {
+	while (running(s1) && !getEndGame()) {
 
-		update(window);
+		update(s1);
 
 		//this->window->draw(this->background_sprite);
 
-		render(window);
+		render(s1);
 
 	}
 

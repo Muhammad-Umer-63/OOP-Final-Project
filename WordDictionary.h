@@ -50,11 +50,11 @@ public:
 
 	int* compareWithHiddenWord(string, int, string);
 	bool checkWithFullWordList(string);
-	bool checkIfDuplicateExists(string, int, string);
+	//bool checkIfDuplicateExists(string, int, string);
 
 	void updateHistory(string, int);
 	void updateText(string, string);
-	void renderText(sf::RenderTarget&);
+	void renderText(Screen& s1);
 
 };
 
@@ -248,6 +248,7 @@ int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size, string w
 	//int colorArray[5]; // have to use dynamic memory here;
 
 	int* colorArray = new int[5] {0};
+	bool checkForDuplicates[5] = { false, false, false, false, false };
 
 	//if (this->checkWithFullWordList(word)) {
 
@@ -267,13 +268,14 @@ int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size, string w
 
 				if (i == j) {
 
+					checkForDuplicates[i] = true;
 					colorArray[i] = 2;
 					checkIfNotWordExists = true;
 
 
 				}
 
-				else if (i != j) { //yahan pe duplicate wali logic lage gi
+				else if (!(checkForDuplicates[i]) && i != j) { //yahan pe duplicate wali logic lage gi //basically jahan jahan humara letter hoga woh duplicate kare dega when indexes not matching
 
 					/*if (checkIfDuplicateExists(hiddenWord, size, word)) {
 
@@ -284,6 +286,7 @@ int* WordDictionary::compareWithHiddenWord(string hiddenWord, int size, string w
 
 					else {*/
 
+					checkForDuplicates[i] = true;
 					colorArray[i] = 1;
 					checkIfNotWordExists = true;
 
@@ -344,27 +347,27 @@ bool WordDictionary::checkWithFullWordList(string word)
 
 }
 
-bool WordDictionary::checkIfDuplicateExists(string hiddenWord, int size, string word)
-{
-
-	for (int i = 0; i < size; i++) {
-
-		for (int j = 0; j < size; j++) {
-
-			if (word[i] == hiddenWord[j] && i != j) {
-
-				return true;
-
-			}
-
-
-		}
-
-	}
-
-	return false;
-
-}
+//bool WordDictionary::checkIfDuplicateExists(string hiddenWord, int size, string word)
+//{
+//
+//	for (int i = 0; i < size; i++) {
+//
+//		for (int j = 0; j < size; j++) {
+//
+//			if (word[i] == hiddenWord[j] && i != j) {
+//
+//				return true;
+//
+//			}
+//
+//
+//		}
+//
+//	}
+//
+//	return false;
+//
+//}
 
 void WordDictionary::updateHistory(string word, int historySize)
 {
@@ -510,15 +513,15 @@ void WordDictionary::updateText(string alpha, string space) { //you can treat it
 
 }
 
-void WordDictionary::renderText(sf::RenderTarget& target) {
+void WordDictionary::renderText(Screen& s1) {
 
-	target.draw(this->uiText);
-	target.draw(this->usedCharachters);
-	target.draw(this->txt1);
-	target.draw(this->txt2);
-	target.draw(this->txt3);
-	target.draw(this->txt4);
-	target.draw(this->txt5);
-	target.draw(this->txt6);
+	s1.drawText(this->uiText);
+	s1.drawText(this->usedCharachters);
+	s1.drawText(this->txt1);
+	s1.drawText(this->txt2);
+	s1.drawText(this->txt3);
+	s1.drawText(this->txt4);
+	s1.drawText(this->txt5);
+	s1.drawText(this->txt6);
 
 }

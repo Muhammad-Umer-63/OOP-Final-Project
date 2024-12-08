@@ -149,6 +149,8 @@
     <ClInclude Include="HangmanFigure.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Letter.h" />
+    <ClInclude Include="Screen.h" />
+    <ClInclude Include="SoundSystem.h" />
     <ClInclude Include="WordDictionary.h" />
     <ClInclude Include="Wordle.h" />
   </ItemGroup>

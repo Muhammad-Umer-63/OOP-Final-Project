@@ -35,7 +35,7 @@ public:
 	~Letter();
 
 	void updateLetter(int);
-	void renderLetter(sf::RenderTarget&);
+	void renderLetter(Screen& s1);
 
 
 };
@@ -101,9 +101,9 @@ void Letter::updateLetter(int i)  //use this for coloring
 
 }
 
-void Letter::renderLetter(sf::RenderTarget& target)
+void Letter::renderLetter(Screen& s1)
 {
 
-	target.draw(this->rectangle);
+	s1.drawRectangle(this->rectangle);
 
 }
