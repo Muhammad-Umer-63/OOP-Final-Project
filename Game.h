@@ -1,13 +1,48 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include<fstream>
 #include <cstdlib>
 #include <ctime>
 //#include "Gameboy.h"
 #include "SoundSystem.h"
 #include "Screen.h"
-
 using namespace std;
+
+class LeaderBoard {
+private:
+    int highscore;
+    string filename;
+public:
+    LeaderBoard(){
+        highscore = 0;
+        filename = "highscore.txt";
+        loadHighScore();
+
+    }
+    void updateHighScore(int newScore) {
+        if (newScore > highscore) {
+            highscore = newScore;
+            saveHighScore();
+        }
+    }
+    void saveHighScore() {
+        ofstream fout(filename);
+        if (fout.is_open()) {
+            fout << highscore;
+            fout.close();
+        }
+    }
+    void loadHighScore(){
+        ifstream fin(filename);
+        if (fin.is_open()) {
+            fin >> highscore;
+            fin.close();
+        }
+        
+    }
+    int getHighScore()const { return highscore; }
+};
 
 class Game {
 protected:
@@ -16,6 +51,10 @@ protected:
     SoundSystem hitSound;
     SoundSystem music;
     //Screen s1;
+    ofstream fout;
+    LeaderBoard leaderboard;
+    
+
 
 public:
 
@@ -377,6 +416,7 @@ private:
     string backMusic;
 
 
+
 public:
     virtual void StartGame(Screen& screen) override{
     
@@ -496,6 +536,7 @@ public:
         this->soundCounter = 0;
 
        
+
     }
 
 
@@ -572,6 +613,8 @@ public:
         f1.increaseVelocity();
         s1.growSnake();
         f1.score++;
+        leaderboard.updateHighScore(f1.score);
+        cout<<"Highest score:"<<leaderboard.getHighScore()<<endl;
 
 
         if (moveDelay > 0.05f) {
