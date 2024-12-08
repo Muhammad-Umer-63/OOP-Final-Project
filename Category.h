@@ -85,7 +85,7 @@ void Category::initText() {
 	this->uiText.setCharacterSize(24);
 	this->uiText.setFillColor(sf::Color::White);
 	this->uiText.setString("Points:0\nLives:7");
-	this->uiText.setOrigin(sf::Vector2f(-700.f, 1.f)); //why ulta?? //Position 
+	this->uiText.setOrigin(sf::Vector2f(-685.f, -10.f)); //why ulta?? //Position 
 	this->uiText.setCharacterSize(24);
 
 	this->historyText.setFont(this->uiFont);
@@ -93,7 +93,7 @@ void Category::initText() {
 	this->historyText.setFillColor(sf::Color::Red);
 	this->historyText.setString("Guess The Word:");
 	this->historyText.setOrigin(sf::Vector2f(-400.f, -150.f)); //why ulta?? //Position 
-	this->historyText.setCharacterSize(24);
+	this->historyText.setCharacterSize(20);
 
 }
 

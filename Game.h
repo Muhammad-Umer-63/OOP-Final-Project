@@ -3,7 +3,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-//#include "Gameboy.h"
+#include <string>
+#include <sstream>
 #include "SoundSystem.h"
 #include "Screen.h"
 
@@ -11,7 +12,7 @@ using namespace std;
 
 class Game {
 protected:
-    int score;
+    int scores;
    // InputClass* input1;
     SoundSystem hitSound;
     SoundSystem music;
@@ -21,7 +22,7 @@ public:
 
     Game(){
     
-        this->score = 0;
+        this->scores = 0;
         //this->hitSound;
 
     }
@@ -64,15 +65,6 @@ public:
 };
 
 
-
-
-
-
-
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Food {
@@ -110,10 +102,13 @@ public:
         bonusPosition.x = 450;
         bonusPosition.y = 450;
 
-
-
     }
 
+    int getScore() {
+
+        return score;
+
+    }
 
     void drawFood(Screen& screen) {
         if (foodPosition.x > 700 - 20 || foodPosition.x < 100) {
@@ -372,6 +367,10 @@ private:
     sf::SoundBuffer boundary;
     sf::Sound boundarysound;
 
+    sf::Font font;
+    sf::Text score_text;
+    sf::Text lives_text;
+
     bool endGame;
     int soundCounter;
     string backMusic;
@@ -389,20 +388,12 @@ public:
             sf::Event event;
             while (screen.window.pollEvent(event)) {
 
-              /* if (soundCounter == 0) {
-
-                    this->PlayhitSound(this->backMusic);
-
-               }*/
-
-
                 if (event.type == sf::Event::Closed) {
                     screen.close();
                 }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
                     screen.close();
                 }
-                
 
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
                     if (dx != 0 && dy != -1)
@@ -434,24 +425,79 @@ public:
 
 
             screen.clear();
+
             screen.drawSprite(BackgroundSprite);
             drawGridForSnake(screen);
             f1.drawFood(screen);
             s1.updateGridForFood(f1.getfoodpointx(), f1.getfoodpointy());
+            this->updateScore();
+            this->updateText();
 
             s1.drawSnake(screen);
             outofbound(screen);
 
-           checkcollision(screen);
+            this->renderText(screen);
+            checkcollision(screen);
 
-            screen.display();
-            //this->soundCounter++;
+           screen.display();
+
+
         }
     
     }
+  
+    void initScore() {
+
+        scores = 0;
+
+    }
+
+    int getScore() {
+
+        return scores;
+
+    }
+
+    void updateScore() {
+
+        scores = f1.getScore();
+        cout << "\nScores : " << scores << endl;
+
+    }
+
     
+    void initFont() {
+
+        if (!this->font.loadFromFile("Fonts/Roboto-Bold.ttf")) {
+
+            cout << "ERROR::GAME::INITFONTS::Failed to load Font!" << endl;
+
+        }
+
+    }
+
+
+    void initText() {
+
+        this->score_text.setFont(this->font);
+        this->score_text.setCharacterSize(20);
+        this->score_text.setFillColor(sf::Color::White);
+        this->score_text.setOrigin(sf::Vector2f(-675.f, -20.f));
+        this->score_text.setString("Points : 0");
+
+        this->lives_text.setFont(this->font);
+        this->lives_text.setCharacterSize(20);
+        this->lives_text.setFillColor(sf::Color::Red);
+        this->lives_text.setOrigin(sf::Vector2f(-675.f, -50.f));
+        this->lives_text.setString("Lives : 5");
+
+    }
+
+
+
 
     SnakeGame(Screen& screen) {
+
         line1[0] = sf::Vertex(sf::Vector2f(100, 100), sf::Color::White);
         line1[1] = sf::Vertex(sf::Vector2f(700, 100), sf::Color::Blue);
 
@@ -472,13 +518,6 @@ public:
         BackgroundSprite.setTexture(Backgroundimage);
         BackgroundSprite.setPosition(0, 0);
 
-        
-        //sf::SoundBuffer buffer;
-        //buffer.loadFromFile("scam_1992.ogg");
-        //sf::Sound sound;
-        //sound.setBuffer(buffer);
-        //sound.play();
-
         zohaib1.loadFromFile("Sound/hit.ogg");
         ZohaibSound.setBuffer(zohaib1);
 
@@ -490,6 +529,10 @@ public:
         
         this->endGame = false;
 
+        this->initScore();
+        this->initFont();
+        this->initText();
+
         this->backMusic = "Sound/scam_1992.ogg";
         this->PlayMusic(this->backMusic);
 
@@ -497,11 +540,8 @@ public:
 
        
     }
-
-
     const bool getEndGame() const { return this->endGame; }
 
-    /////////////////////////////////////////////////////////
     void checkcollision(Screen& screen) {
         getfoodpositionfromfood();
         getheadpositionfromsnake();
@@ -521,10 +561,10 @@ public:
         //    cout << "\n\n\nbonus collided\n\n\n";
           //  f1.score += 5;
         //}
-        if (headcoord.x == f1.getbonuspointx() && headcoord.y == f1.getbonuspointy()) {
+        /*if (headcoord.x == f1.getbonuspointx() && headcoord.y == f1.getbonuspointy()) {
             cout << "\n\n\nBonus collided\n\n\n";
             f1.score += 5;
-        }
+        }*/
 
     }
 
@@ -567,6 +607,7 @@ public:
 
     }
     void collision(Screen& screen) {
+
         PlayhitSound(zohaib1);
         f1.repositionFood();
         f1.increaseVelocity();
@@ -612,6 +653,34 @@ public:
         screen.drawLine(line3, 2 /*sf::Lines*/);
         screen.drawLine(line4, 2 /*sf::Lines*/);
     }
+
+    void updateText() {
+
+        stringstream scr;
+        stringstream liv;
+
+        cout << "\nScores : " << scores << endl;
+
+        scr << "Points : " << scores << "\n";
+        this->score_text.setString(scr.str());
+        scr.clear();
+
+        cout << "\Lives : " << lives << endl;
+
+        liv << "Lives : " << lives << "\n";
+        this->lives_text.setString(liv.str());
+        liv.clear();
+
+
+    }
+
+    void renderText(Screen& screen) {
+
+        screen.drawText(this->score_text);
+        screen.drawText(this->lives_text);
+    }
+
+
 
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
